@@ -1,1 +1,28 @@
-sdasd
+{% extends 'base.html' %}
+
+
+{% block content %}
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-2 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="/">Sistema de Pallets</a>
+        <form action="/admin/logout" method="post" class="m-0">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-outline-dark btn-sm text-white" value="Cerrar Sesión"/>
+        </form>
+  </header>
+  <video id="preview"></video>
+    <script type="text/javascript">
+      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+      scanner.addListener('scan', function (content) {
+        console.log(content);
+      });
+      Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+          scanner.start(cameras[0]);
+        } else {
+          console.error('No cameras found.');
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
+    </script>
+{% endblock content %}
