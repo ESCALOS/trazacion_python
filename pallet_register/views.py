@@ -1,10 +1,10 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import login,authenticate,logout
 from django.db import IntegrityError
-from .models import Pallet
+from .models import Pallet,Usuario
 from django.http import JsonResponse
+from django.conf import settings
 
 def autenticacion(request):
     
@@ -28,13 +28,20 @@ def autenticacion(request):
                 'form' : UserCreationForm,
                 'error' : 'El usuario ya existe'
             })
-    
+def cerrarSesion(request):
+    logout(request)
+    return redirect('login')
+
 def index(request):
     return render(request, 'index.html')
 
 def datosPallet(request):
-    if request.method == "POST":
-        pallet = list(User.objects.values())
-        return JsonResponse(pallet,safe=False)
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     else:
-        return render(request, 'index.html')
+        if request.method == "POST":
+            qs = Usuario.objects.filter(dni=request.POST['codigo']).values()[:1]
+            if qs.exists():
+                return JsonResponse(list(qs),safe=False)
+        else:
+            return redirect('login')

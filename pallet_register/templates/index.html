@@ -2,87 +2,24 @@
 
 
 {% block content %}
-<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-2 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="/">Sistema de Pallets</a>
-        <form action="/logout" method="post" class="m-0">
-            {% csrf_token %}
-            <input type="submit" class="btn btn-outline-dark btn-sm text-white" value="Cerrar Sesión"/>
-        </form>
+
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <header class="mb-auto">
+    <div>
+      <a class="float-md-start mb-0 navbar-brand" href="/"><h3>Registro de Pallets</h3></a>
+    </div>
+    <nav class="nav nav-masthead justify-content-center float-md-end">
+      <a class="nav-link fw-bold py-1 px-0" href="logout">Cerrar Sesión</a>
+    </nav>    
   </header>
-  <video id="preview"></video>
+ {% csrf_token %}
 
-  <button onclick="obtenerDatos()">Obtener Datos</button>
+</div>
+
+
+  <!--<button onclick="obtenerDatos()">Obtener Datos</button>
   <button onclick="activarCamara()">Activar</button>
-  <button onclick="apagarCamara()">Desactivar</button>
+  <button onclick="apagarCamara()">Desactivar</button>-->
 
-<script>
-  let scanner;
-  function activarCamara(){
-    scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-    Instascan.Camera.getCameras().then(cameras => {
-      scanner.camera = cameras[cameras.length - 1];
-      scanner.start();
-      console.log("Hay "+cameras.length+" cámaras.");
-    }).catch(e => console.error(e));
-    scanner.addListener('scan', content => {
-      scanner.stop();
-      let cookie = document.cookie;
-    let csrfToken = cookie.substring(cookie.indexOf('=') + 1);
-    $.ajax({
-      url : 'datos/',
-      data : { 
-        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-        id : content
-      },
-      type : 'POST',
-      dataType : 'json',
-      success : function(json) {
-          console.log(json);
-      },
-      error : function(xhr, status) {
-          alert('Disculpe, existió un problema');
-          console.log(status);
-      },
-  
-      // código a ejecutar sin importar si la petición falló o no
-      complete : function(xhr, status) {
-          alert('Petición realizada');
-      }
-    });
-    });
-  }
-  function apagarCamara(){
-    scanner.stop();
-    scanner.addListener('inactive',() => {
-      setTimeout(()=>{ alert('La cámara está apagada')},1000);
-     
-    });
-  }
-  function obtenerDatos(){
-    let cookie = document.cookie;
-    let csrfToken = cookie.substring(cookie.indexOf('=') + 1);
-    $.ajax({
-      url : 'datos/',
-      data : { 
-        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-        code : 123
-      },
-      type : 'POST',
-      dataType : 'json',
-      success : function(json) {
-          console.log(json);
-      },
-      error : function(xhr, status) {
-          alert('Disculpe, existió un problema');
-          console.log(status);
-      },
-  
-      // código a ejecutar sin importar si la petición falló o no
-      complete : function(xhr, status) {
-          alert('Petición realizada');
-      }
-    });
-  }
-  
-</script>
+
 {% endblock content %}

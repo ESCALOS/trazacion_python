@@ -44,7 +44,7 @@ class AdminFormaCreacionUsuario(forms.ModelForm):
             usuario.save()
         return usuario
 class AdminFormaActualiza(forms.ModelForm):
-    password = ReadOnlyPasswordHashField
+    password = ReadOnlyPasswordHashField()
     
     class Meta:
         model = Usuario
