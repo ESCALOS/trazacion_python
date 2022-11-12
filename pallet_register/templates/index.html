@@ -1,25 +1,129 @@
 {% extends 'base.html' %}
-
-
-{% block content %}
-
-<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-  <header class="mb-auto">
-    <div>
-      <a class="float-md-start mb-0 navbar-brand" href="/"><h3>Registro de Pallets</h3></a>
+  {% block content %}
+  {% csrf_token %}
+  <div class="container p-4">
+    <div class="mt-2 mb-4">
+      <button class="btn btn-md btn-success w-100" onclick="activarCamara()">Escanear código</button>
     </div>
-    <nav class="nav nav-masthead justify-content-center float-md-end">
-      <a class="nav-link fw-bold py-1 px-0" href="logout">Cerrar Sesión</a>
-    </nav>    
-  </header>
- {% csrf_token %}
+    <div class="table-responsive">
+      <table id="table_id" class="display">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Presentación</th>
+                <th>Variedad</th>
+                <th>Calibre</th>
+                <th>Categoría</th>
+                <th>Planta</th>
+                <th>DP</th>
+                <th>PLU</th>
+                <th>¿Completo?</th>
+            </tr>
+        </thead>
+        <tbody>
+          
+          {% for pallet in pallets %}
+          <tr>
+            <td>{{ pallet.codigo }}</td>
+            <td>{{ pallet.presentacion.presentacion }}</td>
+            <td>{{ pallet.variedad.variedad }}</td>
+            <td>{{ pallet.calibre.calibre }}</td>
+            <td>{{ pallet.categoria.categoria }}</td>
+            <td>{{ pallet.planta.planta }}</td>
+            <td>{{ pallet.dp }}</td>
+            <td>{% if pallet.plu %} SI {% else %} NO {% endif %}</td>
+            <td>{% if pallet.completo %} COMPLETO {% else %} FALTANTE {% endif %}  </td>
+        </tr>
+          {% endfor %} 
+        </tbody>
+    </table>
+    <div class="modal modal-md fade" id="modalPallet" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header" style="align-text:center">
+            <h1 class="modal-title fs-5" id="modalTitle">Registrar Pallet</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <center>
+              <video id="preview" width="100%"></video>
+            </center>
+            <div id="formulario" class="text-center" style="display:none">
 
-</div>
+              <h4>Datos del Pallet</h4>
 
+              <div class="row">
+                <div class="mb-3 col">
+                  <label for="codigo" class="form-label">Código</label>
+                  <input type="text" class="form-control" id="codigo" placeholder="Codigo">
+                </div>
+                <div class="mb-3 col">
+                  <label for="dp" class="form-label">DP</label>
+                  <input type="text" class="form-control" id="dp" placeholder="dp">
+                </div>
+              </div>
 
-  <!--<button onclick="obtenerDatos()">Obtener Datos</button>
-  <button onclick="activarCamara()">Activar</button>
-  <button onclick="apagarCamara()">Desactivar</button>-->
-
-
-{% endblock content %}
+              <div class="row">
+                <div class="mb-3 col">
+                  <label for="dni" class="form-label">Presentación</label>
+                  <select name="presentacion" class="form-control" id="presentacion">
+                    <option value="0">Seleccione una presentación</option>
+                    {% for presentacion in presentaciones %}
+                      <option value="{{ presentacion.id }}">{{ presentacion.presentacion }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-3 col">
+                  <label for="dni" class="form-label">Variedad</label>
+                  <select name="presentacion" class="form-control" id="variedad">
+                    <option value="0">Seleccione</option>
+                    {% for variedad in variedades %}
+                      <option value="{{ variedad.id }}">{{ variedad.variedad }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3 col">
+                  <label for="dni" class="form-label">Calibre</label>
+                  <select name="calibre" class="form-control" id="calibre">
+                    <option value="0">Seleccione</option>
+                    {% for calibre in calibres %}
+                      <option value="{{ calibre.id }}">{{ calibre.calibre }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-3 col">
+                  <label for="categoria" class="form-label">Categoría</label>
+                  <select name="categoria" class="form-control" id="categoria">
+                    <option value="0">Seleccione</option>
+                    {% for categoria in categorias %}
+                      <option value="{{ categoria.id }}">{{ categoria.categoria }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3 col">
+                  <label for="categoria" class="form-label">Plu</label>
+                  <select name="categoria" class="form-control" id="categoria">
+                    <option value="True">Sí</option>
+                    <option value="False">No</option>
+                  </select>
+                </div>
+              </div>
+              <hr>
+              <div>
+                <h4>Detalle del Pallet</h4>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary">Guardar Cambios</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}

@@ -2,16 +2,19 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login,authenticate,logout
 from django.db import IntegrityError
-from .models import Pallet,Usuario
+from .models import Pallet,Presentacion,Variedad,Calibre,Categoria
 from django.http import JsonResponse
 from django.conf import settings
 
 def autenticacion(request):
     
     if request.method == "GET":
-        return render(request, 'login.html',{
-            'form' : UserCreationForm
-        })
+        if not request.user.is_authenticated:
+            return render(request, 'login.html',{
+                'form' : UserCreationForm
+            })
+        else:
+            return redirect('index')
     else:
         try:
             user = authenticate(username=request.POST['user'], password=request.POST['password'])
@@ -33,15 +36,27 @@ def cerrarSesion(request):
     return redirect('login')
 
 def index(request):
-    return render(request, 'index.html')
-
-def datosPallet(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     else:
+        pallets = Pallet.objects.all()
+        presentaciones = Presentacion.objects.values('id','presentacion')
+        variedades = Variedad.objects.values('id','variedad')
+        calibres = Calibre.objects.values('id','calibre')
+        categorias = Categoria.objects.values('id','categoria')
+        return render(request, 'index.html',{
+            'pallets':pallets,
+            'presentaciones': presentaciones,
+            'variedades' : variedades,
+            'calibres' : calibres,
+            'categorias' : categorias,
+        })
+
+def datosPallet(request):
+    if request.user.is_authenticated:
         if request.method == "POST":
-            qs = Usuario.objects.filter(dni=request.POST['codigo']).values()[:1]
+            qs = Pallet.objects.filter(codigo=request.POST['codigo']).values('codigo','presentacion','variedad','dp','calibre','categoria','plu')[:1]
             if qs.exists():
                 return JsonResponse(list(qs),safe=False)
-        else:
-            return redirect('login')
+    else:
+        return redirect('login')

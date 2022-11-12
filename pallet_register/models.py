@@ -1,6 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import (BaseUserManager,AbstractUser)
+from django.contrib.auth.models import (BaseUserManager,AbstractBaseUser)
+        
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True,editable=False)
+    updated_at = models.DateTimeField(auto_now=True,editable=False)
 
+    class Meta:
+        abstract = True
+    
 class ManejadorUsuario(BaseUserManager):
     def create_user(self,codigo,password=None):
         if not codigo:
@@ -35,11 +42,39 @@ class ManejadorUsuario(BaseUserManager):
         usuario.save(using=self._db)
         return usuario
 
-class Usuario(AbstractUser):
+class Zona(BaseModel):
+    zona = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.zona
+    
+class Sede(BaseModel):
+    sede = models.CharField(max_length=50)
+    zona = models.ForeignKey(Zona, on_delete=models.RESTRICT)
+    
+    def __str__(self):
+        return self.sede + ' | ' + self.zona.zona
+
+class Fundo(BaseModel):
+    fundo = models.CharField(max_length=100)
+    sede = models.ForeignKey(Sede, on_delete=models.RESTRICT)
+    
+    def __str__(self):
+        return self.fundo + ' | ' + self.sede.sede + ' | ' + self.sede.zona.zona
+    
+class Planta(BaseModel):
+    planta = models.CharField(max_length=100)
+    sede = models.ForeignKey(Sede, on_delete=models.RESTRICT)
+    
+    def __str__(self):
+        return self.planta + ' | ' + self.sede.sede + ' | ' + self.sede.zona.zona
+
+class Usuario(AbstractBaseUser):
     codigo = models.CharField(max_length=6,unique=True)
     dni = models.CharField(max_length=12)
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
+    planta = models.ForeignKey(Planta, on_delete=models.RESTRICT, null=True)
     
     active = models.BooleanField(verbose_name="Activo", default=True)
     staff = models.BooleanField(default=False)
@@ -84,42 +119,6 @@ class Usuario(AbstractUser):
     
     def __str__(self):
         return self.codigo + ' - ' + self.nombre + ' ' + self.apellido
-    
-
-        
-class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True,editable=False)
-    updated_at = models.DateTimeField(auto_now=True,editable=False)
-
-    class Meta:
-        abstract = True
-    
-class Zona(BaseModel):
-    zona = models.CharField(max_length=50)
-    
-    def __str__(self):
-        return self.zona
-    
-class Sede(BaseModel):
-    sede = models.CharField(max_length=50)
-    zona = models.ForeignKey(Zona, on_delete=models.RESTRICT)
-    
-    def __str__(self):
-        return self.sede + ' | ' + self.zona.zona
-
-class Fundo(BaseModel):
-    fundo = models.CharField(max_length=100)
-    sede = models.ForeignKey(Sede, on_delete=models.RESTRICT)
-    
-    def __str__(self):
-        return self.fundo + ' | ' + self.sede.sede + ' | ' + self.sede.zona.zona
-    
-class Planta(BaseModel):
-    planta = models.CharField(max_length=100)
-    sede = models.ForeignKey(Sede, on_delete=models.RESTRICT)
-    
-    def __str__(self):
-        return self.planta + ' | ' + self.sede.sede + ' | ' + self.sede.zona.zona
     
 class Lote(BaseModel):
     lote = models.CharField(max_length=50)
