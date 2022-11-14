@@ -44,8 +44,8 @@
             <h1 class="modal-title fs-5 text-white" id="modalTitle">Registrar Pallet</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body" style="height:690px;overflow-y:scroll">
-            <center>
+          <div class="modal-body" style="max-height:690px;overflow-y:scroll">
+            <center id="camara">
               <video id="preview" width="100%"></video>
             </center>
             <div id="formulario" class="text-center" style="display:none">
@@ -63,7 +63,7 @@
                 <div class="mb-3 col">
                   <label for="dni" class="form-label">Presentación</label>
                   <select name="presentacion" class="form-control" id="presentacion">
-                    <option value="0">Seleccione una presentación</option>
+                    <option value="">Seleccione una presentación</option>
                     {% for presentacion in presentaciones %}
                       <option value="{{ presentacion.id }}">{{ presentacion.presentacion }}</option>
                     {% endfor %}
@@ -72,18 +72,18 @@
               </div>
               <div class="row">
                 <div class="mb-3 col">
-                  <label for="dni" class="form-label">Variedad</label>
+                  <label for="variedad" class="form-label">Variedad</label>
                   <select name="presentacion" class="form-control" id="variedad">
-                    <option value="0">Seleccione</option>
+                    <option value="">Seleccione</option>
                     {% for variedad in variedades %}
                       <option value="{{ variedad.id }}">{{ variedad.variedad }}</option>
                     {% endfor %}
                   </select>
                 </div>
                 <div class="mb-3 col">
-                  <label for="dni" class="form-label">Calibre</label>
+                  <label for="calibre" class="form-label">Calibre</label>
                   <select name="calibre" class="form-control" id="calibre">
-                    <option value="0">Seleccione</option>
+                    <option value="">Seleccione</option>
                     {% for calibre in calibres %}
                       <option value="{{ calibre.id }}">{{ calibre.calibre }}</option>
                     {% endfor %}
@@ -94,35 +94,51 @@
                 <div class="mb-3 col">
                   <label for="categoria" class="form-label">Categoría</label>
                   <select name="categoria" class="form-control" id="categoria">
-                    <option value="0">Seleccione</option>
+                    <option value="">Seleccione</option>
                     {% for categoria in categorias %}
                       <option value="{{ categoria.id }}">{{ categoria.categoria }}</option>
                     {% endfor %}
                   </select>
                 </div>
                 <div class="mb-3 col">
-                  <label for="categoria" class="form-label">Plu</label>
-                  <select name="categoria" class="form-control" id="categoria">
-                    <option value="True">Sí</option>
-                    <option value="False">No</option>
+                  <label for="plu" class="form-label">Plu</label>
+                  <select name="plu" class="form-control" id="plu">
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
                   </select>
                 </div>
               </div>
               <hr>
               <div>
                 <h5>Detalle del Pallet</h5>
-                <div class="row">
-                  <div class="mb-3 col">
-                    <label for="codigo" class="form-label">Guía</label>
-                    <input type="text" class="form-control" id="numero_guia" placeholder="83838383">
+                <div id="detalle">
+                  <div class="row">
+                    <div class="mb-3 col">
+                      <label for="codigo" class="form-label">Guía</label>
+                      <input type="text" class="form-control" id="numero_guia0" placeholder="83838383">
+                    </div>
+                    <div class="mb-3 col">
+                      <label for="dp" class="form-label">Cajas</label>
+                      <input type="number" class="form-control" id="numero_cajas0" placeholder="00">
+                    </div>
+                    <div class="mb-3 col">
+                      <label for="dp" class="form-label">Lote</label>
+                      <input type="number" class="form-control" id="lote0" placeholder="2932389">
+                    </div>
                   </div>
-                  <div class="mb-3 col">
-                    <label for="dp" class="form-label">Cajas</label>
-                    <input type="number" class="form-control" id="numero_cajas" placeholder="00">
-                  </div>
-                  <div class="mb-3 col">
-                    <label for="dp" class="form-label">Lote</label>
-                    <input type="number" class="form-control" id="lote" placeholder="2932389">
+                  <div class="row" id="detalle">
+                    <div class="mb-3 col">
+                      <label for="codigo" class="form-label">Guía</label>
+                      <input type="text" class="form-control" id="numero_guia1" placeholder="83838383">
+                    </div>
+                    <div class="mb-3 col">
+                      <label for="dp" class="form-label">Cajas</label>
+                      <input type="number" class="form-control" id="numero_cajas1" placeholder="00">
+                    </div>
+                    <div class="mb-3 col">
+                      <label for="dp" class="form-label">Lote</label>
+                      <input type="number" class="form-control" id="lote1" placeholder="2932389">
+                    </div>
                   </div>
                 </div>
                 <button class="btn btn-warning w-100 rounded-md text-white">Agregar</button>
