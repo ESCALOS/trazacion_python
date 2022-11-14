@@ -40,18 +40,15 @@
     <div class="modal modal-md fade" id="modalPallet" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header" style="align-text:center">
-            <h1 class="modal-title fs-5" id="modalTitle">Registrar Pallet</h1>
+          <div class="modal-header bg-success" style="align-text:center">
+            <h1 class="modal-title fs-5 text-white" id="modalTitle">Registrar Pallet</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" style="height:690px;overflow-y:scroll">
             <center>
               <video id="preview" width="100%"></video>
             </center>
             <div id="formulario" class="text-center" style="display:none">
-
-              <h4>Datos del Pallet</h4>
-
               <div class="row">
                 <div class="mb-3 col">
                   <label for="codigo" class="form-label">Código</label>
@@ -62,7 +59,6 @@
                   <input type="text" class="form-control" id="dp" placeholder="dp">
                 </div>
               </div>
-
               <div class="row">
                 <div class="mb-3 col">
                   <label for="dni" class="form-label">Presentación</label>
@@ -114,7 +110,22 @@
               </div>
               <hr>
               <div>
-                <h4>Detalle del Pallet</h4>
+                <h5>Detalle del Pallet</h5>
+                <div class="row">
+                  <div class="mb-3 col">
+                    <label for="codigo" class="form-label">Guía</label>
+                    <input type="text" class="form-control" id="numero_guia" placeholder="83838383">
+                  </div>
+                  <div class="mb-3 col">
+                    <label for="dp" class="form-label">Cajas</label>
+                    <input type="number" class="form-control" id="numero_cajas" placeholder="00">
+                  </div>
+                  <div class="mb-3 col">
+                    <label for="dp" class="form-label">Lote</label>
+                    <input type="number" class="form-control" id="lote" placeholder="2932389">
+                  </div>
+                </div>
+                <button class="btn btn-warning w-100 rounded-md text-white">Agregar</button>
               </div>
             </div>
           </div>
