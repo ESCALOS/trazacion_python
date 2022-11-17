@@ -57,7 +57,7 @@ def datosPallet(request):
         if request.method == "POST":
             try:
                 pallet = Pallet.objects.values_list('codigo','dp','presentacion','variedad','calibre','categoria','plu', named=True).get(codigo=request.POST['codigo'])
-                detalle = DetallePallet.objects.filter(pallet__codigo = request.POST['codigo']).values('numero_de_guia','numero_de_cajas','lote_id')
+                detalle = DetallePallet.objects.filter(pallet__codigo = request.POST['codigo']).values('numero_de_guia','numero_de_cajas','lote__lote')
                 data = {
                     'success': True,
                     'pallet': pallet,
