@@ -5,5 +5,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('login/', views.autenticacion, name='login'),
     path('logout/',views.cerrarSesion,name='logout'),
-    path('datos/', views.datosPallet, name="datos_pallet")
+    path('datos/', views.datosPallet, name='datos_pallet'),
+    path('add_pallet/', views.registrarPallet, name='add_pallet')
 ]

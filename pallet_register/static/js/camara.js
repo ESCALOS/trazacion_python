@@ -26,7 +26,7 @@ function activarCamara(){
                 document.getElementById('camara').setAttribute('style','display:none');
                 document.getElementById('formulario').removeAttribute('style');
                 document.getElementById('codigo').value = json.pallet[0];
-                document.getElementById('dp').value = json.pallet[1]
+                document.getElementById('dp').value = json.pallet[1];
                 document.getElementById('presentacion').value = json.pallet[2];
                 document.getElementById('variedad').value = json.pallet[3];
                 document.getElementById('calibre').value = json.pallet[4];
@@ -34,24 +34,13 @@ function activarCamara(){
                 document.getElementById('plu').value = json.pallet[6];
 
                 for(i = 0; i<json.detalle.length;i++){
-
-                    //DECLARANDO LOS ELEMENTOS
-                    nuevo_detalle();
-
-                    //PONIENDO LOS VALORES DE LOS INPUTS
+                    nuevoDetalle();
                     document.getElementById('guia'+i).value = json.detalle[i].numero_de_guia; 
                     document.getElementById('cajas'+i).value = json.detalle[i].numero_de_cajas; 
                     document.getElementById('lote'+i).value = json.detalle[i].lote__lote; 
-
-
-                    //document.getElementById('numero_guia'+i).value = json.detalle[i].numero_de_guia;
-                    //document.getElementById('numero_cajas'+i).value = json.detalle[i].numero_de_cajas;
-                    //document.getElementById('lote'+i).value = json.detalle[i].lote_id;
                 };
             },
             error : function(xhr, status) {
-                console.log(status)
-                console.log(xhr)
                 document.getElementById('camara').setAttribute('style','display:none');
                 document.getElementById('formulario').removeAttribute('style');
                 document.getElementById('codigo').value = content;
@@ -68,8 +57,45 @@ function activarCamara(){
         });
     });
 }
+function registrarPallet(){
 
-function nuevo_detalle(){
+    codigo = document.getElementById('codigo').value;
+    dp = document.getElementById('dp').value;
+    presentacion = document.getElementById('presentacion').value;
+    variedad = document.getElementById('variedad').value;
+    calibre = document.getElementById('calibre').value;
+    categoria = document.getElementById('categoria').value;
+    plu = document.getElementById('plu').value;
+    $.ajax({
+        url : 'add_pallet/',
+        data : { 
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+            codigo : codigo,
+            dp : dp,
+            presentacion : presentacion,
+            variedad : variedad,
+            categoria : categoria,
+            calibre : calibre,
+            plu : plu
+        },
+        type : 'POST',
+        dataType : 'json',
+        success : function(json) {
+            console.log(json);
+        },
+        error : function(xhr, status) {
+            console.log(xhr);
+        },
+        complete : function(xhr, status) {
+            alert('Petición realizada');
+        }
+    });
+}
+function crearNuevoDetalle(){
+    nuevoDetalle();
+    i++;
+}
+function nuevoDetalle(){
     var divRow = document.createElement("div");
     var divColGuia = document.createElement("div");
     var divColCajas = document.createElement("div");
@@ -137,7 +163,6 @@ function nuevo_detalle(){
     divColLote.appendChild(labelLote);
     divColLote.appendChild(entradaLote);
 }
-
 $('#modalPallet').on('hidden.bs.modal', function (event) {
     scanner.stop();
     document.getElementById('formulario').setAttribute('style','display:none');

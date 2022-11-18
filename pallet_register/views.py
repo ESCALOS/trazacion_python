@@ -5,6 +5,7 @@ from django.db import IntegrityError
 from .models import Pallet,DetallePallet,Presentacion,Variedad,Calibre,Categoria
 from django.http import JsonResponse
 from django.conf import settings
+import distutils
 
 def autenticacion(request):
     
@@ -34,7 +35,6 @@ def autenticacion(request):
 def cerrarSesion(request):
     logout(request)
     return redirect('login')
-
 def index(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
@@ -51,7 +51,6 @@ def index(request):
             'calibres' : calibres,
             'categorias' : categorias,
         })
-
 def datosPallet(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -62,12 +61,12 @@ def datosPallet(request):
                     'success': True,
                     'pallet': pallet,
                     'detalle': list(detalle)
-                    }
+                }
                 return JsonResponse(data, safe=False)
             except Pallet.DoesNotExist:
                 data['success'] = False
                 data['message'] = "No se encontro el pallet"
-                return JsonResponse(data)
+                return JsonResponse(data, safe=False)
             except Exception as e:
                 data = {
                     'success' : False,
@@ -76,7 +75,51 @@ def datosPallet(request):
                 return JsonResponse(data, safe=False)
         else:
             data = {'success' : 'Fue por get'}
-            return JsonResponse(list(data))
+            return JsonResponse(data, safe=False)
     else:
         data = {'success': 'No identificado'}
-        return JsonResponse(list(data))
+        return JsonResponse(data, safe=False)
+def registrarPallet(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            try:
+                pallet = Pallet.objects.get(codigo=request.POST['codigo'])
+                pallet.dp = request.POST['dp']
+                pallet.calibre_id = request.POST['calibre']
+                pallet.variedad_id =request.POST['variedad']
+                pallet.presentacion_id = request.POST['presentacion']
+                pallet.categoria_id = request.POST['categoria']
+                pallet.plu = eval(request.POST['plu'].capitalize())
+                pallet.save();
+                data =  {
+                    'success': True,
+                    'message': 'Se actualizó el pallet'
+                }
+            except:
+                presentacion = Presentacion.objects.get(id=request.POST['presentacion'])
+                pallet = Pallet(
+                    codigo = request.POST['codigo'],
+                    dp = request.POST['dp'],
+                    planta_id = request.user.planta_id,
+                    calibre_id = request.POST['calibre'],
+                    variedad_id = request.POST['variedad'],
+                    presentacion_id = request.POST['presentacion'],
+                    categoria_id = request.POST['categoria'],
+                    plu = eval(request.POST['plu'].capitalize()),
+                    completo = False,
+                    cantidad_de_cajas = presentacion.cantidad_de_cajas
+                )
+                pallet.save();
+                data = {
+                    'success':True,
+                    'message':'Se creó el pallet'
+                }
+            return JsonResponse(data, safe=False)
+        else:
+            return redirect('login')
+    else:
+            data = {
+                'success': False,
+                'message': 'No identificado'
+            }
+            return JsonResponse(data, safe=False)
