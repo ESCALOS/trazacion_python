@@ -91,22 +91,56 @@ function registrarPallet(){
         }
     });
 }
+function registrarDetalle(){
+    detalle = [];
+    for(let j = 0; j < i; j++){
+        let guia = document.getElementById('guia'+j).value;
+        let numero_de_cajas = document.getElementById('cajas'+j).value;
+        let lote = document.getElementById('lote'+j).value;
+        detalle.push([guia,numero_de_cajas,lote]);
+    }
+    $.ajax({
+        url : 'add_pallet/',
+        data : { 
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+            codigo : codigo,
+            dp : dp,
+            presentacion : presentacion,
+            variedad : variedad,
+            categoria : categoria,
+            calibre : calibre,
+            plu : plu
+        },
+        type : 'POST',
+        dataType : 'json',
+        success : function(json) {
+            console.log(json);
+        },
+        error : function(xhr, status) {
+            console.log(xhr);
+        },
+        complete : function(xhr, status) {
+            alert('Petición realizada');
+        }
+    });
+    console.log(detalle);
+}
 function crearNuevoDetalle(){
     nuevoDetalle();
     i++;
 }
 function nuevoDetalle(){
-    var divRow = document.createElement("div");
-    var divColGuia = document.createElement("div");
-    var divColCajas = document.createElement("div");
-    var divColLote = document.createElement("div");
-    var labelGuia = document.createElement("label");
-    var labelCajas = document.createElement("label");
-    var labelLote = document.createElement("label");
-    var entradaGuia = document.createElement("input");
-    var entradaCajas = document.createElement("input");
-    var entradaLote = document.createElement("input");
-    var divDetalle = document.getElementById('detalle');
+    let divRow = document.createElement("div");
+    let divColGuia = document.createElement("div");
+    let divColCajas = document.createElement("div");
+    let divColLote = document.createElement("div");
+    let labelGuia = document.createElement("label");
+    let labelCajas = document.createElement("label");
+    let labelLote = document.createElement("label");
+    let entradaGuia = document.createElement("input");
+    let entradaCajas = document.createElement("input");
+    let entradaLote = document.createElement("input");
+    let divDetalle = document.getElementById('detalle');
 
     //ASIGNANDO LOS ATRIBUTOS
     divRow.setAttribute('id','divRow'+i);

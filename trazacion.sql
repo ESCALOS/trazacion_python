@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-11-2022 a las 20:01:34
--- Versión del servidor: 10.4.20-MariaDB
--- Versión de PHP: 8.0.8
+-- Tiempo de generación: 20-11-2022 a las 22:08:13
+-- Versión del servidor: 10.4.24-MariaDB
+-- Versión de PHP: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -173,7 +173,12 @@ INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`,
 (18, '2022-11-12 13:06:40.395785', '2', 'CATEGORIA 2', 1, '[{\"added\": {}}]', 8, 1),
 (19, '2022-11-12 13:06:47.125117', '3', 'CATEGORIA 3', 1, '[{\"added\": {}}]', 8, 1),
 (20, '2022-11-12 13:06:51.633608', '1', '70821326 | ICA', 1, '[{\"added\": {}}]', 15, 1),
-(21, '2022-11-12 13:07:44.777388', '1', '70821326 | ICA', 2, '[{\"changed\": {\"fields\": [\"Presentacion\"]}}]', 15, 1);
+(21, '2022-11-12 13:07:44.777388', '1', '70821326 | ICA', 2, '[{\"changed\": {\"fields\": [\"Presentacion\"]}}]', 15, 1),
+(22, '2022-11-17 19:15:16.876787', '1', 'SANTA MARGARITA | ICA | SUR', 1, '[{\"added\": {}}]', 9, 1),
+(23, '2022-11-17 19:15:19.743765', '1', '123456 | SANTA MARGARITA', 1, '[{\"added\": {}}]', 16, 1),
+(24, '2022-11-17 19:15:32.500117', '1', 'Pallet: 70821326 | Lote: 123456 | Guia: 12312312', 1, '[{\"added\": {}}]', 17, 1),
+(25, '2022-11-17 19:15:43.759195', '2', 'Pallet: 70821326 | Lote: 123456 | Guia: 2221', 1, '[{\"added\": {}}]', 17, 1),
+(26, '2022-11-17 19:15:53.869267', '1', 'Pallet: 70821326 | Lote: 123456 | Guia: 12312312', 2, '[{\"changed\": {\"fields\": [\"Numero de cajas\"]}}]', 17, 1);
 
 -- --------------------------------------------------------
 
@@ -265,6 +270,10 @@ CREATE TABLE `django_session` (
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
+('2tw19gikwkoonoct52xbh7s26e2tpihf', '.eJxVjDsOwjAQBe_iGlm28W8p6TlDtF6vcQDZUj4V4u4kUgpo38y8txhwXeqwzjwNYxYXocXpd0tIT247yA9s9y6pt2Uak9wVedBZ3nrm1_Vw_w4qznWrIygApazKlo3VEDwl8o6xAHiflU2UdDF2c86YiV0JgJFddGSC8Vp8vsZ6N1A:1ovp22:IVxdveuiIWbSb3rSIHH4H06ThTYD3egxWqG6GpuQOa0', '2022-12-01 19:14:58.286689'),
+('8h666gzr3qp9g5jybydcmur3nut92cab', '.eJxVjDsOwjAQBe_iGlm28W8p6TlDtF6vcQDZUj4V4u4kUgpo38y8txhwXeqwzjwNYxYXocXpd0tIT247yA9s9y6pt2Uak9wVedBZ3nrm1_Vw_w4qznWrIygApazKlo3VEDwl8o6xAHiflU2UdDF2c86YiV0JgJFddGSC8Vp8vsZ6N1A:1ow6nP:Hc695GRyMbPMkGZfApWESEpyIqGEAP0pA2-WNvZUkNA', '2022-12-02 14:13:03.901086'),
+('8lg2t1qk2jazzp108upmnsfft9xidrhm', '.eJxVjDsOwjAQBe_iGlm28W8p6TlDtF6vcQDZUj4V4u4kUgpo38y8txhwXeqwzjwNYxYXocXpd0tIT247yA9s9y6pt2Uak9wVedBZ3nrm1_Vw_w4qznWrIygApazKlo3VEDwl8o6xAHiflU2UdDF2c86YiV0JgJFddGSC8Vp8vsZ6N1A:1ow6v7:ACZaTG_wdTv-bMllK-QUpaXy03UfqCsEOx75sQr25aY', '2022-12-02 14:21:01.071105'),
+('cybuz561ez5s1gct4j8kq392y6k1xii4', '.eJxVjDsOwjAQBe_iGlm28W8p6TlDtF6vcQDZUj4V4u4kUgpo38y8txhwXeqwzjwNYxYXocXpd0tIT247yA9s9y6pt2Uak9wVedBZ3nrm1_Vw_w4qznWrIygApazKlo3VEDwl8o6xAHiflU2UdDF2c86YiV0JgJFddGSC8Vp8vsZ6N1A:1ow6xL:oJQ-sHwnauVuoYKgpqMkQU4vdzs--xXZGXDO_EpMeKY', '2022-12-02 14:23:19.493841'),
 ('e9igrq38k14o50slx2zsbmb4pfvbsl8j', '.eJxVjDkOwjAUBe_iGll2sPNjSvqcIfpbcADZUpYKcXeIlALaNzPvZQbc1jxsi87DJOZivDn9boT80LIDuWO5Vcu1rPNEdlfsQRfbV9Hn9XD_DjIu-VvHxM4Rdp7YcQwasQ2oAOgZk29CO0aMSVsgOaugUwcNJQaBMUFHYt4f8rA4kQ:1otulb:jFhAnmOFBE0fGKKpXRCYkj4n2Be_CDAUHJ36oq9TXTk', '2022-11-26 12:58:07.775306');
 
 -- --------------------------------------------------------
@@ -329,6 +338,14 @@ CREATE TABLE `pallet_register_detallepallet` (
   `usuario_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `pallet_register_detallepallet`
+--
+
+INSERT INTO `pallet_register_detallepallet` (`id`, `created_at`, `updated_at`, `numero_de_guia`, `numero_de_cajas`, `lote_id`, `pallet_id`, `usuario_id`) VALUES
+(1, '2022-11-17 19:15:32.464138', '2022-11-17 19:15:53.855263', '12312312', 36, 1, 1, 1),
+(2, '2022-11-17 19:15:43.730203', '2022-11-17 19:15:43.730203', '2221', 44, 1, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -342,6 +359,13 @@ CREATE TABLE `pallet_register_fundo` (
   `fundo` varchar(100) NOT NULL,
   `sede_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_fundo`
+--
+
+INSERT INTO `pallet_register_fundo` (`id`, `created_at`, `updated_at`, `fundo`, `sede_id`) VALUES
+(1, '2022-11-17 19:15:16.839391', '2022-11-17 19:15:16.839391', 'SANTA MARGARITA', 1);
 
 -- --------------------------------------------------------
 
@@ -357,6 +381,13 @@ CREATE TABLE `pallet_register_lote` (
   `fundo_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `pallet_register_lote`
+--
+
+INSERT INTO `pallet_register_lote` (`id`, `created_at`, `updated_at`, `lote`, `fundo_id`) VALUES
+(1, '2022-11-17 19:15:19.705338', '2022-11-17 19:15:19.705338', '123456', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -370,7 +401,7 @@ CREATE TABLE `pallet_register_pallet` (
   `codigo` varchar(255) NOT NULL,
   `dp` varchar(150) DEFAULT NULL,
   `plu` tinyint(1) NOT NULL,
-  `completo` tinyint(1) NOT NULL,
+  `completo` tinyint(1) NOT NULL DEFAULT 0,
   `cantidad_de_cajas` int(11) NOT NULL,
   `calibre_id` bigint(20) NOT NULL,
   `categoria_id` bigint(20) NOT NULL,
@@ -384,7 +415,9 @@ CREATE TABLE `pallet_register_pallet` (
 --
 
 INSERT INTO `pallet_register_pallet` (`id`, `created_at`, `updated_at`, `codigo`, `dp`, `plu`, `completo`, `cantidad_de_cajas`, `calibre_id`, `categoria_id`, `planta_id`, `presentacion_id`, `variedad_id`) VALUES
-(1, '2022-11-12 13:06:51.630653', '2022-11-12 13:07:44.776213', '70821326', '70821326', 1, 0, 90, 3, 3, 1, 2, 2);
+(1, '2022-11-12 13:06:51.630653', '2022-11-18 16:19:35.780775', '70821326', 'dp12', 0, 0, 90, 4, 1, 1, 3, 1),
+(2, '2022-11-18 15:57:40.237222', '2022-11-18 15:57:40.237222', '70821325', '70821326', 1, 0, 200, 3, 3, 1, 2, 2),
+(3, '2022-11-18 16:22:20.776899', '2022-11-18 16:22:20.776899', '70821324', 'dp12', 0, 0, 100, 4, 1, 1, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -476,7 +509,7 @@ CREATE TABLE `pallet_register_usuario` (
 --
 
 INSERT INTO `pallet_register_usuario` (`id`, `password`, `last_login`, `codigo`, `dni`, `nombre`, `apellido`, `active`, `staff`, `admin`, `planta_id`) VALUES
-(1, 'pbkdf2_sha256$390000$vD5Bx9mLuatzYSZibpMHCc$iGDsIMN3rBeswckvYF5bOC1Wazcj3nIP0GgzMrlekmU=', '2022-11-12 12:58:07.772097', '419738', '70821326', 'Carlos Daniel', 'Escate Román', 1, 1, 1, 1),
+(1, 'pbkdf2_sha256$320000$S5X3THdnkl0EyTLhL5wov4$8ObcCXZuFce95elfPZdmmOwo0UjaDDuXhW4inVQctsI=', '2022-11-18 14:23:19.457837', '419738', '70821326', 'Carlos Daniel', 'Escate Román', 1, 1, 1, 1),
 (2, 'pbkdf2_sha256$390000$2DG5StWBMnKwxVkFy7PFcc$VzxC/AbunFv+VeP06iS8zKLx49XYUVoYzWyurK0IbMk=', NULL, '419739', '', '', '', 1, 0, 0, 1);
 
 -- --------------------------------------------------------
@@ -687,7 +720,7 @@ ALTER TABLE `auth_permission`
 -- AUTO_INCREMENT de la tabla `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `django_content_type`
@@ -717,25 +750,25 @@ ALTER TABLE `pallet_register_categoria`
 -- AUTO_INCREMENT de la tabla `pallet_register_detallepallet`
 --
 ALTER TABLE `pallet_register_detallepallet`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_fundo`
 --
 ALTER TABLE `pallet_register_fundo`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_lote`
 --
 ALTER TABLE `pallet_register_lote`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_pallet`
 --
 ALTER TABLE `pallet_register_pallet`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_planta`

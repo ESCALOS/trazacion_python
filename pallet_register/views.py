@@ -5,7 +5,6 @@ from django.db import IntegrityError
 from .models import Pallet,DetallePallet,Presentacion,Variedad,Calibre,Categoria
 from django.http import JsonResponse
 from django.conf import settings
-import distutils
 
 def autenticacion(request):
     
@@ -80,7 +79,7 @@ def datosPallet(request):
         data = {'success': 'No identificado'}
         return JsonResponse(data, safe=False)
 def registrarPallet(request):
-    if request.user.is_authenticated:
+    """if request.user.is_authenticated:
         if request.method == "POST":
             try:
                 pallet = Pallet.objects.get(codigo=request.POST['codigo'])
@@ -122,4 +121,4 @@ def registrarPallet(request):
                 'success': False,
                 'message': 'No identificado'
             }
-            return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False)"""
