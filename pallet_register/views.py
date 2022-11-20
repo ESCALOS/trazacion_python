@@ -79,10 +79,10 @@ def datosPallet(request):
         data = {'success': 'No identificado'}
         return JsonResponse(data, safe=False)
 def registrarPallet(request):
-    """if request.user.is_authenticated:
+    if request.user.is_authenticated:
         if request.method == "POST":
             try:
-                pallet = Pallet.objects.get(codigo=request.POST['codigo'])
+                """pallet = Pallet.objects.get(codigo=request.POST['codigo'])
                 pallet.dp = request.POST['dp']
                 pallet.calibre_id = request.POST['calibre']
                 pallet.variedad_id =request.POST['variedad']
@@ -93,9 +93,9 @@ def registrarPallet(request):
                 data =  {
                     'success': True,
                     'message': 'Se actualizó el pallet'
-                }
+                }"""
             except:
-                presentacion = Presentacion.objects.get(id=request.POST['presentacion'])
+                """presentacion = Presentacion.objects.get(id=request.POST['presentacion'])
                 pallet = Pallet(
                     codigo = request.POST['codigo'],
                     dp = request.POST['dp'],
@@ -112,13 +112,13 @@ def registrarPallet(request):
                 data = {
                     'success':True,
                     'message':'Se creó el pallet'
-                }
+                }"""
             return JsonResponse(data, safe=False)
         else:
             return redirect('login')
     else:
-            data = {
-                'success': False,
-                'message': 'No identificado'
-            }
-            return JsonResponse(data, safe=False)"""
+        data = {
+            'success': False,
+            'message': 'No identificado'
+        }
+        return JsonResponse(data, safe=False)

@@ -58,7 +58,6 @@ function activarCamara(){
     });
 }
 function registrarPallet(){
-
     codigo = document.getElementById('codigo').value;
     dp = document.getElementById('dp').value;
     presentacion = document.getElementById('presentacion').value;
@@ -66,6 +65,13 @@ function registrarPallet(){
     calibre = document.getElementById('calibre').value;
     categoria = document.getElementById('categoria').value;
     plu = document.getElementById('plu').value;
+    detalle = [];
+    for(let j = 0; j < i; j++){
+        let guia = document.getElementById('guia'+j).value;
+        let numero_de_cajas = document.getElementById('cajas'+j).value;
+        let lote = document.getElementById('lote'+j).value;
+        detalle.push([guia,numero_de_cajas,lote]);
+    }
     $.ajax({
         url : 'add_pallet/',
         data : { 
@@ -76,7 +82,8 @@ function registrarPallet(){
             variedad : variedad,
             categoria : categoria,
             calibre : calibre,
-            plu : plu
+            plu : plu,
+            detalle:detalle
         },
         type : 'POST',
         dataType : 'json',
