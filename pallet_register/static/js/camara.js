@@ -58,7 +58,7 @@ function registrarPallet(){
             console.log(xhr);
         },
         complete : function(xhr, status) {
-            alert('Petición realizada');
+            //alert('Petición realizada');
         }
     });
 }
@@ -173,7 +173,7 @@ function obtenerDatos(content){
         },
 
         complete : function(xhr, status) {
-            alert('Petición realizada');
+            //alert('Petición realizada');
         }
     });
 }
@@ -203,7 +203,4 @@ $('#modalPallet').on('hidden.bs.modal', function (event) {
     document.getElementById('variedad').value = "";
     document.getElementById('categoria').value = "";
     document.getElementById('calibre').value = "";
-    scanner.addListener('inactive',() => {
-        setTimeout(()=>{ alert('La cámara está apagada')},1000);
-    });
 })
