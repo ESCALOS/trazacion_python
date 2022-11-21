@@ -215,8 +215,8 @@ function resetearModal(){
 $('#modalPallet').on('hidden.bs.modal', function (event) {
     if(camaraActiva){
         scanner.stop();
-        document.getElementById('btn-escanear').removeAttribute('style');
     }
+    document.getElementById('btn-escanear').setAttribute('style','display:none');
     resetearModal();
     cargarTabla();
 })
