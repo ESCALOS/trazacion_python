@@ -4,11 +4,11 @@ from django.contrib.auth import login,authenticate,logout
 from django.db import IntegrityError
 from .models import Pallet,DetallePallet,Presentacion,Variedad,Calibre,Categoria
 from django.http import JsonResponse
+from django.template.loader import render_to_string
 from django.conf import settings
 import json
 
 def autenticacion(request):
-    
     if request.method == "GET":
         if not request.user.is_authenticated:
             return render(request, 'login.html',{
@@ -51,6 +51,14 @@ def index(request):
             'calibres' : calibres,
             'categorias' : categorias,
         })
+def tablaPallet(request):
+    data = dict()
+    pallets = Pallet.objects.all()
+    context = {
+        'pallets':pallets
+    }
+    data['tabla'] = render_to_string('tabla_pallet.html',context,request=request)
+    return JsonResponse(data)
 def datosPallet(request):
     if request.user.is_authenticated:
         if request.method == "POST":

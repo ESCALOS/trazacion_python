@@ -5,38 +5,12 @@
     <div class="mt-2 mb-4">
       <button class="btn btn-md btn-success w-100" onclick="activarCamara()">Escanear código</button>
     </div>
+    <div id="tabla_prueba" class="table-responsive">
+
+    </div>
     <div class="table-responsive">
-      <table id="table_id" class="display">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Presentación</th>
-                <th>Variedad</th>
-                <th>Calibre</th>
-                <th>Categoría</th>
-                <th>Planta</th>
-                <th>DP</th>
-                <th>PLU</th>
-                <th>¿Completo?</th>
-            </tr>
-        </thead>
-        <tbody>
-          
-          {% for pallet in pallets %}
-          <tr onclick="editarPallet('{{ pallet.codigo }}')">
-            <td>{{ pallet.codigo }}</td>
-            <td>{{ pallet.presentacion.presentacion }}</td>
-            <td>{{ pallet.variedad.variedad }}</td>
-            <td>{{ pallet.calibre.calibre }}</td>
-            <td>{{ pallet.categoria.categoria }}</td>
-            <td>{{ pallet.planta.planta }}</td>
-            <td>{{ pallet.dp }}</td>
-            <td>{% if pallet.plu %} SI {% else %} NO {% endif %}</td>
-            <td>{% if pallet.completo %} COMPLETO {% else %} FALTANTE {% endif %}  </td>
-        </tr>
-          {% endfor %} 
-        </tbody>
-    </table>
+  
+    </div>
     <div class="modal modal-md fade" id="modalPallet" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">

@@ -1,5 +1,5 @@
 $(document).ready( function () {
-    $('#table_id').DataTable();
+    cargarTabla();
 } );
 let scanner;
 let i = 0;
@@ -166,28 +166,26 @@ function obtenerDatos(content){
                 };
             }else{
                 document.getElementById('codigo').value = content;
-                document.getElementById('dp').value = "";
-                document.getElementById('presentacion').value = "";
-                document.getElementById('variedad').value = "";
-                document.getElementById('categoria').value = "";
-                document.getElementById('calibre').value = "";
             }
         },
         error : function(xhr, status) {
-            document.getElementById('camara').setAttribute('style','display:none');
-            document.getElementById('formulario').removeAttribute('style');
-            document.getElementById('codigo').value = content;
-            document.getElementById('dp').value = "";
-            document.getElementById('presentacion').value = "";
-            document.getElementById('variedad').value = "";
-            document.getElementById('categoria').value = "";
-            document.getElementById('calibre').value = "";
+            console.log(status);
         },
 
         complete : function(xhr, status) {
             alert('Petición realizada');
         }
     });
+}
+function cargarTabla(){
+    $.ajax({
+        url: "tabla/",
+        dataType: 'json',
+        success: function (data) {
+            $('#tabla_prueba').html(data.tabla);
+            $('#table_id').DataTable();
+        }
+    })
 }
 $('#modalPallet').on('hidden.bs.modal', function (event) {
     let rowDetalles = Array.prototype.slice.call(document.getElementsByClassName('rowDetalle'),0);
@@ -199,7 +197,13 @@ $('#modalPallet').on('hidden.bs.modal', function (event) {
     }
     document.getElementById('formulario').setAttribute('style','display:none');
     document.getElementById('camara').removeAttribute('style');
+    cargarTabla();
+    document.getElementById('dp').value = "";
+    document.getElementById('presentacion').value = "";
+    document.getElementById('variedad').value = "";
+    document.getElementById('categoria').value = "";
+    document.getElementById('calibre').value = "";
     scanner.addListener('inactive',() => {
         setTimeout(()=>{ alert('La cámara está apagada')},1000);
     });
-  })
+})
