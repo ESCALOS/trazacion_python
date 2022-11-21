@@ -5,6 +5,7 @@ from django.db import IntegrityError
 from .models import Pallet,DetallePallet,Presentacion,Variedad,Calibre,Categoria
 from django.http import JsonResponse
 from django.conf import settings
+import json
 
 def autenticacion(request):
     
@@ -63,8 +64,10 @@ def datosPallet(request):
                 }
                 return JsonResponse(data, safe=False)
             except Pallet.DoesNotExist:
-                data['success'] = False
-                data['message'] = "No se encontro el pallet"
+                data = {
+                    'success': False,
+                    'message': "Pallet no encontrado",
+                }
                 return JsonResponse(data, safe=False)
             except Exception as e:
                 data = {
@@ -82,7 +85,8 @@ def registrarPallet(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             try:
-                """pallet = Pallet.objects.get(codigo=request.POST['codigo'])
+                detalles = json.loads(request.POST['detalles'])
+                pallet = Pallet.objects.get(codigo=request.POST['codigo'])
                 pallet.dp = request.POST['dp']
                 pallet.calibre_id = request.POST['calibre']
                 pallet.variedad_id =request.POST['variedad']
@@ -90,12 +94,16 @@ def registrarPallet(request):
                 pallet.categoria_id = request.POST['categoria']
                 pallet.plu = eval(request.POST['plu'].capitalize())
                 pallet.save();
+                DetallePallet.objects.filter(pallet=pallet).delete()
+                for detalle in detalles:
+                    DetallePallet.objects.create(numero_de_guia=detalle[0],numero_de_cajas=detalle[1],lote_id=1,pallet_id=pallet.pk,usuario_id=request.user.id)
                 data =  {
                     'success': True,
-                    'message': 'Se actualizó el pallet'
-                }"""
+                    'message': 'Se actualizó con éxito'
+                }
             except:
-                """presentacion = Presentacion.objects.get(id=request.POST['presentacion'])
+                detalles = json.loads(request.POST['detalles'])
+                presentacion = Presentacion.objects.get(id=request.POST['presentacion'])
                 pallet = Pallet(
                     codigo = request.POST['codigo'],
                     dp = request.POST['dp'],
@@ -109,10 +117,13 @@ def registrarPallet(request):
                     cantidad_de_cajas = presentacion.cantidad_de_cajas
                 )
                 pallet.save();
+                DetallePallet.objects.filter(pallet=pallet).delete()
+                for detalle in detalles:
+                    DetallePallet.objects.create(numero_de_guia=detalle[0],numero_de_cajas=detalle[1],lote_id=1,pallet_id=pallet.pk,usuario_id=request.user.id)
                 data = {
                     'success':True,
-                    'message':'Se creó el pallet'
-                }"""
+                    'message':'Se creó con éxito'
+                }
             return JsonResponse(data, safe=False)
         else:
             return redirect('login')

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-11-2022 a las 22:08:13
+-- Tiempo de generación: 21-11-2022 a las 05:53:55
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -329,8 +329,8 @@ INSERT INTO `pallet_register_categoria` (`id`, `created_at`, `updated_at`, `cate
 
 CREATE TABLE `pallet_register_detallepallet` (
   `id` bigint(20) NOT NULL,
-  `created_at` datetime(6) NOT NULL,
-  `updated_at` datetime(6) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   `numero_de_guia` varchar(255) NOT NULL,
   `numero_de_cajas` bigint(20) NOT NULL,
   `lote_id` bigint(20) NOT NULL,
@@ -343,8 +343,7 @@ CREATE TABLE `pallet_register_detallepallet` (
 --
 
 INSERT INTO `pallet_register_detallepallet` (`id`, `created_at`, `updated_at`, `numero_de_guia`, `numero_de_cajas`, `lote_id`, `pallet_id`, `usuario_id`) VALUES
-(1, '2022-11-17 19:15:32.464138', '2022-11-17 19:15:53.855263', '12312312', 36, 1, 1, 1),
-(2, '2022-11-17 19:15:43.730203', '2022-11-17 19:15:43.730203', '2221', 44, 1, 1, 1);
+(382, '2022-11-20 23:52:58', '2022-11-20 23:52:58', 'G-1', 60, 1, 15, 1);
 
 -- --------------------------------------------------------
 
@@ -415,9 +414,7 @@ CREATE TABLE `pallet_register_pallet` (
 --
 
 INSERT INTO `pallet_register_pallet` (`id`, `created_at`, `updated_at`, `codigo`, `dp`, `plu`, `completo`, `cantidad_de_cajas`, `calibre_id`, `categoria_id`, `planta_id`, `presentacion_id`, `variedad_id`) VALUES
-(1, '2022-11-12 13:06:51.630653', '2022-11-18 16:19:35.780775', '70821326', 'dp12', 0, 0, 90, 4, 1, 1, 3, 1),
-(2, '2022-11-18 15:57:40.237222', '2022-11-18 15:57:40.237222', '70821325', '70821326', 1, 0, 200, 3, 3, 1, 2, 2),
-(3, '2022-11-18 16:22:20.776899', '2022-11-18 16:22:20.776899', '70821324', 'dp12', 0, 0, 100, 4, 1, 1, 3, 1);
+(15, '2022-11-20 23:52:23.881702', '2022-11-20 23:52:58.914629', '70821326', 'DP-1', 0, 0, 200, 2, 3, 1, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -750,7 +747,7 @@ ALTER TABLE `pallet_register_categoria`
 -- AUTO_INCREMENT de la tabla `pallet_register_detallepallet`
 --
 ALTER TABLE `pallet_register_detallepallet`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=383;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_fundo`
@@ -768,7 +765,7 @@ ALTER TABLE `pallet_register_lote`
 -- AUTO_INCREMENT de la tabla `pallet_register_pallet`
 --
 ALTER TABLE `pallet_register_pallet`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_planta`
