@@ -169,10 +169,10 @@ class Pallet(BaseModel):
     
 class DetallePallet(BaseModel):
     pallet = models.ForeignKey(Pallet, on_delete=models.RESTRICT)
-    lote = models.ForeignKey(Lote, on_delete=models.RESTRICT)
+    lote = models.CharField(max_length=255)
     numero_de_guia = models.CharField(max_length=255)
     numero_de_cajas = models.BigIntegerField(default=0)
     usuario = models.ForeignKey(Usuario, on_delete=models.RESTRICT)
     
     def __str__(self):
-        return 'Pallet: ' + self.pallet.codigo + ' | Lote: ' + self.lote.lote + ' | Guia: ' + self.numero_de_guia
+        return 'Pallet: ' + self.pallet.codigo + ' | Lote: ' + self.lote + ' | Guia: ' + self.numero_de_guia

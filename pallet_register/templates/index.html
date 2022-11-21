@@ -23,7 +23,7 @@
         <tbody>
           
           {% for pallet in pallets %}
-          <tr>
+          <tr onclick="editarPallet('{{ pallet.codigo }}')">
             <td>{{ pallet.codigo }}</td>
             <td>{{ pallet.presentacion.presentacion }}</td>
             <td>{{ pallet.variedad.variedad }}</td>

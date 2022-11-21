@@ -3,65 +3,20 @@ $(document).ready( function () {
 } );
 let scanner;
 let i = 0;
+let camaraActiva = false;
 function activarCamara(){
     scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
     Instascan.Camera.getCameras().then(cameras => {
         scanner.camera = cameras[cameras.length - 1];
         scanner.start();
+        camaraActiva = true;
         $('#modalPallet').modal('show');
         console.log("Hay "+cameras.length+" cámaras.");
     }).catch(e => console.error(e));
     scanner.addListener('scan', content => {
         scanner.stop();
-        $.ajax({
-            url : 'datos/',
-            data : { 
-                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-                codigo : content
-            },
-            type : 'POST',
-            dataType : 'json',
-            success : function(json) {
-                document.getElementById('camara').setAttribute('style','display:none');
-                document.getElementById('formulario').removeAttribute('style');
-                if(json.success){
-                    document.getElementById('codigo').value = json.pallet[0];
-                    document.getElementById('dp').value = json.pallet[1];
-                    document.getElementById('presentacion').value = json.pallet[2];
-                    document.getElementById('variedad').value = json.pallet[3];
-                    document.getElementById('calibre').value = json.pallet[4];
-                    document.getElementById('categoria').value = json.pallet[5];
-                    document.getElementById('plu').value = json.pallet[6];
-                    for(i = 0; i<json.detalle.length;i++){
-                        nuevoDetalle();
-                        document.getElementById('guia'+i).value = json.detalle[i].numero_de_guia; 
-                        document.getElementById('cajas'+i).value = json.detalle[i].numero_de_cajas; 
-                        document.getElementById('lote'+i).value = json.detalle[i].lote__lote; 
-                    };
-                }else{
-                    document.getElementById('codigo').value = content;
-                    document.getElementById('dp').value = "";
-                    document.getElementById('presentacion').value = "";
-                    document.getElementById('variedad').value = "";
-                    document.getElementById('categoria').value = "";
-                    document.getElementById('calibre').value = "";
-                }
-            },
-            error : function(xhr, status) {
-                document.getElementById('camara').setAttribute('style','display:none');
-                document.getElementById('formulario').removeAttribute('style');
-                document.getElementById('codigo').value = content;
-                document.getElementById('dp').value = "";
-                document.getElementById('presentacion').value = "";
-                document.getElementById('variedad').value = "";
-                document.getElementById('categoria').value = "";
-                document.getElementById('calibre').value = "";
-            },
-
-            complete : function(xhr, status) {
-                alert('Petición realizada');
-            }
-        });
+        camaraActiva = false;
+        obtenerDatos(content);
     });
 }
 function registrarPallet(){
@@ -107,40 +62,6 @@ function registrarPallet(){
         }
     });
 }
-function registrarDetalle(){
-    detalle = [];
-    for(let j = 0; j < i; j++){
-        let guia = document.getElementById('guia'+j).value;
-        let numero_de_cajas = document.getElementById('cajas'+j).value;
-        let lote = document.getElementById('lote'+j).value;
-        detalle.push([guia,numero_de_cajas,lote]);
-    }
-    $.ajax({
-        url : 'add_pallet/',
-        data : { 
-            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-            codigo : codigo,
-            dp : dp,
-            presentacion : presentacion,
-            variedad : variedad,
-            categoria : categoria,
-            calibre : calibre,
-            plu : plu
-        },
-        type : 'POST',
-        dataType : 'json',
-        success : function(json) {
-            console.log(json);
-        },
-        error : function(xhr, status) {
-            console.log(xhr);
-        },
-        complete : function(xhr, status) {
-            alert('Petición realizada');
-        }
-    });
-    console.log(detalle);
-}
 function crearNuevoDetalle(){
     nuevoDetalle();
     i++;
@@ -167,7 +88,7 @@ function nuevoDetalle(){
     labelCajas.setAttribute('id','labelCaja'+i);
     labelLote.setAttribute('id','labelLote'+i);
 
-    divRow.setAttribute('class','row');
+    divRow.setAttribute('class','row rowDetalle');
 
     divColGuia.setAttribute('class','mb-3 col');
     divColCajas.setAttribute('class','mb-3 col');
@@ -213,8 +134,69 @@ function nuevoDetalle(){
     divColLote.appendChild(labelLote);
     divColLote.appendChild(entradaLote);
 }
+function editarPallet(codigo){
+    obtenerDatos(codigo);
+    $("#modalPallet").modal("show");
+}
+function obtenerDatos(content){
+    $.ajax({
+        url : 'datos/',
+        data : { 
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+            codigo : content
+        },
+        type : 'POST',
+        dataType : 'json',
+        success : function(json) {
+            document.getElementById('camara').setAttribute('style','display:none');
+            document.getElementById('formulario').removeAttribute('style');
+            if(json.success){
+                document.getElementById('codigo').value = json.pallet[0];
+                document.getElementById('dp').value = json.pallet[1];
+                document.getElementById('presentacion').value = json.pallet[2];
+                document.getElementById('variedad').value = json.pallet[3];
+                document.getElementById('calibre').value = json.pallet[4];
+                document.getElementById('categoria').value = json.pallet[5];
+                document.getElementById('plu').value = json.pallet[6];
+                for(i = 0; i<json.detalle.length;i++){
+                    nuevoDetalle();
+                    document.getElementById('guia'+i).value = json.detalle[i].numero_de_guia; 
+                    document.getElementById('cajas'+i).value = json.detalle[i].numero_de_cajas; 
+                    document.getElementById('lote'+i).value = json.detalle[i].lote; 
+                };
+            }else{
+                document.getElementById('codigo').value = content;
+                document.getElementById('dp').value = "";
+                document.getElementById('presentacion').value = "";
+                document.getElementById('variedad').value = "";
+                document.getElementById('categoria').value = "";
+                document.getElementById('calibre').value = "";
+            }
+        },
+        error : function(xhr, status) {
+            document.getElementById('camara').setAttribute('style','display:none');
+            document.getElementById('formulario').removeAttribute('style');
+            document.getElementById('codigo').value = content;
+            document.getElementById('dp').value = "";
+            document.getElementById('presentacion').value = "";
+            document.getElementById('variedad').value = "";
+            document.getElementById('categoria').value = "";
+            document.getElementById('calibre').value = "";
+        },
+
+        complete : function(xhr, status) {
+            alert('Petición realizada');
+        }
+    });
+}
 $('#modalPallet').on('hidden.bs.modal', function (event) {
-    scanner.stop();
+    let rowDetalles = Array.prototype.slice.call(document.getElementsByClassName('rowDetalle'),0);
+    if(camaraActiva){
+        scanner.stop();
+    }
+    for(element of rowDetalles){
+        element.remove();
+    }
     document.getElementById('formulario').setAttribute('style','display:none');
     document.getElementById('camara').removeAttribute('style');
     scanner.addListener('inactive',() => {
