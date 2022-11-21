@@ -10,10 +10,10 @@
             <th>DP</th>
             <th>PLU</th>
             <th>¿Completo?</th>
+            <th>Modificación</th>
         </tr>
     </thead>
     <tbody>
-      
       {% for pallet in pallets %}
       <tr onclick="editarPallet('{{ pallet.codigo }}')">
         <td>{{ pallet.codigo }}</td>
@@ -25,6 +25,7 @@
         <td>{{ pallet.dp }}</td>
         <td>{% if pallet.plu %} SI {% else %} NO {% endif %}</td>
         <td>{% if pallet.completo %} COMPLETO {% else %} FALTANTE {% endif %}  </td>
+        <td>{{ pallet.updated_at|date:'Y-m-d H:i'}}</td>
     </tr>
       {% endfor %} 
     </tbody>

@@ -53,7 +53,7 @@ def index(request):
         })
 def tablaPallet(request):
     data = dict()
-    pallets = Pallet.objects.all()
+    pallets = Pallet.objects.order_by('-updated_at')
     context = {
         'pallets':pallets
     }

@@ -164,6 +164,9 @@ class Pallet(BaseModel):
     completo = models.BooleanField(default=False)
     cantidad_de_cajas = models.IntegerField(default=90)
     
+    class Meta:
+        get_latest_by = "order_date"
+    
     def __str__(self):
         return self.codigo + ' | ' + self.planta.planta
     

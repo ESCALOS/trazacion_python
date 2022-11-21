@@ -16,6 +16,7 @@ function activarCamara(){
     scanner.addListener('scan', content => {
         scanner.stop();
         camaraActiva = false;
+        document.getElementById('btn-escanear').removeAttribute('style');
         obtenerDatos(content);
     });
 }
@@ -138,6 +139,13 @@ function editarPallet(codigo){
     obtenerDatos(codigo);
     $("#modalPallet").modal("show");
 }
+function escanear(){
+    document.getElementById('btn-escanear').setAttribute('style','display:none');
+    document.getElementById('formulario').setAttribute('style','display:none');
+    document.getElementById('camara').removeAttribute('style');
+    resetearModal();
+    activarCamara();
+}
 function obtenerDatos(content){
     $.ajax({
         url : 'datos/',
@@ -183,24 +191,32 @@ function cargarTabla(){
         dataType: 'json',
         success: function (data) {
             $('#tabla_prueba').html(data.tabla);
-            $('#table_id').DataTable();
+            
+            $('#table_id').DataTable({
+                "ordering": false,
+            });
         }
     })
 }
-$('#modalPallet').on('hidden.bs.modal', function (event) {
+function resetearModal(){
     let rowDetalles = Array.prototype.slice.call(document.getElementsByClassName('rowDetalle'),0);
-    if(camaraActiva){
-        scanner.stop();
-    }
+    i = 0;
     for(element of rowDetalles){
         element.remove();
     }
     document.getElementById('formulario').setAttribute('style','display:none');
     document.getElementById('camara').removeAttribute('style');
-    cargarTabla();
     document.getElementById('dp').value = "";
     document.getElementById('presentacion').value = "";
     document.getElementById('variedad').value = "";
     document.getElementById('categoria').value = "";
     document.getElementById('calibre').value = "";
+}
+$('#modalPallet').on('hidden.bs.modal', function (event) {
+    if(camaraActiva){
+        scanner.stop();
+        document.getElementById('btn-escanear').removeAttribute('style');
+    }
+    resetearModal();
+    cargarTabla();
 })
