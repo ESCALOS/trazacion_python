@@ -2,10 +2,12 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login,authenticate,logout
 from django.db import IntegrityError
+from django.db.models import Sum
 from .models import Pallet,DetallePallet,Presentacion,Variedad,Calibre,Categoria
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.utils.datastructures import MultiValueDictKeyError
 import json
 
 def autenticacion(request):
@@ -63,12 +65,13 @@ def datosPallet(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             try:
-                pallet = Pallet.objects.values_list('codigo','dp','presentacion','variedad','calibre','categoria','plu', named=True).get(codigo=request.POST['codigo'])
+                pallet = Pallet.objects.values_list('codigo','dp','presentacion','variedad','calibre','categoria','plu','cantidad_de_cajas',named=True).get(codigo=request.POST['codigo'])
                 detalle = DetallePallet.objects.filter(pallet__codigo = request.POST['codigo']).values('numero_de_guia','numero_de_cajas','lote')
                 data = {
                     'success': True,
                     'pallet': pallet,
-                    'detalle': list(detalle)
+                    'detalle': list(detalle),
+                    'message': 'Pallet encontrado'
                 }
                 return JsonResponse(data, safe=False)
             except Pallet.DoesNotExist:
@@ -136,6 +139,7 @@ def registrarPallet(request):
                     pallet.presentacion_id = request.POST['presentacion']
                     pallet.categoria_id = request.POST['categoria']
                     pallet.plu = eval(request.POST['plu'].capitalize())
+                    pallet.cantidad_de_cajas = presentacion.cantidad_de_cajas
                     pallet.save()
                     DetallePallet.objects.filter(pallet=pallet).delete()
                     for detalle in detalles:
@@ -197,3 +201,22 @@ def registrarPallet(request):
             'message': 'No identificado'
         }
         return JsonResponse(data, safe=False)
+def cantidadCajas(request):
+    if request.user.is_authenticated:
+        try:
+            cantidad_de_cajas_del_pallet = DetallePallet.objects.filter(pallet__codigo=request.GET['codigo']).aggregate(cantidad_de_cajas = Sum('numero_de_cajas'))
+            data = {
+                'success':True,
+                'message':cantidad_de_cajas_del_pallet['cantidad_de_cajas']
+            } 
+        except MultiValueDictKeyError:
+            data = {
+                'success' : False,
+                'message' : 'Falta el codigo del pallet'
+            }
+    else:
+        data = {
+            'success': False,
+            'message': 'No autorizado'
+        }
+    return JsonResponse(data,safe=False) 

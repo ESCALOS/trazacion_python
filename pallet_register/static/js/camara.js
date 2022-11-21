@@ -166,6 +166,7 @@ function obtenerDatos(content){
                 document.getElementById('calibre').value = json.pallet[4];
                 document.getElementById('categoria').value = json.pallet[5];
                 document.getElementById('plu').value = json.pallet[6];
+                document.getElementById('cajas_restantes').textContent = "Falta " + json.pallet[7] + ' - '+ obtenerCantidadCajas("70821326") + " cajas."
                 for(i = 0; i<json.detalle.length;i++){
                     nuevoDetalle();
                     document.getElementById('guia'+i).value = json.detalle[i].numero_de_guia; 
@@ -184,6 +185,34 @@ function obtenerDatos(content){
             //alert('Petición realizada');
         }
     });
+}
+function obtenerCantidadCajas(codigo){
+    let total_de_cajas = 50;
+    $.ajax({
+        url : 'cantidad_cajas/',
+        data : { 
+            codigo : codigo
+        },
+        type : 'GET',
+        dataType : 'json',
+        success : function(json) {
+            if(json.success){
+                console.log(json);
+                total_de_cajas = 30;
+            }else{
+                console.log(json.message);
+                total_de_cajas = 20;
+            }
+        },
+        error : function(xhr, status) {
+            console.log(status);
+        },
+
+        complete : function(xhr, status) {
+            //alert('Petición realizada');
+        }
+    });
+    return total_de_cajas;
 }
 function cargarTabla(){
     $.ajax({

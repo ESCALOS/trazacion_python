@@ -7,5 +7,6 @@ urlpatterns = [
     path('logout/',views.cerrarSesion,name='logout'),
     path('datos/', views.datosPallet, name='datos_pallet'),
     path('tabla/', views.tablaPallet, name='tabla_pallet'),
-    path('add_pallet/', views.registrarPallet, name='add_pallet')
+    path('add_pallet/', views.registrarPallet, name='add_pallet'),
+    path('cantidad_cajas/', views.cantidadCajas, name='cantidad_cajas'),
 ]
