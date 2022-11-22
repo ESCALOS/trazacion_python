@@ -1,1 +1,19 @@
-https://codepen.io/chris-gunawardena/pen/REGQPR?editors=1111
+https://timonweb.com/django/https-django-development-server-ssl-certificate/
+Paso 1: Instalar mkcert
+https://github.com/FiloSottile/mkcert
+Paso 2 : Instalar mkcert
+mkcert -install
+Paso 3 : Generar el certificado
+mkcert -cert-file cert.pem -key-file key.pem localhost 127.0.0.1
+Paso 4 : Installar django-extensions
+pip install django-extensions Werkzeug
+Paso 5 : Incluirlo en apps instaladas
+INSTALLED_APPS = [
+    # other apps
+    "django_extensions",
+]
+Paso 6: Correr en modo https
+python manage.py runserver_plus --cert-file cert.pem --key-file key.pem
+
+Codigo para correr con https : 
+python manage.py runserver_plus --cert-file cert.pem --key-file key.pem
