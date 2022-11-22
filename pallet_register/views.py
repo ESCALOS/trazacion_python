@@ -205,18 +205,20 @@ def cantidadCajas(request):
     if request.user.is_authenticated:
         try:
             cantidad_de_cajas_del_pallet = DetallePallet.objects.filter(pallet__codigo=request.GET['codigo']).aggregate(cantidad_de_cajas = Sum('numero_de_cajas'))
+            maximo_de_cajas_del_pallet = Presentacion.objects.values_list('cantidad_de_cajas').get(pk=request.GET['presentacion'])
             data = {
                 'success':True,
-                'message':cantidad_de_cajas_del_pallet['cantidad_de_cajas']
+                'message':"Pallet encontrado",
+                'total_cajas':cantidad_de_cajas_del_pallet['cantidad_de_cajas'],
+                'maximo_cajas':maximo_de_cajas_del_pallet[0]
             } 
         except MultiValueDictKeyError:
             data = {
                 'success' : False,
-                'message' : 'Falta el codigo del pallet'
-            }
+                'message' : 'Falta el codigo o presentacion del pallet',
+                'total_cajas': 0,
+                'maximo_cajas':0
+            }     
+        return JsonResponse(data,safe=False) 
     else:
-        data = {
-            'success': False,
-            'message': 'No autorizado'
-        }
-    return JsonResponse(data,safe=False) 
+        return redirect('login')

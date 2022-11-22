@@ -5,6 +5,7 @@ let scanner;
 let i = 0;
 let camaraActiva = false;
 function activarCamara(){
+    document.getElementById('modalTitle').textContent="Escanear Código";
     scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
     Instascan.Camera.getCameras().then(cameras => {
         scanner.camera = cameras[cameras.length - 1];
@@ -13,7 +14,7 @@ function activarCamara(){
         $('#modalPallet').modal('show');
         console.log("Hay "+cameras.length+" cámaras.");
     }).catch(e => console.error(e));
-    scanner.addListener('scan', content => {
+    scanner.addListener('scan',content => {
         scanner.stop();
         camaraActiva = false;
         document.getElementById('btn-escanear').removeAttribute('style');
@@ -53,13 +54,17 @@ function registrarPallet(){
         type : 'POST',
         dataType : 'json',
         success : function(json) {
-            console.log(json);
+            if(json.success){
+                obtenerCantidadCajas(codigo,presentacion);
+            }else{
+                console.log(json.message);
+            }
         },
         error : function(xhr, status) {
             console.log(xhr);
         },
         complete : function(xhr, status) {
-            //alert('Petición realizada');
+
         }
     });
 }
@@ -155,10 +160,13 @@ function obtenerDatos(content){
         },
         type : 'POST',
         dataType : 'json',
-        success : function(json) {
+        success : json => {
+            document.getElementById('btn-escanear').removeAttribute('style');
             document.getElementById('camara').setAttribute('style','display:none');
             document.getElementById('formulario').removeAttribute('style');
             if(json.success){
+                document.getElementById('modalTitle').textContent="Editar Pallet";
+                obtenerCantidadCajas(json.pallet[0],json.pallet[2]);
                 document.getElementById('codigo').value = json.pallet[0];
                 document.getElementById('dp').value = json.pallet[1];
                 document.getElementById('presentacion').value = json.pallet[2];
@@ -166,7 +174,6 @@ function obtenerDatos(content){
                 document.getElementById('calibre').value = json.pallet[4];
                 document.getElementById('categoria').value = json.pallet[5];
                 document.getElementById('plu').value = json.pallet[6];
-                document.getElementById('cajas_restantes').textContent = "Falta " + json.pallet[7] + ' - '+ obtenerCantidadCajas("70821326") + " cajas."
                 for(i = 0; i<json.detalle.length;i++){
                     nuevoDetalle();
                     document.getElementById('guia'+i).value = json.detalle[i].numero_de_guia; 
@@ -174,7 +181,9 @@ function obtenerDatos(content){
                     document.getElementById('lote'+i).value = json.detalle[i].lote; 
                 };
             }else{
+                document.getElementById('modalTitle').textContent="Registrar Pallet";
                 document.getElementById('codigo').value = content;
+                mensajesCajas(0,0);
             }
         },
         error : function(xhr, status) {
@@ -186,22 +195,18 @@ function obtenerDatos(content){
         }
     });
 }
-function obtenerCantidadCajas(codigo){
-    let total_de_cajas = 50;
+function obtenerCantidadCajas(codigo,presentacion){
     $.ajax({
         url : 'cantidad_cajas/',
         data : { 
-            codigo : codigo
+            codigo : codigo,
+            presentacion : presentacion
         },
         type : 'GET',
         dataType : 'json',
-        success : function(json) {
+        success : json => {
             if(json.success){
-                console.log(json);
-                total_de_cajas = 30;
-            }else{
-                console.log(json.message);
-                total_de_cajas = 20;
+                mensajesCajas(json.maximo_cajas,json.total_cajas);
             }
         },
         error : function(xhr, status) {
@@ -209,16 +214,34 @@ function obtenerCantidadCajas(codigo){
         },
 
         complete : function(xhr, status) {
-            //alert('Petición realizada');
+            console.log(xhr.responseJSON);
         }
     });
-    return total_de_cajas;
+}
+function mensajesCajas(maximo_cajas,total_cajas){
+    let cajas_restantes = maximo_cajas - total_cajas;
+    if(maximo_cajas == 0){
+        document.getElementById('cajas_restantes').removeAttribute('class');
+        document.getElementById('cajas_restantes').textContent = "Detalle del Pallet";
+    }else if(total_cajas == 0){
+        document.getElementById('cajas_restantes').removeAttribute('class');
+        document.getElementById('cajas_restantes').textContent = "Ninguna caja registrada";
+    }else if(cajas_restantes < 0){
+        document.getElementById('cajas_restantes').setAttribute('class','text-warning');
+        document.getElementById('cajas_restantes').textContent = "Sobran " + (cajas_restantes*-1);
+    }else if(cajas_restantes == 0){
+        document.getElementById('cajas_restantes').setAttribute('class','text-success');
+        document.getElementById('cajas_restantes').textContent = "Pallet Completo";
+    }else{
+        document.getElementById('cajas_restantes').setAttribute('class','text-danger');
+        document.getElementById('cajas_restantes').textContent = "Faltan " + (cajas_restantes);
+    }
 }
 function cargarTabla(){
     $.ajax({
         url: "tabla/",
         dataType: 'json',
-        success: function (data) {
+        success: data => {
             $('#tabla_prueba').html(data.tabla);
             
             $('#table_id').DataTable({
