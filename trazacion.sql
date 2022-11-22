@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-11-2022 a las 15:57:31
+-- Tiempo de generación: 22-11-2022 a las 18:27:15
 -- Versión del servidor: 10.4.20-MariaDB
 -- Versión de PHP: 8.0.8
 
@@ -262,7 +262,8 @@ CREATE TABLE `django_session` (
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
-('0hn81yhmiptvgclcuoyiegamatsh5t78', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1ox4nF:qn5SWq6WI-olLdUOnQyc9Ex3dfXq0YoLnssF0RmSi8Y', '2022-12-05 06:16:53.892517');
+('0hn81yhmiptvgclcuoyiegamatsh5t78', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1ox4nF:qn5SWq6WI-olLdUOnQyc9Ex3dfXq0YoLnssF0RmSi8Y', '2022-12-05 06:16:53.892517'),
+('1rrycxcskg357i2ghfks7ntheqinejcx', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxWXB:mIeG_5A-KuVE5a4h-UwEXrql6KurQFQJC2bJxKf5DQc', '2022-12-06 11:54:09.817843');
 
 -- --------------------------------------------------------
 
@@ -335,10 +336,15 @@ INSERT INTO `pallet_register_detallepallet` (`id`, `created_at`, `updated_at`, `
 (8, '2022-11-21 07:52:40.206170', '2022-11-21 07:52:40.206170', 'L-44', 'G-005', 40, 2, 2),
 (13, '2022-11-21 08:53:21.457298', '2022-11-21 08:53:21.457298', 'L-334', 'G-012', 40, 3, 2),
 (14, '2022-11-21 08:53:21.461313', '2022-11-21 08:53:21.461313', 'L-334', 'G-013', 33, 3, 2),
-(27, '2022-11-21 09:52:32.530552', '2022-11-21 09:52:32.530552', 'L-23', 'G-001', 20, 1, 2),
-(28, '2022-11-21 09:52:32.537311', '2022-11-21 09:52:32.537311', 'L-22', 'G-002', 30, 1, 2),
-(29, '2022-11-21 09:52:32.539768', '2022-11-21 09:52:32.539768', 'L-12', 'G-003', 30, 1, 2),
-(30, '2022-11-21 09:52:32.542944', '2022-11-21 09:52:32.542944', 'LOTE-3', 'G-003', 20, 1, 2);
+(38, '2022-11-22 12:01:47.705977', '2022-11-22 12:01:47.705977', 'L-33', 'G-21', 23, 4, 2),
+(39, '2022-11-22 12:01:47.707519', '2022-11-22 12:01:47.707519', 'L-33', 'G-45', 57, 4, 2),
+(52, '2022-11-22 12:02:43.944131', '2022-11-22 12:02:43.944131', 'L-23', 'G-001', 20, 1, 2),
+(53, '2022-11-22 12:02:43.946401', '2022-11-22 12:02:43.946401', 'L-22', 'G-002', 30, 1, 2),
+(54, '2022-11-22 12:02:43.947977', '2022-11-22 12:02:43.947977', 'L-12', 'G-003', 30, 1, 2),
+(55, '2022-11-22 12:02:43.948988', '2022-11-22 12:02:43.948988', 'LOTE-3', 'G-003', 20, 1, 2),
+(61, '2022-11-22 12:26:40.255674', '2022-11-22 12:26:40.255674', 'l-900', 'g-88', 12, 6, 2),
+(62, '2022-11-22 12:26:40.257672', '2022-11-22 12:26:40.257672', 'l-22', 'g-33', 78, 6, 2),
+(63, '2022-11-22 12:26:47.849622', '2022-11-22 12:26:47.849622', 'L-23', 'G-1222', 70, 5, 2);
 
 --
 -- Disparadores `pallet_register_detallepallet`
@@ -350,11 +356,11 @@ DECLARE cajas_totales INT;
 DECLARE presentacion INT;
 SELECT presentacion_id INTO presentacion FROM pallet_register_pallet WHERE id = new.pallet_id;
 SELECT cantidad_de_cajas INTO cajas_maxima FROM pallet_register_presentacion WHERE id = presentacion;
-SELECT COUNT(numero_de_cajas) INTO cajas_totales FROM pallet_register_detallepallet p WHERE p.pallet_id = new.pallet_id;
+SELECT SUM(numero_de_cajas) INTO cajas_totales FROM pallet_register_detallepallet p WHERE p.pallet_id = new.pallet_id;
 IF(cajas_totales = cajas_maxima) THEN
-	UPDATE pallet_register_pallet p SET p.completo = 0 WHERE id = new.pallet_id;
+	UPDATE pallet_register_pallet p SET p.completo = 1 WHERE id = new.pallet_id;
 ELSE
-	UPDATE pallet_register_pallet SET completo = 1 WHERE id = new.pallet_id;
+	UPDATE pallet_register_pallet SET completo = 0 WHERE id = new.pallet_id;
 END IF;
 END
 $$
@@ -415,9 +421,12 @@ CREATE TABLE `pallet_register_pallet` (
 --
 
 INSERT INTO `pallet_register_pallet` (`id`, `created_at`, `updated_at`, `codigo`, `dp`, `plu`, `completo`, `cantidad_de_cajas`, `calibre_id`, `categoria_id`, `planta_id`, `presentacion_id`, `variedad_id`) VALUES
-(1, '2022-11-21 06:25:39.885277', '2022-11-21 09:52:32.521115', '70821326', 'DP-1', 0, 1, 0, 2, 2, 1, 2, 1),
+(1, '2022-11-21 06:25:39.885277', '2022-11-22 12:02:43.938091', '70821326', 'DP-1', 0, 0, 100, 2, 2, 1, 2, 1),
 (2, '2022-11-21 07:36:45.450610', '2022-11-21 07:52:40.193842', '1-300242.', 'DP-2', 1, 0, 100, 3, 2, 1, 2, 2),
-(3, '2022-11-21 08:53:21.432381', '2022-11-21 08:53:21.432381', '18-213643.', 'DP-12', 0, 0, 80, 1, 2, 1, 3, 3);
+(3, '2022-11-21 08:53:21.432381', '2022-11-21 08:53:21.432381', '18-213643.', 'DP-12', 0, 0, 80, 1, 2, 1, 3, 3),
+(4, '2022-11-22 11:58:22.538152', '2022-11-22 12:01:47.702977', '18-213639.', 'DP-123', 0, 0, 90, 1, 1, 1, 1, 1),
+(5, '2022-11-22 12:00:03.960725', '2022-11-22 12:26:47.832429', '18-213637.', 'DP-33', 1, 0, 80, 4, 2, 1, 3, 2),
+(6, '2022-11-22 12:18:50.088574', '2022-11-22 12:26:40.241535', '18-213625.', 'DP-32', 1, 1, 90, 4, 3, 1, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -509,7 +518,7 @@ CREATE TABLE `pallet_register_usuario` (
 --
 
 INSERT INTO `pallet_register_usuario` (`id`, `password`, `last_login`, `codigo`, `dni`, `nombre`, `apellido`, `active`, `staff`, `admin`, `planta_id`) VALUES
-(2, 'pbkdf2_sha256$390000$5iexyZyWgAn4gALwfzZleu$WliwT5NHGwcHPzRlSqDDRJmLHfsFIuXhQIp867Vu/iY=', '2022-11-21 06:16:53.886426', '419738', '70821326', 'Carlos Daniel', 'Escate Román', 1, 1, 1, 1);
+(2, 'pbkdf2_sha256$390000$5iexyZyWgAn4gALwfzZleu$WliwT5NHGwcHPzRlSqDDRJmLHfsFIuXhQIp867Vu/iY=', '2022-11-22 11:54:09.815675', '419738', '70821326', 'Carlos Daniel', 'Escate Román', 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -748,7 +757,7 @@ ALTER TABLE `pallet_register_categoria`
 -- AUTO_INCREMENT de la tabla `pallet_register_detallepallet`
 --
 ALTER TABLE `pallet_register_detallepallet`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_fundo`
@@ -766,7 +775,7 @@ ALTER TABLE `pallet_register_lote`
 -- AUTO_INCREMENT de la tabla `pallet_register_pallet`
 --
 ALTER TABLE `pallet_register_pallet`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_planta`
