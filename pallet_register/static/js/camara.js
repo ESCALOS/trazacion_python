@@ -3,16 +3,30 @@ $(document).ready( function () {
 } );
 let scanner;
 let i = 0;
+let numero_de_la_camara = 0;
 let camaraActiva = false;
 function activarCamara(){
     document.getElementById('modalTitle').textContent="Escanear Código";
     scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror:false });
     Instascan.Camera.getCameras().then(cameras => {
-        scanner.camera = cameras[cameras.length - 1];
-        //scanner.camera = cameras[0];
-        scanner.start();
-        camaraActiva = true;
-        $('#modalPallet').modal('show');
+        if(cameras.length > 0){
+            if(numero_de_la_camara+1 == cameras.length){
+                numero_de_la_camara = 0;
+            }else{
+                numero_de_la_camara = numero_de_la_camara+1;
+            }
+            scanner.camera = cameras[numero_de_la_camara];
+            scanner.start();
+            camaraActiva = true;
+            $('#modalPallet').modal('show');
+        }else{
+            Swal.fire(
+                'Sin cámaras',
+                'No se encontraron cámaras',
+                'error',
+              )
+        }
+        
     }).catch(e => console.error(e));
     scanner.addListener('scan',content => {
         scanner.stop();
@@ -67,8 +81,6 @@ function registrarPallet(){
         success : json => {
             if(json.success){
                 obtenerCantidadCajas(codigo,presentacion);
-            }else{
-                console.log(json.message);
             }
         },
         error : function(xhr, status) {
@@ -145,6 +157,7 @@ function nuevoDetalle(){
     entradaCajas.type = "number";
     entradaCajas.setAttribute('placeholder','00');
     entradaCajas.setAttribute('id','cajas'+i);
+    entradaCajas.setAttribute('onchange','verificarCajas(this)');
 
     entradaLote.setAttribute('class','form-control');
     entradaLote.type = "text";
@@ -258,7 +271,7 @@ function obtenerCantidadCajas(codigo,presentacion){
         },
 
         complete : function(xhr, status) {
-            console.log(xhr.responseJSON);
+            
         }
     });
 }
@@ -311,16 +324,7 @@ function cargarTabla(){
               })
         },
         complete : (xhr,status) =>{
-            if(status == "success"){
-                Swal.fire({
-                    position: 'top-end',
-                    icon: status,
-                    title: "Datos cargados",
-                    showConfirmButton: false,
-                    timer: 1000
-                  })
-            }
-            
+            document.getElementsByClassName("swal2-container")[0].style.display = "none";
         } 
     })
 }
@@ -337,6 +341,46 @@ function resetearModal(){
     document.getElementById('variedad').value = "";
     document.getElementById('categoria').value = "";
     document.getElementById('calibre').value = "";
+}
+function verificarCajas(self){
+    let presentacion = document.getElementById('presentacion').value;
+    if(presentacion > 0){
+        $.ajax({
+            url : 'cantidad_cajas/',
+            data : { 
+                codigo : '',
+                presentacion : presentacion
+            },
+            type : 'GET',
+            dataType : 'json',
+            success : json => {
+                let total_cajas = 0;
+                if(json.success){
+                    for(let j = 0; j<i; j++){
+                        total_cajas = total_cajas + parseInt(document.getElementById('cajas'+j).value);
+                    }
+                    if(total_cajas> json.maximo_cajas){
+                        total_cajas = total_cajas - parseInt(self.value)
+                        self.value = json.maximo_cajas - total_cajas;
+                    }
+                }
+            },
+            error : function(xhr, status) {
+                console.log(xhr);
+            },
+    
+            complete : function(xhr, status) {
+                
+            }
+        });
+    }else{
+        Swal.fire({
+            icon: 'warning',
+            title: "Seleccione una presentación",
+            showConfirmButton: false,
+            timer: 850
+          })
+    }
 }
 $('#modalPallet').on('hidden.bs.modal', function (event) {
     if(camaraActiva){

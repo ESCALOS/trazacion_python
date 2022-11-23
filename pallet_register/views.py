@@ -241,12 +241,17 @@ def registrarPallet(request):
 def cantidadCajas(request):
     if request.user.is_authenticated:
         try:
-            cantidad_de_cajas_del_pallet = DetallePallet.objects.filter(pallet__codigo=request.GET['codigo']).aggregate(cantidad_de_cajas = Sum('numero_de_cajas'))
+            if(request.GET['codigo']==''):
+                cantidad_presentacion = 0
+            else:
+                cantidad_de_cajas_del_pallet = DetallePallet.objects.filter(pallet__codigo=request.GET['codigo']).aggregate(cantidad_de_cajas = Sum('numero_de_cajas'))
+                cantidad_presentacion = cantidad_de_cajas_del_pallet['cantidad_de_cajas']
+                
             maximo_de_cajas_del_pallet = Presentacion.objects.values_list('cantidad_de_cajas').get(pk=request.GET['presentacion'])
             data = {
                 'success':True,
                 'message':"Pallet encontrado",
-                'total_cajas':cantidad_de_cajas_del_pallet['cantidad_de_cajas'],
+                'total_cajas':cantidad_presentacion,
                 'maximo_cajas':maximo_de_cajas_del_pallet[0]
             } 
         except MultiValueDictKeyError:
