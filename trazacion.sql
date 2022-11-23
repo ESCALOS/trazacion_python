@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-11-2022 a las 18:27:15
+-- Tiempo de generación: 23-11-2022 a las 16:06:35
 -- Versión del servidor: 10.4.20-MariaDB
 -- Versión de PHP: 8.0.8
 
@@ -263,7 +263,16 @@ CREATE TABLE `django_session` (
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
 ('0hn81yhmiptvgclcuoyiegamatsh5t78', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1ox4nF:qn5SWq6WI-olLdUOnQyc9Ex3dfXq0YoLnssF0RmSi8Y', '2022-12-05 06:16:53.892517'),
-('1rrycxcskg357i2ghfks7ntheqinejcx', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxWXB:mIeG_5A-KuVE5a4h-UwEXrql6KurQFQJC2bJxKf5DQc', '2022-12-06 11:54:09.817843');
+('1rrycxcskg357i2ghfks7ntheqinejcx', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxWXB:mIeG_5A-KuVE5a4h-UwEXrql6KurQFQJC2bJxKf5DQc', '2022-12-06 11:54:09.817843'),
+('2wl60kfktt7b53nvyirexo5cglh71h6q', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxYLV:CpUuCwNdfpUYW_KoOAVKgMCiBXMl4sjf8fCUxtg4F_k', '2022-12-06 13:50:13.163801'),
+('40tmwb9v40js2lrcjzt781gyyrvglrj9', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxXS8:L0iYiNfO7ITA_nnr8AZ5O-e7yD-I6ctqfdMWYvHaFBI', '2022-12-06 12:53:00.313932'),
+('78t75zsyh0bvhdgsgoimlx9qt1xtxomv', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxXio:v_GjN1vgutnWNB-XDczF4dhvGjOQoAiM-Ux6zup0sZU', '2022-12-06 13:10:14.981210'),
+('bzkppgg0q0b348c2t8d1xyev1s2k79vl', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxXIv:f6GULM_WaHogcF5YaXEss2XS3advCgkv9x9yy_ibfRE', '2022-12-06 12:43:29.883932'),
+('cb2n6s2ok4ds8ojrei7pjlfhmpa4x46u', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxoiZ:c8qd12UL6G8YX8IlqW9lgr5a1_4leaJNTl_nSbFFauo', '2022-12-07 07:19:07.699594'),
+('iqgrrkgmb5exke32rln6qiisjlmyoksf', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxYcf:3ugTrE9naKjtGTuDaB6dsGA3GutB5KGdRNmgxp7AU98', '2022-12-06 14:07:57.140408'),
+('qxy4wmxiy4grgdhp10tmbxxy8uqo7yf8', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxolh:2vE9vrzx1cS74Ycntqy08moL-8RFuqeoiELpvo3FO5A', '2022-12-07 07:22:21.701629'),
+('rg1emki851spi6rx5vu8o9u4ih8xl6mo', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxXUI:eg2YVPoo_4pfKPMwrRfU56aoI3rLZ1r3bV3WEHXb8zU', '2022-12-06 12:55:14.593919'),
+('y2m2e7i2c36kduqy59goejk26vt6qnst', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxYCN:fBW4iLOd4NLYwTK2utpb-XHa9f4v-G1E9biY9qLp5Is', '2022-12-06 13:40:47.122401');
 
 -- --------------------------------------------------------
 
@@ -332,19 +341,35 @@ CREATE TABLE `pallet_register_detallepallet` (
 --
 
 INSERT INTO `pallet_register_detallepallet` (`id`, `created_at`, `updated_at`, `lote`, `numero_de_guia`, `numero_de_cajas`, `pallet_id`, `usuario_id`) VALUES
-(7, '2022-11-21 07:52:40.201597', '2022-11-21 07:52:40.201597', 'L-57', 'G-004', 37, 2, 2),
-(8, '2022-11-21 07:52:40.206170', '2022-11-21 07:52:40.206170', 'L-44', 'G-005', 40, 2, 2),
 (13, '2022-11-21 08:53:21.457298', '2022-11-21 08:53:21.457298', 'L-334', 'G-012', 40, 3, 2),
 (14, '2022-11-21 08:53:21.461313', '2022-11-21 08:53:21.461313', 'L-334', 'G-013', 33, 3, 2),
-(38, '2022-11-22 12:01:47.705977', '2022-11-22 12:01:47.705977', 'L-33', 'G-21', 23, 4, 2),
-(39, '2022-11-22 12:01:47.707519', '2022-11-22 12:01:47.707519', 'L-33', 'G-45', 57, 4, 2),
-(52, '2022-11-22 12:02:43.944131', '2022-11-22 12:02:43.944131', 'L-23', 'G-001', 20, 1, 2),
-(53, '2022-11-22 12:02:43.946401', '2022-11-22 12:02:43.946401', 'L-22', 'G-002', 30, 1, 2),
-(54, '2022-11-22 12:02:43.947977', '2022-11-22 12:02:43.947977', 'L-12', 'G-003', 30, 1, 2),
-(55, '2022-11-22 12:02:43.948988', '2022-11-22 12:02:43.948988', 'LOTE-3', 'G-003', 20, 1, 2),
 (61, '2022-11-22 12:26:40.255674', '2022-11-22 12:26:40.255674', 'l-900', 'g-88', 12, 6, 2),
 (62, '2022-11-22 12:26:40.257672', '2022-11-22 12:26:40.257672', 'l-22', 'g-33', 78, 6, 2),
-(63, '2022-11-22 12:26:47.849622', '2022-11-22 12:26:47.849622', 'L-23', 'G-1222', 70, 5, 2);
+(64, '2022-11-22 13:57:26.735043', '2022-11-22 13:57:26.735043', 'L-23', 'G-1222', 70, 5, 2),
+(65, '2022-11-22 13:57:26.735043', '2022-11-22 13:57:26.735043', 'L-666', 'G-233', 10, 5, 2),
+(66, '2022-11-22 13:57:38.139237', '2022-11-22 13:57:38.139237', 'L-23', 'G-001', 20, 1, 2),
+(67, '2022-11-22 13:57:38.139237', '2022-11-22 13:57:38.139237', 'L-22', 'G-002', 30, 1, 2),
+(68, '2022-11-22 13:57:38.154868', '2022-11-22 13:57:38.154868', 'L-12', 'G-003', 30, 1, 2),
+(69, '2022-11-22 13:57:38.154868', '2022-11-22 13:57:38.154868', 'LOTE-3', 'G-003', 20, 1, 2),
+(73, '2022-11-22 13:58:08.407528', '2022-11-22 13:58:08.407528', 'L-33', 'G-21', 23, 4, 2),
+(74, '2022-11-22 13:58:08.407528', '2022-11-22 13:58:08.407528', 'L-33', 'G-45', 57, 4, 2),
+(75, '2022-11-22 13:58:08.407528', '2022-11-22 13:58:08.407528', 'L-777', 'G-46', 10, 4, 2),
+(76, '2022-11-23 07:35:11.319359', '2022-11-23 07:35:11.319359', 'L-57', 'G-004', 37, 2, 2),
+(77, '2022-11-23 07:35:11.319359', '2022-11-23 07:35:11.319359', 'L-44', 'G-005', 41, 2, 2),
+(79, '2022-11-23 09:25:53.325339', '2022-11-23 09:25:53.325339', '445', 'G-12', 80, 7, 2),
+(80, '2022-11-23 09:25:53.328194', '2022-11-23 09:25:53.328194', '122', 'G-122', 10, 7, 2),
+(97, '2022-11-23 09:30:16.540911', '2022-11-23 09:30:16.540911', 'l-900', 'g-88', 22, 8, 2),
+(98, '2022-11-23 09:30:16.542667', '2022-11-23 09:30:16.542667', 'as', 'ss', 22, 8, 2),
+(99, '2022-11-23 09:30:16.544672', '2022-11-23 09:30:16.544672', 'sas', 'as', 22, 8, 2),
+(100, '2022-11-23 09:30:16.545668', '2022-11-23 09:30:16.545668', 'as', 's', 22, 8, 2),
+(103, '2022-11-23 09:34:41.930655', '2022-11-23 09:34:41.930655', '98', 'G-666', 40, 9, 2),
+(104, '2022-11-23 09:34:41.930655', '2022-11-23 09:34:41.930655', '98', 'G-88', 39, 9, 2),
+(105, '2022-11-23 09:36:18.311821', '2022-11-23 09:36:18.311821', 'L-98', 'G-77', 36, 10, 2),
+(106, '2022-11-23 09:36:18.311821', '2022-11-23 09:36:18.311821', '98', 'G-88', 42, 10, 2),
+(107, '2022-11-23 09:38:34.444454', '2022-11-23 09:38:34.444454', 'L-12', 'G-666', 60, 11, 2),
+(108, '2022-11-23 09:38:34.460092', '2022-11-23 09:38:34.460092', 'L-44', 'G-233', 30, 11, 2),
+(109, '2022-11-23 09:39:44.391738', '2022-11-23 09:39:44.391738', 'L-77', 'G-666', 58, 12, 2),
+(110, '2022-11-23 09:39:44.391738', '2022-11-23 09:39:44.391738', '98', 'G-88', 22, 12, 2);
 
 --
 -- Disparadores `pallet_register_detallepallet`
@@ -421,12 +446,18 @@ CREATE TABLE `pallet_register_pallet` (
 --
 
 INSERT INTO `pallet_register_pallet` (`id`, `created_at`, `updated_at`, `codigo`, `dp`, `plu`, `completo`, `cantidad_de_cajas`, `calibre_id`, `categoria_id`, `planta_id`, `presentacion_id`, `variedad_id`) VALUES
-(1, '2022-11-21 06:25:39.885277', '2022-11-22 12:02:43.938091', '70821326', 'DP-1', 0, 0, 100, 2, 2, 1, 2, 1),
-(2, '2022-11-21 07:36:45.450610', '2022-11-21 07:52:40.193842', '1-300242.', 'DP-2', 1, 0, 100, 3, 2, 1, 2, 2),
+(1, '2022-11-21 06:25:39.885277', '2022-11-22 13:57:38.090229', '70821326', 'DP-1', 0, 1, 100, 2, 2, 1, 2, 1),
+(2, '2022-11-21 07:36:45.450610', '2022-11-23 07:35:11.300868', '1-300242.', 'DP-2', 1, 0, 100, 3, 2, 1, 2, 2),
 (3, '2022-11-21 08:53:21.432381', '2022-11-21 08:53:21.432381', '18-213643.', 'DP-12', 0, 0, 80, 1, 2, 1, 3, 3),
-(4, '2022-11-22 11:58:22.538152', '2022-11-22 12:01:47.702977', '18-213639.', 'DP-123', 0, 0, 90, 1, 1, 1, 1, 1),
-(5, '2022-11-22 12:00:03.960725', '2022-11-22 12:26:47.832429', '18-213637.', 'DP-33', 1, 0, 80, 4, 2, 1, 3, 2),
-(6, '2022-11-22 12:18:50.088574', '2022-11-22 12:26:40.241535', '18-213625.', 'DP-32', 1, 1, 90, 4, 3, 1, 1, 2);
+(4, '2022-11-22 11:58:22.538152', '2022-11-22 13:58:08.389093', '18-213639.', 'DP-123', 0, 1, 90, 1, 1, 1, 1, 1),
+(5, '2022-11-22 12:00:03.960725', '2022-11-22 13:57:26.723268', '18-213637.', 'DP-33', 1, 1, 80, 4, 2, 1, 3, 2),
+(6, '2022-11-22 12:18:50.088574', '2022-11-22 12:26:40.241535', '18-213625.', 'DP-32', 1, 1, 90, 4, 3, 1, 1, 2),
+(7, '2022-11-23 09:19:23.789643', '2022-11-23 09:25:53.311189', '18-213569.', '9191', 1, 1, 90, 2, 1, 1, 1, 2),
+(8, '2022-11-23 09:28:32.508932', '2022-11-23 09:30:16.526193', '18-213554.', 'DP-32', 1, 0, 100, 3, 3, 1, 2, 2),
+(9, '2022-11-23 09:34:37.011153', '2022-11-23 09:34:41.914877', '18-213602.', 'DP-122', 0, 0, 80, 3, 3, 1, 3, 2),
+(10, '2022-11-23 09:36:18.288993', '2022-11-23 09:36:18.288993', '18-213591.', 'DP-122', 1, 0, 80, 4, 3, 1, 3, 3),
+(11, '2022-11-23 09:38:34.444454', '2022-11-23 09:38:34.444454', '18-213603.', 'DP-122', 1, 1, 90, 2, 1, 1, 1, 1),
+(12, '2022-11-23 09:39:44.381439', '2022-11-23 09:39:44.381439', '18-213611.', 'DP-122', 0, 0, 100, 2, 3, 1, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -518,7 +549,7 @@ CREATE TABLE `pallet_register_usuario` (
 --
 
 INSERT INTO `pallet_register_usuario` (`id`, `password`, `last_login`, `codigo`, `dni`, `nombre`, `apellido`, `active`, `staff`, `admin`, `planta_id`) VALUES
-(2, 'pbkdf2_sha256$390000$5iexyZyWgAn4gALwfzZleu$WliwT5NHGwcHPzRlSqDDRJmLHfsFIuXhQIp867Vu/iY=', '2022-11-22 11:54:09.815675', '419738', '70821326', 'Carlos Daniel', 'Escate Román', 1, 1, 1, 1);
+(2, 'pbkdf2_sha256$390000$5iexyZyWgAn4gALwfzZleu$WliwT5NHGwcHPzRlSqDDRJmLHfsFIuXhQIp867Vu/iY=', '2022-11-23 07:22:21.701629', '419738', '70821326', 'Carlos Daniel', 'Escate Román', 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -757,7 +788,7 @@ ALTER TABLE `pallet_register_categoria`
 -- AUTO_INCREMENT de la tabla `pallet_register_detallepallet`
 --
 ALTER TABLE `pallet_register_detallepallet`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_fundo`
@@ -775,7 +806,7 @@ ALTER TABLE `pallet_register_lote`
 -- AUTO_INCREMENT de la tabla `pallet_register_pallet`
 --
 ALTER TABLE `pallet_register_pallet`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_planta`
