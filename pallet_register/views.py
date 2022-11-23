@@ -77,13 +77,13 @@ def datosPallet(request):
             except Pallet.DoesNotExist:
                 data = {
                     'success': False,
-                    'message': "Pallet no encontrado",
+                    'message': "Registre el pallet",
                 }
                 return JsonResponse(data, safe=False)
             except Exception as e:
                 data = {
                     'success' : False,
-                    'error' : e
+                    'message' : e
                 }
                 return JsonResponse(data, safe=False)
         else:
@@ -95,104 +95,141 @@ def datosPallet(request):
 def registrarPallet(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            presentacion = Presentacion.objects.get(id=request.POST['presentacion'])
-            total_cajas = 0
-            detalles = json.loads(request.POST['detalles'])
-            for detalle in detalles:
-                total_cajas = total_cajas + int(detalle[1])
-            if(request.POST['codigo'] == ""):
+            if request.POST['presentacion'] == "":
+                 presentacion_post = "0";
+            else:
+                presentacion_post = request.POST['presentacion'];
+                
+            if request.POST['variedad'] == "":
+                 variedad_post = "0";
+            else:
+                variedad_post = request.POST['variedad'];
+                
+            if request.POST['calibre'] == "":
+                 calibre_post = "0";
+            else:
+                calibre_post = request.POST['calibre'];
+                
+            if request.POST['categoria'] == "":
+                 categoria_post = "0";
+            else:
+                categoria_post = request.POST['categoria'];
+            
+            if request.POST['codigo'] == "":
                 data = {
                     'success' : False,
-                    'message' : 'Falta el código del Pallet'
+                    'message' : 'Falta el código del Pallet',
+                    'icon' : 'warning'
                 }
-            elif(request.POST['dp'] == ""):
+            elif request.POST['dp'] == "":
                 data = {
                     'success' : False,
-                    'message' : 'Falta el DP'
+                    'message' : 'Falta el DP',
+                    'icon' : 'warning'
                 }
-            elif(request.POST['presentacion'] == "" or int(request.POST['presentacion']) <= 0):
+            elif not Presentacion.objects.filter(id=int(presentacion_post)).exists():
                 data = {
                     'success' : False,
-                    'message' : 'Falta el presentacion'
+                    'message' : 'Presentación incorrecta',
+                    'icon' : 'warning'
                 }
-            elif(request.POST['variedad'] == "" or int(request.POST['variedad']) <= 0):
+            elif not Variedad.objects.filter(id=int(variedad_post)).exists():
                 data = {
                     'success' : False,
-                    'message' : 'Falta la variedad'
+                    'message' : 'Falta la variedad',
+                    'icon' : 'warning'
                 }
-            elif(request.POST['calibre'] == "" or int(request.POST['calibre']) <= 0):
+            elif not Calibre.objects.filter(id=int(calibre_post)).exists():
                 data = {
                     'success' : False,
-                    'message' : 'Falta el calibre'
+                    'message' : 'Falta el calibre',
+                    'icon' : 'warning'
                 }
-            elif(request.POST['categoria'] == "" or int(request.POST['categoria']) <= 0):
+            elif not Categoria.objects.filter(id=int(categoria_post)).exists():
                 data = {
                     'success' : False,
-                    'message' : 'Falta el categoria'
+                    'message' : 'Falta el categoria',
+                    'icon' : 'warning'
                 }
-            elif(total_cajas<=presentacion.cantidad_de_cajas):
-                try:
-                    pallet = Pallet.objects.get(codigo=request.POST['codigo'])
-                    pallet.dp = request.POST['dp']
-                    pallet.calibre_id = request.POST['calibre']
-                    pallet.variedad_id =request.POST['variedad']
-                    pallet.presentacion_id = request.POST['presentacion']
-                    pallet.categoria_id = request.POST['categoria']
-                    pallet.plu = eval(request.POST['plu'].capitalize())
-                    pallet.cantidad_de_cajas = presentacion.cantidad_de_cajas
-                    pallet.save()
-                    DetallePallet.objects.filter(pallet=pallet).delete()
-                    for detalle in detalles:
-                        DetallePallet.objects.create(
-                            numero_de_guia=detalle[0],
-                            numero_de_cajas=detalle[1],
-                            lote=detalle[2],
-                            pallet_id=pallet.pk,
-                            usuario_id=request.user.id
-                        )                
-                    data =  {
-                        'success': True,
-                        'message': 'Se actualizó el pallet con éxito'
-                    }
-                except Pallet.DoesNotExist:
-                    pallet = Pallet(
-                        codigo = request.POST['codigo'],
-                        dp = request.POST['dp'],
-                        planta_id = request.user.planta_id,
-                        calibre_id = request.POST['calibre'],
-                        variedad_id = request.POST['variedad'],
-                        presentacion_id = request.POST['presentacion'],
-                        categoria_id = request.POST['categoria'],
-                        plu = eval(request.POST['plu'].capitalize()),
-                        completo = False,
-                        cantidad_de_cajas = presentacion.cantidad_de_cajas
-                    )
-                    pallet.save()
-                    DetallePallet.objects.filter(pallet=pallet).delete()
-                    for detalle in detalles:
-                        DetallePallet.objects.create(
-                            numero_de_guia=detalle[0],
-                            numero_de_cajas=detalle[1],
-                            lote=detalle[2],
-                            pallet_id=pallet.pk,
-                            usuario_id=request.user.id
+            else:
+                presentacion = Presentacion.objects.get(id=request.POST['presentacion'])
+                total_cajas = 0
+                detalles = json.loads(request.POST['detalles'])
+                for detalle in detalles:
+                    total_cajas = total_cajas + int(detalle[1])
+                if(total_cajas<=presentacion.cantidad_de_cajas):
+                    try:
+                        pallet = Pallet.objects.get(codigo=request.POST['codigo'])
+                        pallet.dp = request.POST['dp']
+                        pallet.calibre_id = request.POST['calibre']
+                        pallet.variedad_id =request.POST['variedad']
+                        pallet.presentacion_id = request.POST['presentacion']
+                        pallet.categoria_id = request.POST['categoria']
+                        pallet.plu = eval(request.POST['plu'].capitalize())
+                        pallet.cantidad_de_cajas = presentacion.cantidad_de_cajas
+                        pallet.save()
+                        DetallePallet.objects.filter(pallet=pallet).delete()
+                        for detalle in detalles:
+                            DetallePallet.objects.create(
+                                numero_de_guia=detalle[0],
+                                numero_de_cajas=detalle[1],
+                                lote=detalle[2],
+                                pallet_id=pallet.pk,
+                                usuario_id=request.user.id
+                            )                
+                        data =  {
+                            'success': True,
+                            'message': 'Se actualizó el pallet con éxito',
+                            'icon' : 'success'
+                        }
+                    except Pallet.DoesNotExist:
+                        pallet = Pallet(
+                            codigo = request.POST['codigo'],
+                            dp = request.POST['dp'],
+                            planta_id = request.user.planta_id,
+                            calibre_id = request.POST['calibre'],
+                            variedad_id = request.POST['variedad'],
+                            presentacion_id = request.POST['presentacion'],
+                            categoria_id = request.POST['categoria'],
+                            plu = eval(request.POST['plu'].capitalize()),
+                            completo = False,
+                            cantidad_de_cajas = presentacion.cantidad_de_cajas
                         )
-                    data = {
-                        'success':True,
-                        'message':'Se creó el pallet con éxito'
-                    }
-                except Exception as e:
+                        pallet.save()
+                        DetallePallet.objects.filter(pallet=pallet).delete()
+                        for detalle in detalles:
+                            DetallePallet.objects.create(
+                                numero_de_guia=detalle[0],
+                                numero_de_cajas=detalle[1],
+                                lote=detalle[2],
+                                pallet_id=pallet.pk,
+                                usuario_id=request.user.id
+                            )
+                        data = {
+                            'success':True,
+                            'message':'Se creó el pallet con éxito',
+                            'icon' : 'success'
+                        }
+                    except Exception as e:
+                        data = {
+                            'success' : False,
+                            'message' : e,
+                            'icon' : 'error'
+                        }
+                else:
+                    excedente = total_cajas-presentacion.cantidad_de_cajas;
+                    if excedente == 1:
+                        mensaje = "Hay una caja de más";
+                    else:
+                        mensaje = "Hay " + str(excedente) + ' cajas de más';
+                        
                     data = {
                         'success' : False,
-                        'message' : e
+                        'message' : mensaje,
+                        'icon' : 'warning'
                     }
-            else:
-                data = {
-                    'success' : False,
-                    'message' : 'Número de cajas totales excedente'
-                }
-            
-            return JsonResponse(data, safe=False)
+                
+                return JsonResponse(data, safe=False)
         else:
             return redirect('login')
     else:
@@ -200,7 +237,7 @@ def registrarPallet(request):
             'success': False,
             'message': 'No identificado'
         }
-        return JsonResponse(data, safe=False)
+    return JsonResponse(data, safe=False)
 def cantidadCajas(request):
     if request.user.is_authenticated:
         try:
@@ -218,7 +255,7 @@ def cantidadCajas(request):
                 'message' : 'Falta el codigo o presentacion del pallet',
                 'total_cajas': 0,
                 'maximo_cajas':0
-            }     
+            }
         return JsonResponse(data,safe=False) 
     else:
         return redirect('login')

@@ -6,13 +6,13 @@ let i = 0;
 let camaraActiva = false;
 function activarCamara(){
     document.getElementById('modalTitle').textContent="Escanear Código";
-    scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+    scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror:false });
     Instascan.Camera.getCameras().then(cameras => {
         scanner.camera = cameras[cameras.length - 1];
+        //scanner.camera = cameras[0];
         scanner.start();
         camaraActiva = true;
         $('#modalPallet').modal('show');
-        console.log("Hay "+cameras.length+" cámaras.");
     }).catch(e => console.error(e));
     scanner.addListener('scan',content => {
         scanner.stop();
@@ -53,7 +53,18 @@ function registrarPallet(){
         },
         type : 'POST',
         dataType : 'json',
-        success : function(json) {
+        beforeSend: () => {
+            Swal.fire({
+                title: 'Cargando!',
+                text: 'Espere un momento',
+                imageUrl: "static/images/load.gif",
+                imageWidth: 400,
+                imageHeight: 200,
+                imageAlt: 'Pantalla de carga',
+                showConfirmButton: false,
+              })
+        },
+        success : json => {
             if(json.success){
                 obtenerCantidadCajas(codigo,presentacion);
             }else{
@@ -64,7 +75,23 @@ function registrarPallet(){
             console.log(xhr);
         },
         complete : function(xhr, status) {
-
+            if(status == "success"){
+                if(xhr.responseJSON.success){
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: xhr.responseJSON.icon,
+                        title: xhr.responseJSON.message,
+                        showConfirmButton: false,
+                        timer: 1000
+                      })
+                }else{
+                      Swal.fire(
+                        xhr.responseJSON.message,
+                        'No guardado',
+                        xhr.responseJSON.icon,
+                      )
+                }
+            }
         }
     });
 }
@@ -160,6 +187,17 @@ function obtenerDatos(content){
         },
         type : 'POST',
         dataType : 'json',
+        beforeSend: () => {
+            Swal.fire({
+                title: 'Cargando!',
+                text: 'Espere un momento',
+                imageUrl: "static/images/load.gif",
+                imageWidth: 400,
+                imageHeight: 200,
+                imageAlt: 'Pantalla de carga',
+                showConfirmButton: false,
+              })
+        },
         success : json => {
             document.getElementById('btn-escanear').removeAttribute('style');
             document.getElementById('camara').setAttribute('style','display:none');
@@ -187,11 +225,17 @@ function obtenerDatos(content){
             }
         },
         error : function(xhr, status) {
-            console.log(status);
+            console.log(xhr);
         },
 
         complete : function(xhr, status) {
-            //alert('Petición realizada');
+            Swal.fire({
+                position: 'top-end',
+                icon: status,
+                title: xhr.responseJSON.message,
+                showConfirmButton: false,
+                timer: 1000
+              })
         }
     });
 }
@@ -210,7 +254,7 @@ function obtenerCantidadCajas(codigo,presentacion){
             }
         },
         error : function(xhr, status) {
-            console.log(status);
+            console.log(xhr);
         },
 
         complete : function(xhr, status) {
@@ -241,13 +285,43 @@ function cargarTabla(){
     $.ajax({
         url: "tabla/",
         dataType: 'json',
-        success: data => {
+        beforeSend: () => {
+            Swal.fire({
+                title: 'Cargando!',
+                text: 'Espere un momento',
+                imageUrl: "static/images/load.gif",
+                imageWidth: 400,
+                imageHeight: 200,
+                imageAlt: 'Pantalla de carga',
+                showConfirmButton: false,
+              })
+        },
+        success : data => {
             $('#tabla_prueba').html(data.tabla);
             
             $('#table_id').DataTable({
                 "ordering": false,
             });
-        }
+        },
+        error : (xhr,status) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error',
+                text: 'Actualice la página',
+              })
+        },
+        complete : (xhr,status) =>{
+            if(status == "success"){
+                Swal.fire({
+                    position: 'top-end',
+                    icon: status,
+                    title: "Datos cargados",
+                    showConfirmButton: false,
+                    timer: 1000
+                  })
+            }
+            
+        } 
     })
 }
 function resetearModal(){
