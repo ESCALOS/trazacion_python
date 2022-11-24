@@ -3,19 +3,13 @@ $(document).ready( function () {
 } );
 let scanner;
 let i = 0;
-let numero_de_la_camara = 0;
 let camaraActiva = false;
 function activarCamara(){
     document.getElementById('modalTitle').textContent="Escanear Código";
     scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror:false });
     Instascan.Camera.getCameras().then(cameras => {
         if(cameras.length > 0){
-            if(numero_de_la_camara+1 == cameras.length){
-                numero_de_la_camara = 0;
-            }else{
-                numero_de_la_camara = numero_de_la_camara+1;
-            }
-            scanner.camera = cameras[numero_de_la_camara];
+            scanner.camera = cameras[0];
             scanner.start();
             camaraActiva = true;
             $('#modalPallet').modal('show');
@@ -247,7 +241,7 @@ function obtenerDatos(content){
                 icon: status,
                 title: xhr.responseJSON.message,
                 showConfirmButton: false,
-                timer: 1000
+                timer: 400
               })
         }
     });
