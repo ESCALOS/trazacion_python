@@ -1,27 +1,83 @@
 $(document).ready( function () {
+    scanner = new Instascan.Scanner({ 
+        video: document.getElementById('preview'), 
+        mirror:false,
+        backgroundScan: false,
+});
     cargarTabla();
 } );
 let scanner;
 let i = 0;
 let camaraActiva = false;
-function activarCamara(){
-    document.getElementById('modalTitle').textContent="Escanear Código";
-    scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror:false });
-    Instascan.Camera.getCameras().then(cameras => {
-        if(cameras.length > 0){
-            scanner.camera = cameras[0];
-            scanner.start();
-            camaraActiva = true;
-            $('#modalPallet').modal('show');
-        }else{
+let numero_de_la_camara = 0;
+function activarCamara(cambiar){
+    document.getElementById('btnCambiarCamara').disabled = true;
+    pantallaCarga();
+    
+    if(!cambiar){
+        document.getElementById('modalTitle').textContent="Escanear Código";
+        Instascan.Camera.getCameras().then(cameras => {
             Swal.fire(
-                'Sin cámaras',
-                'No se encontraron cámaras',
-                'error',
-              )
-        }
-        
-    }).catch(e => console.error(e));
+                cameras[numero_de_la_camara].id,
+                cameras[numero_de_la_camara].name,
+                'info'
+            );
+            if(cameras.length > 0){
+                scanner.camera = cameras[numero_de_la_camara];
+                scanner.start();
+                scanner.addListener('active',()=>{
+                    camaraActiva = true;
+                    if(!cambiar){
+                        $('#modalPallet').modal('show');
+                    }
+                });
+            }else{
+                Swal.fire(
+                    'Sin cámaras',
+                    'No se encontraron cámaras',
+                    'error',
+                  );
+            }
+            document.getElementById('btnCambiarCamara').disabled = false;
+        }).catch(e => {
+            alert('get'+e);
+        });
+    }else{
+        scanner.removeEventListener('scan');
+        scanner.stop().then(()=>{
+            Instascan.Camera.getCameras().then(cameras => {
+                if(cameras.length > 0){
+                    if(numero_de_la_camara == 0){
+                        numero_de_la_camara = 1;
+                    }else{
+                        numero_de_la_camara = 0;
+                    }
+                    scanner.camera = cameras[numero_de_la_camara];
+                    scanner.start();
+                    scanner.addListener('active',()=>{
+                        camaraActiva = true;
+                        if(!cambiar){
+                            $('#modalPallet').modal('show');
+                        }
+                    });
+                    Swal.fire(
+                        cameras[numero_de_la_camara].id,
+                        cameras[numero_de_la_camara].name,
+                        'info'
+                    );
+                }else{
+                    Swal.fire(
+                        'Sin cámaras',
+                        'No se encontraron cámaras',
+                        'error',
+                      );
+                }
+                document.getElementById('btnCambiarCamara').disabled = false;
+            }).catch(e => {
+                alert('get'+e);
+            });
+        })
+    }
     scanner.addListener('scan',content => {
         scanner.stop();
         camaraActiva = false;
@@ -62,15 +118,7 @@ function registrarPallet(){
         type : 'POST',
         dataType : 'json',
         beforeSend: () => {
-            Swal.fire({
-                title: 'Cargando!',
-                text: 'Espere un momento',
-                imageUrl: "static/images/load.gif",
-                imageWidth: 400,
-                imageHeight: 200,
-                imageAlt: 'Pantalla de carga',
-                showConfirmButton: false,
-              })
+            pantallaCarga();
         },
         success : json => {
             if(json.success){
@@ -185,6 +233,17 @@ function escanear(){
     resetearModal();
     activarCamara();
 }
+function pantallaCarga(){
+    Swal.fire({
+        title: 'Cargando!',
+        text: 'Espere un momento',
+        imageUrl: "static/images/load.gif",
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Pantalla de carga',
+        showConfirmButton: false,
+      })
+}
 function obtenerDatos(content){
     $.ajax({
         url : 'datos/',
@@ -236,13 +295,17 @@ function obtenerDatos(content){
         },
 
         complete : function(xhr, status) {
-            Swal.fire({
-                position: 'top-end',
-                icon: status,
-                title: xhr.responseJSON.message,
-                showConfirmButton: false,
-                timer: 400
-              })
+            if(xhr.responseJSON.success){
+                document.getElementsByClassName("swal2-container")[0].style.display = "none";
+            }else{
+                Swal.fire({
+                    position: 'top-end',
+                    icon: status,
+                    title: xhr.responseJSON.message,
+                    showConfirmButton: false,
+                    timer: 400
+                })
+            }
         }
     });
 }
@@ -379,6 +442,7 @@ function verificarCajas(self){
 $('#modalPallet').on('hidden.bs.modal', function (event) {
     if(camaraActiva){
         scanner.stop();
+        console.log(scanner);
     }
     document.getElementById('btn-escanear').setAttribute('style','display:none');
     resetearModal();

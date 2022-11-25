@@ -16,4 +16,4 @@ Paso 6: Correr en modo https
 python manage.py runserver_plus --cert-file cert.pem --key-file key.pem
 
 Codigo para correr con https : 
-python manage.py runserver_plus --cert-file cert.pem --key-file key.pem
+python manage.py runserver_plus 0.0.0.0:8000 --cert-file cert.pem --key-file key.pem
