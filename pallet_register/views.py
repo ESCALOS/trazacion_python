@@ -229,7 +229,7 @@ def registrarPallet(request):
                         'icon' : 'warning'
                     }
                 
-                return JsonResponse(data, safe=False)
+            return JsonResponse(data, safe=False)
         else:
             return redirect('login')
     else:

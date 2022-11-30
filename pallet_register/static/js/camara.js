@@ -1,10 +1,4 @@
 $(document).ready( function () {
-    scanner = new Instascan.Scanner({ 
-        video: document.getElementById('preview'), 
-        mirror:false,
-        backgroundScan: false,
-});
-    scanner.setMaxListeners(0);
     cargarTabla();
 } );
 let scanner;
@@ -12,9 +6,13 @@ let i = 0;
 let camaraActiva = false;
 let numero_de_la_camara = 0;
 function activarCamara(cambiar){
+    scanner = new Instascan.Scanner({ 
+        video: document.getElementById('preview'), 
+        mirror:false,
+        backgroundScan: false,
+    });
     document.getElementById('btnCambiarCamara').disabled = true;
     pantallaCarga();
-    
     if(!cambiar){
         document.getElementById('modalTitle').textContent="Escanear Código";
         Instascan.Camera.getCameras().then(cameras => {
@@ -40,40 +38,42 @@ function activarCamara(cambiar){
             alert(e);
         });
     }else{
-        scanner.stop().then(()=>{
-            Instascan.Camera.getCameras().then(cameras => {
-                if(cameras.length > 0){
-                    if(numero_de_la_camara == 0){
-                        numero_de_la_camara = 1;
-                    }else{
-                        numero_de_la_camara = 0;
-                    }
-                    scanner.camera = cameras[numero_de_la_camara];
-                    scanner.start();
-                    scanner.addListener('active',()=>{
-                        camaraActiva = true;
-                        if(!cambiar){
-                            $('#modalPallet').modal('show');
-                        }
-                    });
+        document.getElementById('preview').outerHTML = document.getElementById('preview').outerHTML;
+        Instascan.Camera.getCameras().then(cameras => {
+            if(cameras.length > 0){
+                if(numero_de_la_camara == 0){
+                    numero_de_la_camara = 1;
                 }else{
-                    Swal.fire(
-                        'Sin cámaras',
-                        'No se encontraron cámaras',
-                        'error',
-                      );
+                    numero_de_la_camara = 0;
                 }
-                document.getElementById('btnCambiarCamara').disabled = false;
-            }).catch(e => {
-                alert('get: '+e);
-            });
-        })
+                scanner.camera = cameras[numero_de_la_camara];
+                scanner.start();
+                scanner.addListener('active',()=>{
+                    camaraActiva = true;
+                    if(!cambiar){
+                        $('#modalPallet').modal('show');
+                    }
+                });
+            }else{
+                Swal.fire(
+                    'Sin cámaras',
+                    'No se encontraron cámaras',
+                    'error',
+                    );
+            }
+            document.getElementById('btnCambiarCamara').disabled = false;
+        }).catch(e => {
+            alert('get: '+e);
+        });
     }
     scanner.addListener('scan',content => {
-        scanner.stop();
-        camaraActiva = false;
-        document.getElementById('btn-escanear').removeAttribute('style');
-        obtenerDatos(content);
+        scanner.stop().then(()=>{
+            document.getElementById('preview').outerHTML = document.getElementById('preview').outerHTML;
+            camaraActiva = false;
+            document.getElementById('btn-escanear').removeAttribute('style');
+            obtenerDatos(content);
+            alert(content);
+        });
     });
 }
 function registrarPallet(){
