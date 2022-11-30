@@ -364,7 +364,53 @@ function cargarTabla(){
             $('#tabla_prueba').html(data.tabla);
             
             $('#table_id').DataTable({
-                "ordering": false,
+                ordering: false,
+                dom: 'QBrtip',
+                buttons: [
+                    'colvis',
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':visible'
+                        },
+                        autoFilter: true,
+                        sheetName: "Registro de Pallets"
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                ],
+                searchBuilder: {
+                    conditions: {
+                        num: {
+                            '!between':null,
+                            '!contains':null,
+                            '!ends':null,
+                            '!starts':null
+                        },
+                        string: {
+                            '!null':null,
+                            'null':null,
+                            '!contains':null,
+                            '!ends':null,
+                            '!starts':null,
+                        },
+                        date: {
+                            '!null': null,
+                            'null':null,
+                            '!between':null
+                        }
+                    }
+                }
             });
         },
         error : (xhr,status) => {
