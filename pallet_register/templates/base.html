@@ -21,7 +21,12 @@
     <script src="{% static 'js/library/datatable2.js' %}" defer></script>
     <script src="{% static 'js/library/instascan.min.js' %}" defer></script>
     <script src="{% static 'js/library/sweetalert2.min.js' %}" defer></script>
+    {% if not user.is_staff %}
     <script src="{% static 'js/camara.js' %}" defer></script>
+    {% else %}
+    <script src="{% static 'js/reporte.js' %}" defer></script>
+    {% endif %}
+    <script src="{% static 'js/general.js' %}" defer></script>
 </head>
 <body style="max-height: 100vh;overflow-y:auto">
   <header>

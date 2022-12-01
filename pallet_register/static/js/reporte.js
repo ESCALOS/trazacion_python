@@ -1,133 +1,7 @@
 $(document).ready( function () {
     cargarTabla();
 } );
-let scanner;
 let i = 0;
-let camaraActiva = false;
-let numero_de_la_camara = 0;
-let recargar_tabla = true;
-function activarCamara(){
-    scanner = new Instascan.Scanner({ 
-        video: document.getElementById('preview'), 
-        mirror:false,
-        backgroundScan: false,
-    });
-    document.getElementById('btnCambiarCamara').disabled = true;
-    pantallaCarga();
-    document.getElementById('modalTitle').textContent="Escanear Código";
-    Instascan.Camera.getCameras().then(cameras => {
-        if(cameras.length > 0){
-            scanner.camera = cameras[numero_de_la_camara];
-            scanner.start();
-            scanner.addListener('active',()=>{
-                camaraActiva = true;
-                $('#modalPallet').modal('show');
-                ocultarAlerta();
-            });
-        }else{
-            Swal.fire(
-                'Sin cámaras',
-                'No se encontraron cámaras',
-                'error',
-                );
-        }
-        document.getElementById('btnCambiarCamara').disabled = false;
-    }).catch(e => {
-        alert(e);
-    });
-    
-    scanner.addListener('scan',content => {
-        scanner.stop().then(()=>{
-            document.getElementById('preview').outerHTML = document.getElementById('preview').outerHTML;
-            camaraActiva = false;
-            document.getElementById('btn-escanear').removeAttribute('style');
-            obtenerDatos(content);
-            alert(content);
-        });
-    });
-}
-function cambiarCamara(){
-    scanner.stop().then(()=>{
-        document.getElementById('preview').outerHTML = document.getElementById('preview').outerHTML;
-        camaraActiva = false;
-        recargar_tabla = false;
-        $('#modalPallet').modal('hide');
-        switch (numero_de_la_camara) {
-            case 0:
-                numero_de_la_camara = 1;
-                break;
-        
-            default:
-                numero_de_la_camara = 0;
-                break;
-        }
-        activarCamara();
-    });
-}
-function registrarPallet(){
-    codigo = document.getElementById('codigo').value;
-    dp = document.getElementById('dp').value;
-    presentacion = document.getElementById('presentacion').value;
-    variedad = document.getElementById('variedad').value;
-    calibre = document.getElementById('calibre').value;
-    categoria = document.getElementById('categoria').value;
-    plu = document.getElementById('plu').value;
-    detalle = [];
-    for(let j = 0; j < i; j++){
-        let guia = document.getElementById('guia'+j).value;
-        let numero_de_cajas = document.getElementById('cajas'+j).value;
-        let lote = document.getElementById('lote'+j).value;
-        if(guia!= "" && numero_de_cajas != "" && numero_de_cajas != 0 && lote != ""){
-            detalle.push([guia,numero_de_cajas,lote]);
-        }
-    }
-    $.ajax({
-        url : 'add_pallet/',
-        data : { 
-            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-            codigo : codigo,
-            dp : dp,
-            presentacion : presentacion,
-            variedad : variedad,
-            categoria : categoria,
-            calibre : calibre,
-            plu : plu,
-            detalles:JSON.stringify(detalle)
-        },
-        type : 'POST',
-        dataType : 'json',
-        beforeSend: () => {
-            pantallaCarga();
-        },
-        success : json => {
-            if(json.success){
-                obtenerCantidadCajas(codigo,presentacion);
-            }
-        },
-        error : function(xhr, status) {
-            console.log(xhr);
-        },
-        complete : function(xhr, status) {
-            if(status == "success"){
-                if(xhr.responseJSON.success){
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: xhr.responseJSON.icon,
-                        title: xhr.responseJSON.message,
-                        showConfirmButton: false,
-                        timer: 1000
-                      })
-                }else{
-                      Swal.fire(
-                        xhr.responseJSON.message,
-                        'No guardado',
-                        xhr.responseJSON.icon,
-                      )
-                }
-            }
-        }
-    });
-}
 function crearNuevoDetalle(){
     nuevoDetalle();
     i++;
@@ -135,13 +9,6 @@ function crearNuevoDetalle(){
 function editarPallet(codigo){
     obtenerDatos(codigo);
     $("#modalPallet").modal("show");
-}
-function escanear(){
-    document.getElementById('btn-escanear').setAttribute('style','display:none');
-    document.getElementById('formulario').setAttribute('style','display:none');
-    document.getElementById('camara').removeAttribute('style');
-    resetearModal();
-    activarCamara();
 }
 function obtenerDatos(content){
     $.ajax({
@@ -163,8 +30,6 @@ function obtenerDatos(content){
               })
         },
         success : json => {
-            document.getElementById('btn-escanear').removeAttribute('style');
-            document.getElementById('camara').setAttribute('style','display:none');
             document.getElementById('formulario').removeAttribute('style');
             if(json.success){
                 document.getElementById('modalTitle').textContent="Editar Pallet";
@@ -261,7 +126,52 @@ function cargarTabla(){
             
             $('#table_id').DataTable({
                 ordering: false,
-                dom: 'frtip'
+                dom: 'QBrtip',
+                buttons: [
+                    'colvis',
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':visible'
+                        },
+                        autoFilter: true,
+                        sheetName: "Registro de Pallets"
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                ],
+                searchBuilder: {
+                    conditions: {
+                        num: {
+                            '!between':null,
+                            '!contains':null,
+                            '!ends':null,
+                            '!starts':null
+                        },
+                        string: {
+                            '!null':null,
+                            'null':null,
+                            '!contains':null,
+                            '!ends':null,
+                            '!starts':null,
+                        },
+                        date: {
+                            '!null': null,
+                            'null':null,
+                            '!between':null
+                        }
+                    }
+                }
             });
         },
         error : (xhr,status) => {
@@ -282,8 +192,6 @@ function resetearModal(){
     for(element of rowDetalles){
         element.remove();
     }
-    document.getElementById('formulario').setAttribute('style','display:none');
-    document.getElementById('camara').removeAttribute('style');
     document.getElementById('dp').value = "";
     document.getElementById('presentacion').value = "";
     document.getElementById('variedad').value = "";
@@ -331,14 +239,5 @@ function verificarCajas(self){
     }
 }
 $('#modalPallet').on('hidden.bs.modal', function (event) {
-    if(camaraActiva){
-        scanner.stop();
-    }
-    document.getElementById('btn-escanear').setAttribute('style','display:none');
     resetearModal();
-    if(!recargar_tabla){
-        recargar_tabla = true; 
-    }else{
-        cargarTabla();
-    }
 })
