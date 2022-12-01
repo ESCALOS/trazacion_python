@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+  {% block scripts %}
+  <script src="{% static 'js/detalle.js' %}" defer></script>
+  {% endblock scripts %}
+  {% block content %}
+  <div class="container px-6">
+    <div id="div-detalle" class="table-responsive">
+        <table id="table_detalle" class="display">
+            <thead>
+                <tr>
+                    <th>Pallet</th>
+                    <th>Lote</th>
+                    <th>Guia</th>
+                    <th>Cajas</th>
+                    <th>Usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for detalle in detalle_pallets %}
+              <tr onclick="editarDetallePallet('{{ pallet.codigo }}')">
+                <td>{{ detalle.pallet.codigo }}</td>
+                <td>{{ detalle.lote }}</td>
+                <td>{{ detalle.numero_de_guia }}</td>
+                <td>{{ detalle.numero_de_cajas }}</td>
+                <td>{{ detalle.usuario.nombre }}  {{ detalle.usuario.apellido }}</td>
+            </tr>
+              {% endfor %} 
+            </tbody>
+          </table>
+    </div>
+  </div>
+  {% endblock content %}

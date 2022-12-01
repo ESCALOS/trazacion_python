@@ -258,3 +258,11 @@ def cantidadCajas(request):
         return JsonResponse(data,safe=False) 
     else:
         return redirect('login')
+def tablaDetalle(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    else:
+        detalle_pallets = DetallePallet.objects.all()
+        return render(request, 'detalle.html',{
+            'detalle_pallets': detalle_pallets,
+        })

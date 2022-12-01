@@ -9,4 +9,5 @@ urlpatterns = [
     path('tabla/', views.tablaPallet, name='tabla_pallet'),
     path('add_pallet/', views.registrarPallet, name='add_pallet'),
     path('cantidad_cajas/', views.cantidadCajas, name='cantidad_cajas'),
+    path('detalle/', views.tablaDetalle, name='cantidad_cajas'),
 ]

@@ -1,0 +1,21 @@
+<table id="table_detalle" class="display">
+    <thead>
+        <tr>
+            <th>Pallet</th>
+            <th>Lote</th>
+            <th>Guia</th>
+            <th>Cajas</th>
+            <th>Usuario</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for detalle in detalle_pallets %}
+      <tr onclick="editarDetallePallet('{{ pallet.codigo }}')">
+        <td>{{ detalle.pallet }}</td>
+        <td>{{ detalle.lote }}</td>
+        <td>{{ detalle.guia }}</td>
+        <td>{{ detalle.usuario.name }}</td>
+    </tr>
+      {% endfor %} 
+    </tbody>
+  </table>

@@ -164,13 +164,18 @@ function cargarTabla(){
                             '!contains':null,
                             '!ends':null,
                             '!starts':null,
+                            '!=': null,
+                            '=': null
                         },
                         date: {
                             '!null': null,
                             'null':null,
-                            '!between':null
+                            '!between':null,
+                            '=': null,
+                            '!=': null
                         }
-                    }
+                    },
+                    enterSearch: true,
                 }
             });
         },
