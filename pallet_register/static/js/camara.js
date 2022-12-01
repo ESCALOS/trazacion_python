@@ -5,7 +5,8 @@ let scanner;
 let i = 0;
 let camaraActiva = false;
 let numero_de_la_camara = 0;
-function activarCamara(cambiar){
+let recargar_tabla = true;
+function activarCamara(){
     scanner = new Instascan.Scanner({ 
         video: document.getElementById('preview'), 
         mirror:false,
@@ -13,59 +14,29 @@ function activarCamara(cambiar){
     });
     document.getElementById('btnCambiarCamara').disabled = true;
     pantallaCarga();
-    if(!cambiar){
-        document.getElementById('modalTitle').textContent="Escanear Código";
-        Instascan.Camera.getCameras().then(cameras => {
-            if(cameras.length > 0){
-                scanner.camera = cameras[numero_de_la_camara];
-                scanner.start();
-                scanner.addListener('active',()=>{
-                    camaraActiva = true;
-                    if(!cambiar){
-                        $('#modalPallet').modal('show');
-                    }
-                    ocultarAlerta();
-                });
-            }else{
-                Swal.fire(
-                    'Sin cámaras',
-                    'No se encontraron cámaras',
-                    'error',
-                  );
-            }
-            document.getElementById('btnCambiarCamara').disabled = false;
-        }).catch(e => {
-            alert(e);
-        });
-    }else{
-        document.getElementById('preview').outerHTML = document.getElementById('preview').outerHTML;
-        Instascan.Camera.getCameras().then(cameras => {
-            if(cameras.length > 0){
-                if(numero_de_la_camara == 0){
-                    numero_de_la_camara = 1;
-                }else{
-                    numero_de_la_camara = 0;
-                }
-                scanner.camera = cameras[numero_de_la_camara];
-                scanner.start();
-                scanner.addListener('active',()=>{
-                    camaraActiva = true;
-                    if(!cambiar){
-                        $('#modalPallet').modal('show');
-                    }
-                });
-            }else{
-                Swal.fire(
-                    'Sin cámaras',
-                    'No se encontraron cámaras',
-                    'error',
-                    );
-            }
-            document.getElementById('btnCambiarCamara').disabled = false;
-        }).catch(e => {
-            alert('get: '+e);
-        });
-    }
+    document.getElementById('modalTitle').textContent="Escanear Código";
+    Instascan.Camera.getCameras().then(cameras => {
+        if(cameras.length > 0){
+            scanner.camera = cameras[numero_de_la_camara];
+            scanner.start();
+            scanner.addListener('active',()=>{
+                camaraActiva = true;
+                console.log(cameras[numero_de_la_camara]);
+                $('#modalPallet').modal('show');
+                ocultarAlerta();
+            });
+        }else{
+            Swal.fire(
+                'Sin cámaras',
+                'No se encontraron cámaras',
+                'error',
+                );
+        }
+        document.getElementById('btnCambiarCamara').disabled = false;
+    }).catch(e => {
+        alert(e);
+    });
+    
     scanner.addListener('scan',content => {
         scanner.stop().then(()=>{
             document.getElementById('preview').outerHTML = document.getElementById('preview').outerHTML;
@@ -74,6 +45,24 @@ function activarCamara(cambiar){
             obtenerDatos(content);
             alert(content);
         });
+    });
+}
+function cambiarCamara(){
+    scanner.stop().then(()=>{
+        document.getElementById('preview').outerHTML = document.getElementById('preview').outerHTML;
+        camaraActiva = false;
+        recargar_tabla = false;
+        $('#modalPallet').modal('hide');
+        switch (numero_de_la_camara) {
+            case 0:
+                numero_de_la_camara = 1;
+                break;
+        
+            default:
+                numero_de_la_camara = 0;
+                break;
+        }
+        activarCamara();
     });
 }
 function registrarPallet(){
@@ -245,7 +234,7 @@ function obtenerDatos(content){
             csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
             codigo : content
         },
-        type : 'POST',
+        type : 'GET',
         dataType : 'json',
         beforeSend: () => {
             Swal.fire({
@@ -485,5 +474,9 @@ $('#modalPallet').on('hidden.bs.modal', function (event) {
     }
     document.getElementById('btn-escanear').setAttribute('style','display:none');
     resetearModal();
-    cargarTabla();
+    if(!recargar_tabla){
+        recargar_tabla = true; 
+    }else{
+        cargarTabla();
+    }
 })

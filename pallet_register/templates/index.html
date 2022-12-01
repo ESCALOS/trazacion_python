@@ -3,7 +3,7 @@
   {% csrf_token %}
   <div class="container px-4 py-2">
     <div class="mt-2 mb-4">
-      <button class="btn btn-md btn-success w-100" onclick="activarCamara(false)">Escanear código</button>
+      <button class="btn btn-md btn-success w-100" onclick="activarCamara()">Escanear código</button>
     </div>
     <div id="tabla_prueba" class="table-responsive"></div>
     <div class="modal modal-md fade" id="modalPallet" tabindex="-1" aria-hidden="true">
@@ -16,7 +16,7 @@
           <div class="modal-body" style="max-height:690px;overflow-y:auto">
             <center id="camara">
               <div class="mb-3">
-                <button id="btnCambiarCamara" class="btn btn-lg btn-danger w-100" onclick="activarCamara(true)">Cambiar Cámara</button>
+                <button id="btnCambiarCamara" class="btn btn-lg btn-danger w-100" onclick="cambiarCamara()">Cambiar Cámara</button>
               </div>
               <div id="div-video">
                 <video id="preview" width="100%"></video>

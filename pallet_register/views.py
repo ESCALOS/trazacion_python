@@ -63,35 +63,29 @@ def tablaPallet(request):
     return JsonResponse(data)
 def datosPallet(request):
     if request.user.is_authenticated:
-        if request.method == "POST":
-            try:
-                pallet = Pallet.objects.values_list('codigo','dp','presentacion','variedad','calibre','categoria','plu','cantidad_de_cajas',named=True).get(codigo=request.POST['codigo'])
-                detalle = DetallePallet.objects.filter(pallet__codigo = request.POST['codigo']).values('numero_de_guia','numero_de_cajas','lote')
-                data = {
-                    'success': True,
-                    'pallet': pallet,
-                    'detalle': list(detalle),
-                    'message': 'Pallet encontrado'
-                }
-                return JsonResponse(data, safe=False)
-            except Pallet.DoesNotExist:
-                data = {
-                    'success': False,
-                    'message': "Registre el pallet",
-                }
-                return JsonResponse(data, safe=False)
-            except Exception as e:
-                data = {
-                    'success' : False,
-                    'message' : e
-                }
-                return JsonResponse(data, safe=False)
-        else:
-            data = {'success' : 'Fue por get'}
-            return JsonResponse(data, safe=False)
+        try:
+            pallet = Pallet.objects.values_list('codigo','dp','presentacion','variedad','calibre','categoria','plu','cantidad_de_cajas',named=True).get(codigo=request.GET['codigo'])
+            detalle = DetallePallet.objects.filter(pallet__codigo = request.GET['codigo']).values('numero_de_guia','numero_de_cajas','lote')
+            data = {
+                'success': True,
+                'pallet': pallet,
+                'detalle': list(detalle),
+                'message': 'Pallet encontrado'
+            }
+        except Pallet.DoesNotExist:
+            data = {
+                'success': False,
+                'message': "Registre el pallet",
+            }
+        except Exception as e:
+            data = {
+                'success' : False,
+                'message' : e
+            }
     else:
         data = {'success': 'No identificado'}
-        return JsonResponse(data, safe=False)
+        
+    return JsonResponse(data, safe=False)
 def registrarPallet(request):
     if request.user.is_authenticated:
         if request.method == "POST":
