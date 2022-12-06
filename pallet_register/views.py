@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login,authenticate,logout
 from django.db import IntegrityError
-from django.db.models import Sum
+from django.db.models import Sum,Count
 from .models import Pallet,DetallePallet,Presentacion,Variedad,Calibre,Categoria
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -266,3 +266,40 @@ def tablaDetalle(request):
         return render(request, 'detalle.html',{
             'detalle_pallets': detalle_pallets,
         })
+def remontabilidad(request):
+    if request.method == "POST":
+        data = {
+            'success' : False,
+            'message' : "Ruta no disponible por Post"
+        }
+    else:
+        try:
+            pallet_para_sacar = Pallet.objects.get(codigo = request.GET['codigo_pallet_para_sacar'])
+            pallet_para_poner = Pallet.objects.get(codigo=request.GET['codigo_pallet_para_poner'],presentacion=pallet_para_sacar.presentacion,variedad=pallet_para_sacar.variedad,calibre=pallet_para_sacar.calibre,categoria=pallet_para_sacar.categoria)
+            
+            cajas_puestas = DetallePallet.objects.filter(pallet=pallet_para_poner).aggregate(cajas = Sum('numero_de_cajas'))
+            cajas_disponibles_para_sacar = DetallePallet.objects.filter(pallet=pallet_para_sacar).aggregate(cajas = Sum('numero_de_cajas'))
+            
+            cajas_necesarias_para_completar = pallet_para_poner.cantidad_de_cajas - cajas_puestas['cajas']
+            
+            data = {
+                'success' : True,
+                'title': "Compatible",
+                'message' : "¿Desea remontar " + str(cajas_necesarias_para_completar) + " cajas.",
+                'icon': "success"
+            }
+        except Pallet.DoesNotExist:
+            data = {
+                'success' : False,
+                'title': "Incompatible",
+                'message' : "No se puede montar",
+                'icon': "error"
+            }
+        except MultiValueDictKeyError:
+            data = {
+                'success' : False,
+                'message': "Falta el valor del código",
+                'icon': "success"
+            }
+    return JsonResponse(data,safe=False)
+    

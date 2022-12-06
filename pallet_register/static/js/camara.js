@@ -6,14 +6,16 @@ let i = 0;
 let camaraActiva = false;
 let numero_de_la_camara = 0;
 let recargar_tabla = true;
-let modal = "";
-let video = 0;
+let modal = '#modalPallet';
+let video = 'preview';
 function escanearPallet(){
-    activarCamara('preview','modalPallet');
+    modal = '#modalPallet';
+    video = 'preview';
+    activarCamara();
     
     scanner.addListener('scan',content => {
         scanner.stop().then(()=>{
-            document.getElementById(modal).outerHTML = document.getElementById(modal).outerHTML;
+            document.getElementById(video).outerHTML = document.getElementById(video).outerHTML;
             camaraActiva = false;
             document.getElementById('btn-escanear').removeAttribute('style');
             obtenerDatos(content);
@@ -21,13 +23,14 @@ function escanearPallet(){
     });
 }
 function escanearRemontar(){
-    activarCamara('video_remontar','modalRemontar');
+    modal = '#modalRemontar';
+    video = 'preview_remontar';
+    activarCamara();
     
     scanner.addListener('scan',content => {
         scanner.stop().then(()=>{
-            document.getElementById(modal).outerHTML = document.getElementById(modal).outerHTML;
+            document.getElementById(video).outerHTML = document.getElementById(video).outerHTML;
             camaraActiva = false;
-            alert(content);
         });
     });
 }
@@ -104,11 +107,13 @@ function editarPallet(codigo){
     $("#modalPallet").modal("show");
 }
 function escanear(){
+    modal = '#modalPallet';
+    video = 'preview';
     document.getElementById('btn-escanear').setAttribute('style','display:none');
     document.getElementById('formulario').setAttribute('style','display:none');
     document.getElementById('camara').removeAttribute('style');
     resetearModal();
-    activarCamara();
+    escanearPallet();
 }
 function obtenerDatos(content){
     $.ajax({
@@ -257,9 +262,7 @@ function resetearModal(){
     document.getElementById('categoria').value = "";
     document.getElementById('calibre').value = "";
 }
-function activarCamara(v ,m){
-    modal = m;
-    video = v;
+function activarCamara(){
     scanner = new Instascan.Scanner({ 
         video: document.getElementById(video), 
         mirror:false,
@@ -302,18 +305,29 @@ function cambiarCamara(){
                 numero_de_la_camara = 0;
                 break;
         }
-        activarCamara(video,modal);
+        video == 'preview' ? escanearPallet() : escanearRemontar();
     });
 }
 $('#modalPallet').on('hidden.bs.modal', function (event) {
     if(camaraActiva){
-        scanner.stop();
+        scanner.stop().then(()=>{
+            document.getElementById(video).outerHTML = document.getElementById(video).outerHTML;
+            document.getElementById('btn-escanear').setAttribute('style','display:none');
+            if(!recargar_tabla){
+                recargar_tabla = true; 
+            }else{
+                cargarTabla();
+                resetearModal();
+            }
+        });
     }
-    document.getElementById('btn-escanear').setAttribute('style','display:none');
-    resetearModal();
-    if(!recargar_tabla){
-        recargar_tabla = true; 
-    }else{
-        cargarTabla();
+})
+
+$('#modalRemontar').on('hidden.bs.modal', function (event) {
+    if(camaraActiva){
+        scanner.stop().then(()=>{
+            document.getElementById(video).outerHTML = document.getElementById(video).outerHTML;
+            camaraActiva = false;
+        });
     }
 })
