@@ -11,4 +11,5 @@ urlpatterns = [
     path('cantidad_cajas/', views.cantidadCajas, name='cantidad_cajas'),
     path('detalle/', views.tablaDetalle, name='detalle'),
     path('remontabilidad/', views.remontabilidad, name='remontabilidad'),
+    path('remontar/', views.remontar, name='remontar'),
 ]

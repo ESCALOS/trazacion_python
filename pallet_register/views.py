@@ -92,23 +92,23 @@ def registrarPallet(request):
             if request.POST['presentacion'] == "":
                  presentacion_post = "0";
             else:
-                presentacion_post = request.POST['presentacion'];
+                presentacion_post = request.POST['presentacion']
                 
             if request.POST['variedad'] == "":
-                 variedad_post = "0";
+                 variedad_post = "0"
             else:
-                variedad_post = request.POST['variedad'];
+                variedad_post = request.POST['variedad']
                 
             if request.POST['calibre'] == "":
-                 calibre_post = "0";
+                 calibre_post = "0"
             else:
-                calibre_post = request.POST['calibre'];
+                calibre_post = request.POST['calibre']
                 
             if request.POST['categoria'] == "":
-                 categoria_post = "0";
+                 categoria_post = "0"
             else:
-                categoria_post = request.POST['categoria'];
-            
+                categoria_post = request.POST['categoria']
+                
             if request.POST['codigo'] == "":
                 data = {
                     'success' : False,
@@ -211,11 +211,11 @@ def registrarPallet(request):
                             'icon' : 'error'
                         }
                 else:
-                    excedente = total_cajas-presentacion.cantidad_de_cajas;
+                    excedente = total_cajas-presentacion.cantidad_de_cajas
                     if excedente == 1:
-                        mensaje = "Hay una caja de más";
+                        mensaje = "Hay una caja de más"
                     else:
-                        mensaje = "Hay " + str(excedente) + ' cajas de más';
+                        mensaje = "Hay " + str(excedente) + ' cajas de más'
                         
                     data = {
                         'success' : False,
@@ -267,10 +267,19 @@ def tablaDetalle(request):
             'detalle_pallets': detalle_pallets,
         })
 def remontabilidad(request):
-    if request.method == "POST":
+    if request.user.is_authenticated:
+        return redirect('login')
+    elif request.method != "GET":
         data = {
             'success' : False,
             'message' : "Ruta no disponible por Post"
+        }
+    elif request.GET['codigo_pallet_para_sacar'] == request.GET['codigo_pallet_para_poner']:
+        data = {
+            'success' : False,
+            'title' : 'Código repetido',
+            'message' : "No se puede hacer remontado del mismo pallet",
+            'icon' : 'error'
         }
     else:
         try:
@@ -281,25 +290,53 @@ def remontabilidad(request):
             cajas_disponibles_para_sacar = DetallePallet.objects.filter(pallet=pallet_para_sacar).aggregate(cajas = Sum('numero_de_cajas'))
             
             cajas_necesarias_para_completar = pallet_para_poner.cantidad_de_cajas - cajas_puestas['cajas']
-            
-            data = {
-                'success' : True,
-                'title': "Compatible",
-                'message' : "¿Desea remontar " + str(cajas_necesarias_para_completar) + " cajas.",
-                'icon': "success"
-            }
+            if(pallet_para_poner.completo or pallet_para_sacar.completo):
+                data = {
+                    'success' : False,
+                    'title' : 'Pallet completo',
+                    'message' : 'El pallet ya está completo',
+                    'icon' : 'warning'
+                }
+            else:
+                if cajas_disponibles_para_sacar['cajas'] <= cajas_necesarias_para_completar:
+                    cajas_remontadas = cajas_disponibles_para_sacar['cajas']
+                else:
+                    cajas_remontadas = cajas_necesarias_para_completar
+                data = {
+                    'success' : True,
+                    'title': "Compatible",
+                    'message' : "¿Desea remontar " + str(cajas_remontadas) + " cajas.",
+                    'icon' : "success",
+                    'cajas' : cajas_remontadas 
+                }
         except Pallet.DoesNotExist:
             data = {
                 'success' : False,
                 'title': "Incompatible",
                 'message' : "No se puede montar",
-                'icon': "error"
-            }
-        except MultiValueDictKeyError:
-            data = {
-                'success' : False,
-                'message': "Falta el valor del código",
-                'icon': "success"
+                'icon': "error",
             }
     return JsonResponse(data,safe=False)
-    
+
+def remontar(request):
+    if request.user.is_authenticated:
+        return redirect('login')
+    elif request.method != "POST":
+        data = {
+            'success' : False,
+            'message' : "Método http insoportable",
+        }
+    else: 
+        try:
+            data = {
+                'success' : True,
+                'title' : "Remontado",
+                'message' : "Se sacó x cajas de  cajas",
+                'icon' : "success"
+            }
+        except Exception as e:
+            data = {
+                'success' : False,
+                'message' : str(e),
+            }
+    return JsonResponse(data,safe=False)

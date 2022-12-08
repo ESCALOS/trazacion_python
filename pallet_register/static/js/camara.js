@@ -8,6 +8,7 @@ let numero_de_la_camara = 0;
 let recargar_tabla = true;
 let modal = '#modalPallet';
 let video = 'preview';
+let pallet_activo = "";
 function escanearPallet(){
     modal = '#modalPallet';
     video = 'preview';
@@ -23,16 +24,7 @@ function escanearPallet(){
     });
 }
 function escanearRemontar(){
-    modal = '#modalRemontar';
-    video = 'preview_remontar';
-    activarCamara();
-    
-    scanner.addListener('scan',content => {
-        scanner.stop().then(()=>{
-            document.getElementById(video).outerHTML = document.getElementById(video).outerHTML;
-            camaraActiva = false;
-        });
-    });
+    $('#modalRemontar').modal('show');
 }
 function registrarPallet(){
     codigo = document.getElementById('codigo').value;
@@ -159,6 +151,7 @@ function obtenerDatos(content){
                 document.getElementById('codigo').value = content;
                 mensajesCajas(0,0);
             }
+            pallet_activo = content;
         },
         error : function(xhr, status) {
             console.log(xhr);
@@ -207,18 +200,63 @@ function mensajesCajas(maximo_cajas,total_cajas){
     if(maximo_cajas == 0){
         document.getElementById('cajas_restantes').removeAttribute('class');
         document.getElementById('cajas_restantes').textContent = "Detalle del Pallet";
+        document.getElementById('div-remontar').removeAttribute('style');
     }else if(total_cajas == 0){
         document.getElementById('cajas_restantes').removeAttribute('class');
         document.getElementById('cajas_restantes').textContent = "Ninguna caja registrada";
+        document.getElementById('div-remontar').removeAttribute('style');
     }else if(cajas_restantes < 0){
         document.getElementById('cajas_restantes').setAttribute('class','text-warning');
         document.getElementById('cajas_restantes').textContent = "Sobran " + (cajas_restantes*-1);
+        document.getElementById('div-remontar').removeAttribute('style');
     }else if(cajas_restantes == 0){
         document.getElementById('cajas_restantes').setAttribute('class','text-success');
         document.getElementById('cajas_restantes').textContent = "Pallet Completo";
+        document.getElementById('div-remontar').style.display = "none";
     }else{
         document.getElementById('cajas_restantes').setAttribute('class','text-danger');
         document.getElementById('cajas_restantes').textContent = "Faltan " + (cajas_restantes);
+        document.getElementById('div-remontar').removeAttribute('style');
+    }
+}
+function verificarCajas(self){
+    let presentacion = document.getElementById('presentacion').value;
+    if(presentacion > 0){
+        $.ajax({
+            url : 'cantidad_cajas/',
+            data : { 
+                codigo : '',
+                presentacion : presentacion
+            },
+            type : 'GET',
+            dataType : 'json',
+            success : json => {
+                let total_cajas = 0;
+                if(json.success){
+                    for(let j = 0; j<i; j++){
+                        total_cajas = total_cajas + parseInt(document.getElementById('cajas'+j).value);
+                    }
+                    if(total_cajas> json.maximo_cajas){
+                        total_cajas = total_cajas - parseInt(self.value)
+                        self.value = json.maximo_cajas - total_cajas;
+                    }
+                }
+            },
+            error : function(xhr, status) {
+                console.log(xhr);
+            },
+
+            complete : function(xhr, status) {
+
+            }
+        });
+    }else{
+        Swal.fire({
+            icon: 'warning',
+            title: "Seleccione una presentación",
+            showConfirmButton: false,
+            timer: 850
+          })
     }
 }
 function cargarTabla(){
@@ -313,14 +351,15 @@ $('#modalPallet').on('hidden.bs.modal', function (event) {
         scanner.stop().then(()=>{
             document.getElementById(video).outerHTML = document.getElementById(video).outerHTML;
             document.getElementById('btn-escanear').setAttribute('style','display:none');
-            if(!recargar_tabla){
-                recargar_tabla = true; 
-            }else{
-                cargarTabla();
-                resetearModal();
-            }
         });
     }
+    if(!recargar_tabla){
+        recargar_tabla = true; 
+    }else{
+        cargarTabla();
+        resetearModal();
+    }
+    pallet_activo = "";
 })
 
 $('#modalRemontar').on('hidden.bs.modal', function (event) {
@@ -331,3 +370,84 @@ $('#modalRemontar').on('hidden.bs.modal', function (event) {
         });
     }
 })
+$('#codigo_remontar').on('keypress',e=>{
+    if (e.keyCode === 13 && !e.shiftKey) {
+        let pallet_a_poner = pallet_activo;
+        let pallet_a_sacar = $('#codigo_remontar').val();
+        e.preventDefault();
+        $.ajax({
+            url : 'remontabilidad/',
+            data : {
+                codigo_pallet_para_poner : pallet_a_poner,
+                codigo_pallet_para_sacar : pallet_a_sacar
+            },
+            type : 'GET',
+            dataType : 'json',
+            beforeSend: () => {
+                pantallaCarga()
+            },
+            success : json => {
+                if(json.success){
+                    Swal.fire({
+                        title: json.message,
+                        showDenyButton: true,
+                        confirmButtonText: 'Remontar',
+                        denyButtonText: `Cancelar`,
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url : 'remontar/',
+                                data : {
+                                    codigo_pallet_para_poner : pallet_a_poner,
+                                    codigo_pallet_para_sacar : pallet_a_sacar,
+                                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                                    cajas : json.cajas
+                                },
+                                type : 'POST',
+                                dataType : 'json',
+                                beforeSend: () => {
+                                    pantallaCarga();
+                                },
+                                success : json => {
+                                    if(json.success){
+                                        console.log(json.cajas);
+                                        console.log(1);
+                                    }else{
+                                        console.log(2);
+                                    }
+                                },
+                                error : function(xhr, status) {
+                                    console.log(xhr.responseJSON);
+                                },
+                            }); 
+                          Swal.fire('¡Remontado!', 'Remontado satisfactoriamente', 'success');
+                        } else if (result.isDenied) {
+                          Swal.fire('No remontado', 'El pallet no se remontó', 'info')
+                        }
+                      });
+                }else{
+                    Swal.fire(json.title, json.message, 'info')
+                }
+            },
+            error : function(xhr, status) {
+                console.log(xhr.responseJSON);
+            },
+            complete : function(xhr, status) {
+                if(xhr.responseJSON.success){
+                    //ocultarAlerta();
+                }else{
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: xhr.responseJSON.icon,
+                        title: xhr.responseJSON.message,
+                        showConfirmButton: false,
+                        timer: 800
+                    })
+                }
+            }
+        });
+    }
+});
+$('#modalRemontar').on('shown.bs.modal', function () {
+    document.getElementById('codigo_remontar').focus();
+});
