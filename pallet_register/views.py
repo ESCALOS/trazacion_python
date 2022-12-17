@@ -267,7 +267,7 @@ def tablaDetalle(request):
             'detalle_pallets': detalle_pallets,
         })
 def remontabilidad(request):
-    if request.user.is_authenticated:
+    if not request.user.is_authenticated:
         return redirect('login')
     elif request.method != "GET":
         data = {
@@ -307,7 +307,9 @@ def remontabilidad(request):
                     'title': "Compatible",
                     'message' : "¿Desea remontar " + str(cajas_remontadas) + " cajas.",
                     'icon' : "success",
-                    'cajas' : cajas_remontadas 
+                    'cajas' : cajas_remontadas,
+                    'pallet_a_sacar': pallet_para_sacar.pk,
+                    'pallet_a_poner': pallet_para_poner.pk
                 }
         except Pallet.DoesNotExist:
             data = {
@@ -319,24 +321,54 @@ def remontabilidad(request):
     return JsonResponse(data,safe=False)
 
 def remontar(request):
-    if request.user.is_authenticated:
+    if not request.user.is_authenticated:
         return redirect('login')
     elif request.method != "POST":
         data = {
-            'success' : False,
-            'message' : "Método http insoportable",
+            'success'   : False,
+            'title'     : "Método http insoportable",
+            'message'   : "Error al enviar",
+            'icon'      : 'error'
         }
     else: 
+        pallet_para_poner = int(request.POST['pallet_para_poner'])
+        pallet_para_sacar = int(request.POST['pallet_para_sacar'])
+        cajas_a_remontar = int(request.POST['cajas'])
         try:
+            pallet = Pallet.objects.get(pk=pallet_para_poner)
+            detalles = DetallePallet.objects.filter(pallet=pallet_para_sacar).order_by('-id')
+            for detalle in detalles:
+                while cajas_a_remontar > 0:
+                    if cajas_a_remontar - detalle.numero_de_cajas < 0:
+                        detalle.numero_de_cajas -= cajas_a_remontar
+                        DetallePallet.objects.create(
+                                numero_de_guia=detalle.numero_de_guia,
+                                numero_de_cajas=cajas_a_remontar,
+                                lote=detalle.lote,
+                                pallet_id=pallet_para_poner,
+                                usuario_id=request.user.id
+                            ) 
+                        detalle.save()
+                        cajas_a_remontar = 0
+                    else:
+                        cajas_a_remontar -= detalle.numero_de_cajas
+                        detalle.pallet_id = pallet_para_poner
+                        detalle.usuario_id = request.user.id
+                        detalle.save()
+                    break
             data = {
-                'success' : True,
-                'title' : "Remontado",
-                'message' : "Se sacó x cajas de  cajas",
-                'icon' : "success"
+                'success'   : True,
+                'title'     : "Remontado",
+                'message'   : "Se remontó " + request.POST['cajas'] + " cajas",
+                'icon'      : "success",
+                'codigo'    : pallet.codigo,
+                'presentacion': pallet.presentacion_id
             }
         except Exception as e:
             data = {
-                'success' : False,
-                'message' : str(e),
+                'success'   : False,
+                'message'   : str(e),
+                'title'     : "¡No remontado!",
+                'icon'      : "warning"   
             }
     return JsonResponse(data,safe=False)

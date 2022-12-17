@@ -384,7 +384,9 @@ $('#codigo_remontar').on('keypress',e=>{
             type : 'GET',
             dataType : 'json',
             beforeSend: () => {
-                pantallaCarga()
+                pantallaCarga();
+                $('#codigo_remontar').val('');
+                $('#modalRemontar').modal('hide');
             },
             success : json => {
                 if(json.success){
@@ -398,8 +400,8 @@ $('#codigo_remontar').on('keypress',e=>{
                             $.ajax({
                                 url : 'remontar/',
                                 data : {
-                                    codigo_pallet_para_poner : pallet_a_poner,
-                                    codigo_pallet_para_sacar : pallet_a_sacar,
+                                    pallet_para_poner : json.pallet_a_poner,
+                                    pallet_para_sacar : json.pallet_a_sacar,
                                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
                                     cajas : json.cajas
                                 },
@@ -410,17 +412,14 @@ $('#codigo_remontar').on('keypress',e=>{
                                 },
                                 success : json => {
                                     if(json.success){
-                                        console.log(json.cajas);
-                                        console.log(1);
-                                    }else{
-                                        console.log(2);
+                                        obtenerCantidadCajas(json.codigo,json.presentacion);
                                     }
+                                    Swal.fire(json.title, json.message, json.icon);
                                 },
                                 error : function(xhr, status) {
                                     console.log(xhr.responseJSON);
                                 },
                             }); 
-                          Swal.fire('¡Remontado!', 'Remontado satisfactoriamente', 'success');
                         } else if (result.isDenied) {
                           Swal.fire('No remontado', 'El pallet no se remontó', 'info')
                         }
