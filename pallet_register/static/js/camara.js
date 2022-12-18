@@ -10,18 +10,7 @@ let modal = '#modalPallet';
 let video = 'preview';
 let pallet_activo = "";
 function escanearPallet(){
-    modal = '#modalPallet';
-    video = 'preview';
-    activarCamara();
-    
-    scanner.addListener('scan',content => {
-        scanner.stop().then(()=>{
-            document.getElementById(video).outerHTML = document.getElementById(video).outerHTML;
-            camaraActiva = false;
-            document.getElementById('btn-escanear').removeAttribute('style');
-            obtenerDatos(content);
-        });
-    });
+    $('#modalPallet').modal('show');
 }
 function escanearRemontar(){
     $('#modalRemontar').modal('show');
@@ -95,17 +84,9 @@ function crearNuevoDetalle(){
     i++;
 }
 function editarPallet(codigo){
-    obtenerDatos(codigo);
-    $("#modalPallet").modal("show");
-}
-function escanear(){
-    modal = '#modalPallet';
-    video = 'preview';
-    document.getElementById('btn-escanear').setAttribute('style','display:none');
-    document.getElementById('formulario').setAttribute('style','display:none');
-    document.getElementById('camara').removeAttribute('style');
     resetearModal();
-    escanearPallet();
+    obtenerDatos(codigo);
+    $("#modalRegistro").modal("show");
 }
 function obtenerDatos(content){
     $.ajax({
@@ -116,20 +97,9 @@ function obtenerDatos(content){
         type : 'GET',
         dataType : 'json',
         beforeSend: () => {
-            Swal.fire({
-                title: 'Cargando!',
-                text: 'Espere un momento',
-                imageUrl: "static/images/load.gif",
-                imageWidth: 400,
-                imageHeight: 200,
-                imageAlt: 'Pantalla de carga',
-                showConfirmButton: false,
-              })
+            pantallaCarga();
         },
         success : json => {
-            document.getElementById('btn-escanear').removeAttribute('style');
-            document.getElementById('camara').setAttribute('style','display:none');
-            document.getElementById('formulario').removeAttribute('style');
             if(json.success){
                 document.getElementById('modalTitle').textContent="Editar Pallet";
                 obtenerCantidadCajas(json.pallet[0],json.pallet[2]);
@@ -147,7 +117,6 @@ function obtenerDatos(content){
                     document.getElementById('lote'+i).value = json.detalle[i].lote; 
                 };
             }else{
-                document.getElementById('modalTitle').textContent="Registrar Pallet";
                 document.getElementById('codigo').value = content;
                 mensajesCajas(0,0);
             }
@@ -292,8 +261,6 @@ function resetearModal(){
     for(element of rowDetalles){
         element.remove();
     }
-    document.getElementById('formulario').setAttribute('style','display:none');
-    document.getElementById('camara').removeAttribute('style');
     document.getElementById('dp').value = "";
     document.getElementById('presentacion').value = "";
     document.getElementById('variedad').value = "";
@@ -346,13 +313,7 @@ function cambiarCamara(){
         video == 'preview' ? escanearPallet() : escanearRemontar();
     });
 }
-$('#modalPallet').on('hidden.bs.modal', function (event) {
-    if(camaraActiva){
-        scanner.stop().then(()=>{
-            document.getElementById(video).outerHTML = document.getElementById(video).outerHTML;
-            document.getElementById('btn-escanear').setAttribute('style','display:none');
-        });
-    }
+$('#modalRegistro').on('hidden.bs.modal', function (event) {
     if(!recargar_tabla){
         recargar_tabla = true; 
     }else{
@@ -361,15 +322,21 @@ $('#modalPallet').on('hidden.bs.modal', function (event) {
     }
     pallet_activo = "";
 })
-
-$('#modalRemontar').on('hidden.bs.modal', function (event) {
-    if(camaraActiva){
-        scanner.stop().then(()=>{
-            document.getElementById(video).outerHTML = document.getElementById(video).outerHTML;
-            camaraActiva = false;
-        });
-    }
+$('#modalPallet').on('hidden.bs.modal', function (event) {
+    $('#codigo_pallet').val('');
 })
+$('#modalRemontar').on('hidden.bs.modal', function (event) {
+    $('#codigo_remontar').val('');
+})
+$('#codigo_pallet').on('keypress',e=>{
+    if (e.keyCode === 13 && !e.shiftKey) {
+        let codigo_pallet = $('#codigo_pallet').val();
+        e.preventDefault();
+        $('#modalPallet').modal('hide');
+        obtenerDatos(codigo_pallet);
+        $('#modalRegistro').modal('show');
+    }
+});
 $('#codigo_remontar').on('keypress',e=>{
     if (e.keyCode === 13 && !e.shiftKey) {
         let pallet_a_poner = pallet_activo;
@@ -432,9 +399,7 @@ $('#codigo_remontar').on('keypress',e=>{
                 console.log(xhr.responseJSON);
             },
             complete : function(xhr, status) {
-                if(xhr.responseJSON.success){
-                    //ocultarAlerta();
-                }else{
+                if(!xhr.responseJSON.success){
                     Swal.fire({
                         position: 'top-end',
                         icon: xhr.responseJSON.icon,
@@ -446,6 +411,9 @@ $('#codigo_remontar').on('keypress',e=>{
             }
         });
     }
+});
+$('#modalPallet').on('shown.bs.modal', function () {
+    document.getElementById('codigo_pallet').focus();
 });
 $('#modalRemontar').on('shown.bs.modal', function () {
     document.getElementById('codigo_remontar').focus();

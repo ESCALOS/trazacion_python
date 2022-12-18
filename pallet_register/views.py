@@ -314,8 +314,7 @@ def remontabilidad(request):
         except Pallet.DoesNotExist:
             data = {
                 'success' : False,
-                'title': "Incompatible",
-                'message' : "No se puede montar",
+                'message' : "Incompatible",
                 'icon': "error",
             }
     return JsonResponse(data,safe=False)
