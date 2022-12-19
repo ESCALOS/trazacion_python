@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import (BaseUserManager,AbstractBaseUser)
+from django.utils.translation import gettext_lazy as _
         
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,editable=False)
@@ -70,12 +71,23 @@ class Planta(BaseModel):
         return self.planta + ' | ' + self.sede.sede + ' | ' + self.sede.zona.zona
 
 class Usuario(AbstractBaseUser):
+
+    class Roles(models.TextChoices):
+        ENCARGADO = 'ENC', _('Encargado')
+        REGISTRADOR = "REG", _('Registrador')
+        EMBARCADOR = "EMB", _('Embarcador')
+
     codigo = models.CharField(max_length=6,unique=True)
     dni = models.CharField(max_length=12)
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     planta = models.ForeignKey(Planta, on_delete=models.RESTRICT, null=True)
     
+    rol = models.CharField(
+        max_length=3,
+        choices=Roles.choices,
+        default=Roles.REGISTRADOR
+    )
     active = models.BooleanField(verbose_name="Activo", default=True)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
@@ -162,6 +174,7 @@ class Pallet(BaseModel):
     categoria = models.ForeignKey(Categoria, on_delete=models.RESTRICT)
     plu = models.BooleanField(default=False)
     completo = models.BooleanField(default=False)
+    embarcado = models.BooleanField(default=False)
     cantidad_de_cajas = models.IntegerField(default=90)
     
     class Meta:

@@ -7,8 +7,9 @@ function crearNuevoDetalle(){
     i++;
 }
 function editarPallet(codigo){
+    resetearModal();
     obtenerDatos(codigo);
-    $("#modalPallet").modal("show");
+    $("#modalRegistro").modal("show");
 }
 function obtenerDatos(content){
     $.ajax({
@@ -19,18 +20,9 @@ function obtenerDatos(content){
         type : 'GET',
         dataType : 'json',
         beforeSend: () => {
-            Swal.fire({
-                title: 'Cargando!',
-                text: 'Espere un momento',
-                imageUrl: "static/images/load.gif",
-                imageWidth: 400,
-                imageHeight: 200,
-                imageAlt: 'Pantalla de carga',
-                showConfirmButton: false,
-              })
+            pantallaCarga();
         },
         success : json => {
-            document.getElementById('formulario').removeAttribute('style');
             if(json.success){
                 document.getElementById('modalTitle').textContent="Editar Pallet";
                 obtenerCantidadCajas(json.pallet[0],json.pallet[2]);
@@ -48,10 +40,10 @@ function obtenerDatos(content){
                     document.getElementById('lote'+i).value = json.detalle[i].lote; 
                 };
             }else{
-                document.getElementById('modalTitle').textContent="Registrar Pallet";
                 document.getElementById('codigo').value = content;
                 mensajesCajas(0,0);
             }
+            pallet_activo = content;
         },
         error : function(xhr, status) {
             console.log(xhr);

@@ -1,0 +1,32 @@
+<table id="table_embarque" class="display">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Presentación</th>
+            <th>Variedad</th>
+            <th>Calibre</th>
+            <th>Categoría</th>
+            <th>Planta</th>
+            <th>DP</th>
+            <th>PLU</th>
+            <th>¿Completo?</th>
+            <th>Modificado</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for pallet in pallets %}
+      <tr>
+        <td>{{ pallet.codigo }}</td>
+        <td>{{ pallet.presentacion.presentacion }}</td>
+        <td>{{ pallet.variedad.variedad }}</td>
+        <td>{{ pallet.calibre.calibre }}</td>
+        <td>{{ pallet.categoria.categoria }}</td>
+        <td>{{ pallet.planta.planta }}</td>
+        <td>{{ pallet.dp }}</td>
+        <td>{% if pallet.plu %} SI {% else %} NO {% endif %}</td>
+        <td>{% if pallet.embarcado %} EMBARCADO {% else %} EN ALMACÉN {% endif %}  </td>
+        <td>{{ pallet.updated_at|date:'Y-m-d H:i'}}</td>
+    </tr>
+      {% endfor %} 
+    </tbody>
+  </table>

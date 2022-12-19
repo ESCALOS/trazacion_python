@@ -17,13 +17,27 @@ def autenticacion(request):
                 'form' : UserCreationForm
             })
         else:
-            return redirect('index')
+            if request.user.rol == "ENC":
+                return redirect('detalle')
+            elif request.user.rol == "REG":
+                return redirect('index')
+            elif request.user.rol == "EMB":
+                return redirect('embarque')
+            else:
+                cerrarSesion(request)
     else:
         try:
             user = authenticate(username=request.POST['user'], password=request.POST['password'])
             if user is not None:    
                 login(request,user)
-                return redirect('index')
+                if request.user.rol == "ENC":
+                    return redirect('detalle')
+                elif request.user.rol == "REG":
+                    return redirect('index')
+                elif request.user.rol == "EMB":
+                    return redirect('embarque')
+                else:
+                    cerrarSesion(request)
             else:
                 return render(request, 'login.html',{
                 'form' : UserCreationForm,
@@ -40,7 +54,11 @@ def cerrarSesion(request):
 def index(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-    else:
+    elif request.user.rol == "ENC":
+        return redirect('detalle')
+    elif request.user.rol == "EMB":
+        return redirect('embarque')
+    elif request.user.rol == "REG":
         pallets = Pallet.objects.all()
         presentaciones = Presentacion.objects.values('id','presentacion')
         variedades = Variedad.objects.values('id','variedad')
@@ -53,6 +71,8 @@ def index(request):
             'calibres' : calibres,
             'categorias' : categorias,
         })
+    else:
+        cerrarSesion(request)
 def tablaPallet(request):
     data = dict()
     pallets = Pallet.objects.order_by('-updated_at')
@@ -261,11 +281,17 @@ def cantidadCajas(request):
 def tablaDetalle(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-    else:
+    elif request.user.rol == "ENC":
         detalle_pallets = DetallePallet.objects.all()
         return render(request, 'detalle.html',{
             'detalle_pallets': detalle_pallets,
         })
+    elif request.user.rol == "EMB":
+        return redirect('embarque')
+    elif request.user.rol == "REG":
+        return redirect("index")
+    else:
+        cerrarSesion(request)
 def remontabilidad(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -318,7 +344,6 @@ def remontabilidad(request):
                 'icon': "error",
             }
     return JsonResponse(data,safe=False)
-
 def remontar(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -370,4 +395,60 @@ def remontar(request):
                 'title'     : "¡No remontado!",
                 'icon'      : "warning"   
             }
+    return JsonResponse(data,safe=False)
+def embarque(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    elif request.user.rol == "EMB":
+        return render(request, 'embarque.html')
+    elif request.user.rol == "ENC":
+        return redirect('detalle')
+    elif request.user.rol == "REG":
+        return redirect('index')
+    else:
+        cerrarSesion(request)
+def tablaEmbarque(request):
+    data = dict()
+    pallets = Pallet.objects.filter(completo=True)
+    context = {
+        'pallets':pallets
+    }
+    data['tabla'] = render_to_string('tabla_embarque.html',context,request=request)
+    return JsonResponse(data)
+def embarcar(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    elif request.method != "POST":
+        data = {
+            'success' : False,
+            'title' : "Método no soportado",
+            'icon' : "error"
+        }
+    else:
+        try:
+            pallet = Pallet.objects.get(codigo=request.POST['codigo_pallet'],completo=True)
+            pallet.embarcado = not pallet.embarcado
+            pallet.save()
+            if(pallet.embarcado):    
+                title = "¡Embarcado!"
+                message = "Se embarcó el pallet correctamente",
+                icon = "success"
+            else:
+                title = "¡Desembarcado!"
+                message = "El pallet volvió a almacén",
+                icon = "info"
+            data = {
+                    'success' : True,
+                    'title': title,
+                    'message': message,
+                    'icon': icon
+                }
+        except Exception as e:
+            data = {
+            'success' : True,
+            'title': "¡Pallet incompleto!",
+            'message': str(e),
+            'icon': "warning"
+        }
+
     return JsonResponse(data,safe=False)

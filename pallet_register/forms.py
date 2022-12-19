@@ -28,7 +28,7 @@ class AdminFormaCreacionUsuario(forms.ModelForm):
     
     class Meta:
         model = Usuario
-        fields = ('codigo','dni','nombre','apellido','planta')
+        fields = ('codigo','dni','nombre','apellido','planta','rol')
         
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -48,7 +48,7 @@ class AdminFormaActualiza(forms.ModelForm):
     
     class Meta:
         model = Usuario
-        fields = ('codigo','password','dni','nombre','apellido','planta','active','admin')
+        fields = ('codigo','password','dni','nombre','apellido','planta','rol','active','admin')
         
     def cleaned_password(self):
         return self.initial['password']

@@ -14,7 +14,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('codigo','admin')
     list_filter = ('admin',)
     fieldsets = (
-        (None,{'fields': ('codigo','password','planta')}),
+        (None,{'fields': ('codigo','password','planta','rol')}),
         ('Informacion Personal',{'fields': ('dni','nombre','apellido',)}),
         ('Permisos Django',{'fields': ('admin','staff','active')}),
     )
@@ -22,7 +22,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('codigo','password1','password2','planta') 
+            'fields': ('codigo','password1','password2','planta','rol') 
         }),
     )
     

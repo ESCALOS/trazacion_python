@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+  {% block scripts %}
+  <script src="{% static 'js/embarque.js' %}" defer></script>
+  {% endblock scripts %}
+  {% block content %}
+  <div class="container px-4 py-2">
+    {% csrf_token %}
+    <div class="mt-2 mb-4">
+      <button class="btn btn-md btn-success w-100" onclick="escanearPallet()">Escanear código</button>
+    </div>
+    <div id="div_embarque" class="table-responsive">
+
+    </div>
+    
+    {% include 'modal_pallet.html' %}
+  </div>
+  {% endblock content %}
