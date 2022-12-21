@@ -24,60 +24,83 @@ function registrarPallet(){
     categoria = document.getElementById('categoria').value;
     plu = document.getElementById('plu').value;
     detalle = [];
+    falta_campo = false;
     for(let j = 0; j < i; j++){
         let guia = document.getElementById('guia'+j).value;
         let numero_de_cajas = document.getElementById('cajas'+j).value;
         let lote = document.getElementById('lote'+j).value;
-        if(guia!= "" && numero_de_cajas != "" && numero_de_cajas != 0 && lote != ""){
-            detalle.push([guia,numero_de_cajas,lote]);
-        }
+        if(guia=="" && numero_de_cajas > 0){
+	    document.getElementById('guia'+j).focus();
+	    j=i; //break
+	    falta_campo = true;
+	    Swal.fire({
+	    	icon: "warning",
+		showConfirmButton: false,
+                title: "Falta la guía",
+		timer: 800
+	    });
+	}else if(lote=="" && numero_de_cajas > 0){
+            document.getElementById('lote'+j).focus();
+	    j=i; //break
+	    falta_campo = true;
+	    Swal.fire({
+	        icon: "warning",
+		showConfirmButton: false,
+		title: "Falta el lote",
+		timer: 800
+	    });
+	}else{
+	    detalle.push([guia,numero_de_cajas,lote]);
+	}
     }
-    $.ajax({
-        url : 'add_pallet/',
-        data : { 
-            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-            codigo : codigo,
-            dp : dp,
-            presentacion : presentacion,
-            variedad : variedad,
-            categoria : categoria,
-            calibre : calibre,
-            plu : plu,
-            detalles:JSON.stringify(detalle)
-        },
-        type : 'POST',
-        dataType : 'json',
-        beforeSend: () => {
-            pantallaCarga();
-        },
-        success : json => {
-            if(json.success){
-                obtenerCantidadCajas(codigo,presentacion);
-            }
-        },
-        error : function(xhr, status) {
-            console.log(xhr);
-        },
-        complete : function(xhr, status) {
-            if(status == "success"){
-                if(xhr.responseJSON.success){
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: xhr.responseJSON.icon,
-                        title: xhr.responseJSON.message,
-                        showConfirmButton: false,
-                        timer: 1000
-                      })
-                }else{
-                      Swal.fire(
-                        xhr.responseJSON.message,
-                        'No guardado',
-                        xhr.responseJSON.icon,
-                      )
+    if(!falta_campo){	
+	$.ajax({
+            url : 'add_pallet/',
+            data : { 
+                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                codigo : codigo,
+                dp : dp,
+                presentacion : presentacion,
+                variedad : variedad,
+                categoria : categoria,
+                calibre : calibre,
+                plu : plu,
+               detalles:JSON.stringify(detalle)
+            },
+            type : 'POST',
+            dataType : 'json',
+            beforeSend: () => {
+                pantallaCarga();
+            },
+            success : json => {
+                if(json.success){
+                    obtenerCantidadCajas(codigo,presentacion);
+                }
+            },
+            error : function(xhr, status) {
+                console.log(xhr);
+            },
+            complete : function(xhr, status) {
+                if(status == "success"){
+                    if(xhr.responseJSON.success){
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: xhr.responseJSON.icon,
+                            title: xhr.responseJSON.message,
+                            showConfirmButton: false,
+                            timer: 1000
+                          })
+                    }else{
+                        Swal.fire(
+                            xhr.responseJSON.message,
+                            'No guardado',
+                            xhr.responseJSON.icon,
+                          )
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 }
 function crearNuevoDetalle(){
     nuevoDetalle();
@@ -169,23 +192,34 @@ function mensajesCajas(maximo_cajas,total_cajas){
     if(maximo_cajas == 0){
         document.getElementById('cajas_restantes').removeAttribute('class');
         document.getElementById('cajas_restantes').textContent = "Detalle del Pallet";
-        document.getElementById('div-remontar').removeAttribute('style');
+        document.getElementById('div-agregar-cajas').removeAttribute('style');
+        document.getElementById('div-remontar').style.display = "none";
+        document.getElementById('btn-registrar-pallet').removeAttribute('style');
     }else if(total_cajas == 0){
         document.getElementById('cajas_restantes').removeAttribute('class');
         document.getElementById('cajas_restantes').textContent = "Ninguna caja registrada";
+        document.getElementById('div-agregar-cajas').removeAttribute('style');
         document.getElementById('div-remontar').removeAttribute('style');
+        document.getElementById('btn-registrar-pallet').removeAttribute('style');
     }else if(cajas_restantes < 0){
         document.getElementById('cajas_restantes').setAttribute('class','text-warning');
         document.getElementById('cajas_restantes').textContent = "Sobran " + (cajas_restantes*-1);
+        document.getElementById('div-agregar-cajas').removeAttribute('style');
         document.getElementById('div-remontar').removeAttribute('style');
+        document.getElementById('btn-registrar-pallet').removeAttribute('style');
     }else if(cajas_restantes == 0){
         document.getElementById('cajas_restantes').setAttribute('class','text-success');
         document.getElementById('cajas_restantes').textContent = "Pallet Completo";
+        document.getElementById('div-agregar-cajas').style.display = "none";
         document.getElementById('div-remontar').style.display = "none";
+        document.getElementById('btn-registrar-pallet').style.display = "none";
+
     }else{
         document.getElementById('cajas_restantes').setAttribute('class','text-danger');
         document.getElementById('cajas_restantes').textContent = "Faltan " + (cajas_restantes);
+        document.getElementById('div-agregar-cajas').removeAttribute('style');
         document.getElementById('div-remontar').removeAttribute('style');
+        document.getElementById('btn-registrar-pallet').removeAttribute('style');
     }
 }
 function verificarCajas(self){
@@ -415,6 +449,6 @@ $('#codigo_remontar').on('keypress',e=>{
 $('#modalPallet').on('shown.bs.modal', function () {
     document.getElementById('codigo_pallet').focus();
 });
-$('#modalRemontar').on('shown.bs.modal', function () {
+$('#modalRemontar').on('shown.bs.modal', function (){
     document.getElementById('codigo_remontar').focus();
 });

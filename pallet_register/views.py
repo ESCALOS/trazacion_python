@@ -54,11 +54,9 @@ def cerrarSesion(request):
 def index(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-    elif request.user.rol == "ENC":
-        return redirect('detalle')
     elif request.user.rol == "EMB":
         return redirect('embarque')
-    elif request.user.rol == "REG":
+    elif request.user.rol == "REG" or request.user.rol == "ENC":
         pallets = Pallet.objects.all()
         presentaciones = Presentacion.objects.values('id','presentacion')
         variedades = Variedad.objects.values('id','variedad')
@@ -75,7 +73,7 @@ def index(request):
         cerrarSesion(request)
 def tablaPallet(request):
     data = dict()
-    pallets = Pallet.objects.order_by('-updated_at')
+    pallets = Pallet.objects.filter(embarcado=False).order_by('-updated_at')
     context = {
         'pallets':pallets
     }
@@ -173,7 +171,7 @@ def registrarPallet(request):
                     total_cajas = total_cajas + int(detalle[1])
                 if(total_cajas<=presentacion.cantidad_de_cajas):
                     try:
-                        pallet = Pallet.objects.get(codigo=request.POST['codigo'])
+                        pallet = Pallet.objects.get(codigo=request.POST['codigo'],embarcado=False)
                         pallet.dp = request.POST['dp']
                         pallet.calibre_id = request.POST['calibre']
                         pallet.variedad_id =request.POST['variedad']
@@ -309,8 +307,8 @@ def remontabilidad(request):
         }
     else:
         try:
-            pallet_para_sacar = Pallet.objects.get(codigo = request.GET['codigo_pallet_para_sacar'])
-            pallet_para_poner = Pallet.objects.get(codigo=request.GET['codigo_pallet_para_poner'],presentacion=pallet_para_sacar.presentacion,variedad=pallet_para_sacar.variedad,calibre=pallet_para_sacar.calibre,categoria=pallet_para_sacar.categoria)
+            pallet_para_sacar = Pallet.objects.get(codigo = request.GET['codigo_pallet_para_sacar'],completo=False,embarcado=False)
+            pallet_para_poner = Pallet.objects.get(codigo=request.GET['codigo_pallet_para_poner'],completo=False,embarcado=False,presentacion=pallet_para_sacar.presentacion,variedad=pallet_para_sacar.variedad,calibre=pallet_para_sacar.calibre,categoria=pallet_para_sacar.categoria)
             
             cajas_puestas = DetallePallet.objects.filter(pallet=pallet_para_poner).aggregate(cajas = Sum('numero_de_cajas'))
             cajas_disponibles_para_sacar = DetallePallet.objects.filter(pallet=pallet_para_sacar).aggregate(cajas = Sum('numero_de_cajas'))
@@ -401,9 +399,7 @@ def embarque(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     elif request.user.rol == "EMB":
         return render(request, 'embarque.html')
-    elif request.user.rol == "ENC":
-        return redirect('detalle')
-    elif request.user.rol == "REG":
+    elif request.user.rol == "ENC" or request.user.rol == "REG":
         return redirect('index')
     else:
         cerrarSesion(request)
@@ -447,7 +443,7 @@ def embarcar(request):
             data = {
             'success' : True,
             'title': "¡Pallet incompleto!",
-            'message': str(e),
+            'message': "No se puede embarcar",
             'icon': "warning"
         }
 
