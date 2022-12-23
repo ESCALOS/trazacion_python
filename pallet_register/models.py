@@ -172,9 +172,9 @@ class Presentacion(BaseModel):
     tipo_caja = models.ForeignKey(TipoCaja, on_delete=models.RESTRICT)
     peso = models.DecimalField(max_digits=3,decimal_places=1)
     cantidad_de_cajas = models.IntegerField(default=100)
-    
+    producto = models.ForeignKey(Producto, on_delete=models.RESTRICT) 
     def __str__(self):
-        return self.tipo_caja + ' ' + self.peso
+        return self.tipo_caja.tipo_caja + ' ' + str(self.peso)
     
 class Categoria(BaseModel):
     categoria = models.CharField(max_length=50)
@@ -193,13 +193,13 @@ class Campaign(BaseModel):
     planta = models.ForeignKey(Planta,on_delete=models.RESTRICT)
     inicio = models.DateField()
     producto = models.ForeignKey(Producto, on_delete=models.RESTRICT)
-    state = models.BooleanField(default=True)
+    state = models.BooleanField(verbose_name="Activo",default=True)
 
     class Meta:
         verbose_name = "Campaña"
 
     def __str__(self):
-        return self.planta + ' | ' + inicio
+        return self.planta.planta + ' | ' + self.producto.producto  + ' | ' + str(self.inicio)
 
 class CurrentCampaign(BaseModel):
     campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT, limit_choices_to={'state':True},)
@@ -210,14 +210,37 @@ class CurrentCampaign(BaseModel):
         verbose_name = "Campaña Actual"
 
     def __str__(self):
-        return self.campaing.planta + ' | ' + self.inicio
+        return self.campaign.planta.planta +  ' | ' + self.campaign.producto.producto + ' | ' + str(self.inicio)
 
-class ClientesXCampaign(BaseModel):
-    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT);
+class PresentacionesPorCampaign(BaseModel):
+    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT, limit_choices_to={'state',True})
+    presentacion = models.ForeignKey(Presentacion, on_delete=models.RESTRICT)
+
+    class Meta:
+        verbose_name = "Presentaciones por campaña"
+
+    def __str__(self):
+        return self.campaign.planta.planta + ' | ' + self.campaign.producto.producto + ' | ' + str(self.campaign.inicio) + ' | ' + self.presentacion.tipo_caja.tipo_caja + ' ' + self.presentacion.peso
+
+class ClientesPorCampaign(BaseModel):
+    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT, limit_choices_to={'state':True});
     cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT);
 
     class Meta:
         verbose_name = "Clientes por Campaña" 
+
+    def __str__(self):
+        return self.campaign.planta.planta + ' | ' + self.campaign.producto.producto + ' | ' + str(self.campaign.inicio) + ' | ' + self.cliente.cliente
+
+class PersonalPorCampaign(BaseModel):
+    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT, limit_choices_to={'state':True})
+    usuario = models.ForeignKey(Usuario, on_delete=models.RESTRICT)
+
+    class Meta:
+        verbose_name = "Personal por Campaña"
+
+    def __str__(self):
+        return self.campaign.planta.planta + '| ' + self.campaign.producto.producto + ' | ' + str(self.campaign.inicio) + ' | ' + self.usuario.nombre + ' ' + self.usuario.apellido
 
 class Pallet(BaseModel):
     campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT)

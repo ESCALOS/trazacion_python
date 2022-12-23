@@ -58,7 +58,7 @@ def index(request):
         return redirect('embarque')
     elif request.user.rol == "REG" or request.user.rol == "ENC":
         pallets = Pallet.objects.all()
-        presentaciones = Presentacion.objects.values('id','presentacion')
+        presentaciones = Presentacion.objects.values('id','tipo_caja__tipo_caja','peso')
         variedades = Variedad.objects.values('id','variedad')
         calibres = Calibre.objects.values('id','calibre')
         categorias = Categoria.objects.values('id','categoria')
