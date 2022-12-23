@@ -70,6 +70,13 @@ class Planta(BaseModel):
     def __str__(self):
         return self.planta + ' | ' + self.sede.sede + ' | ' + self.sede.zona.zona
 
+class Producto(BaseModel):
+    producto = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.producto
+
+
 class Usuario(AbstractBaseUser):
 
     class Roles(models.TextChoices):
@@ -134,10 +141,11 @@ class Usuario(AbstractBaseUser):
     
 class Lote(BaseModel):
     lote = models.CharField(max_length=50)
+    producto = models.ForeignKey(Producto, on_delete=models.RESTRICT)
     fundo = models.ForeignKey(Fundo, on_delete=models.RESTRICT)
-    
+
     def __str__(self):
-        return self.lote + ' | ' + self.fundo.fundo
+        return self.lote + '|' + self.producto + ' | ' + self.fundo.fundo
 
 class Calibre(BaseModel):
     calibre = models.CharField(max_length=100)
@@ -150,22 +158,71 @@ class Variedad(BaseModel):
     
     def __str__(self):
         return self.variedad
-    
+
+class TipoCaja(BaseModel):
+    tipo_caja = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = "Tipo de Caja"
+
+    def __str__(self):
+        return self.tipo_caja
+
 class Presentacion(BaseModel):
-    presentacion = models.CharField(max_length=100)
-    cantidad_de_cajas = models.IntegerField(default=0)
+    tipo_caja = models.ForeignKey(TipoCaja, on_delete=models.RESTRICT)
+    peso = models.DecimalField(max_digits=3,decimal_places=1)
+    cantidad_de_cajas = models.IntegerField(default=100)
     
     def __str__(self):
-        return self.presentacion
+        return self.tipo_caja + ' ' + self.peso
     
 class Categoria(BaseModel):
     categoria = models.CharField(max_length=50)
     
     def __str__(self):
         return self.categoria
-    
+
+class Cliente(BaseModel):
+    cliente = models.CharField(max_length=150)
+    destino = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.cliente
+
+class Campaign(BaseModel):
+    planta = models.ForeignKey(Planta,on_delete=models.RESTRICT)
+    inicio = models.DateField()
+    producto = models.ForeignKey(Producto, on_delete=models.RESTRICT)
+    state = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Campaña"
+
+    def __str__(self):
+        return self.planta + ' | ' + inicio
+
+class CurrentCampaign(BaseModel):
+    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT, limit_choices_to={'state':True},)
+    inicio =  models.DateTimeField(auto_now_add=True,editable=False)
+    fin =  models.DateTimeField(auto_now=True,editable=False)
+
+    class Meta:
+        verbose_name = "Campaña Actual"
+
+    def __str__(self):
+        return self.campaing.planta + ' | ' + self.inicio
+
+class ClientesXCampaign(BaseModel):
+    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT);
+    cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT);
+
+    class Meta:
+        verbose_name = "Clientes por Campaña" 
+
 class Pallet(BaseModel):
+    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT)
     codigo = models.CharField(max_length=255)
+    codigo_comercial = models.CharField(max_length=50)
     dp = models.CharField(max_length=150,null=True)
     planta = models.ForeignKey(Planta, on_delete=models.RESTRICT)
     calibre = models.ForeignKey(Calibre, on_delete=models.RESTRICT)

@@ -5,11 +5,14 @@ let scanner;
 let i = 0;
 let camaraActiva = false;
 let numero_de_la_camara = 0;
-let recargar_tabla = true;
+let recargar_tabla_pallet = true;
+let recargar_tabla_registro = true;
 let modal = '#modalPallet';
 let video = 'preview';
 let pallet_activo = "";
 function escanearPallet(){
+    recargar_tabla_registro = false;
+    $('#modalRegistro').modal('hide');
     $('#modalPallet').modal('show');
 }
 function escanearRemontar(){
@@ -301,70 +304,30 @@ function resetearModal(){
     document.getElementById('categoria').value = "";
     document.getElementById('calibre').value = "";
 }
-function activarCamara(){
-    scanner = new Instascan.Scanner({ 
-        video: document.getElementById(video), 
-        mirror:false,
-        backgroundScan: false,
-    });
-    pantallaCarga();
-    document.getElementById('modalTitle').textContent="Escanear Código";
-    Instascan.Camera.getCameras().then(cameras => {
-        if(cameras.length > 0){
-            scanner.camera = cameras[numero_de_la_camara];
-            scanner.start();
-            scanner.addListener('active',()=>{
-                camaraActiva = true;
-                $(modal).modal('show');
-                ocultarAlerta();
-            });
-        }else{
-            Swal.fire(
-                'Sin cámaras',
-                'No se encontraron cámaras',
-                'error',
-                );
-        }
-    }).catch(e => {
-        alert(e);
-    });
-}
-function cambiarCamara(){
-    scanner.stop().then(()=>{
-        document.getElementById(video).outerHTML = document.getElementById(video).outerHTML;
-        camaraActiva = false;
-        recargar_tabla = false;
-        $(modal).modal('hide');
-        switch (numero_de_la_camara) {
-            case 0:
-                numero_de_la_camara = 1;
-                break;
-        
-            default:
-                numero_de_la_camara = 0;
-                break;
-        }
-        video == 'preview' ? escanearPallet() : escanearRemontar();
-    });
-}
 $('#modalRegistro').on('hidden.bs.modal', function (event) {
-    if(!recargar_tabla){
-        recargar_tabla = true; 
+    if(!recargar_tabla_registro){
+        recargar_tabla_registro = true; 
     }else{
         cargarTabla();
-        resetearModal();
     }
+    resetearModal();
     pallet_activo = "";
 })
 $('#modalPallet').on('hidden.bs.modal', function (event) {
     $('#codigo_pallet').val('');
-})
+    if(!recargar_tabla_pallet){
+        recargar_tabla_pallet = true;
+    }else{
+	cargarTabla();
+    }
+});
 $('#modalRemontar').on('hidden.bs.modal', function (event) {
     $('#codigo_remontar').val('');
 })
 $('#codigo_pallet').on('keypress',e=>{
     if (e.keyCode === 13 && !e.shiftKey) {
         let codigo_pallet = $('#codigo_pallet').val();
+	recargar_tabla_pallet = false;
         e.preventDefault();
         $('#modalPallet').modal('hide');
         obtenerDatos(codigo_pallet);

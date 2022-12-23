@@ -1,5 +1,6 @@
 function nuevoDetalle(){
     let divRow = document.createElement("div");
+    
     let divColGuia = document.createElement("div");
     let divColCajas = document.createElement("div");
     let divColLote = document.createElement("div");
@@ -13,6 +14,7 @@ function nuevoDetalle(){
 
     //ASIGNANDO LOS ATRIBUTOS
     divRow.setAttribute('id','divRow'+i);
+
     divColGuia.setAttribute('id','divColGuia'+i);
     divColCajas.setAttribute('id','divColCajas'+i);
     divColLote.setAttribute('id','divColLote'+i);
@@ -54,7 +56,7 @@ function nuevoDetalle(){
 
     //PONIENDO LOS ELEMENTOS EN EL DIV DE DETALLE
     divDetalle.appendChild(divRow);
-
+ 
     divRow.appendChild(divColGuia);
     divColGuia.appendChild(labelGuia);
     divColGuia.appendChild(entradaGuia);
