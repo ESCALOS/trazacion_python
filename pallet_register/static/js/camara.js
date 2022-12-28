@@ -1,14 +1,27 @@
 $(document).ready( function () {
     cargarTabla();
-} );
-let scanner;
+    document.addEventListener('keydown', function(e) {   
+	if (e.keyCode === 13 && !e.shiftKey && codigo_qr != "") {
+	    recargar_tabla_pallet = false;
+	    codigo_qr = codigo_qr.substring(0, codigo_qr.length - 2);
+	    console.log(codigo_qr);
+       	    e.preventDefault();
+            obtenerDatos(codigo_qr);
+	    codigo_qr = "";
+	    $('#modalRegistro').modal('show');
+    	}else{
+	    codigo_qr += e.key;
+	    console.log(codigo_qr);
+	}
+    });
+});
+let codigo_qr = "";
 let i = 0;
 let camaraActiva = false;
 let numero_de_la_camara = 0;
 let recargar_tabla_pallet = true;
 let recargar_tabla_registro = true;
-let modal = '#modalPallet';
-let video = 'preview';
+let escaner_qr = true;
 let pallet_activo = "";
 function escanearPallet(){
     recargar_tabla_registro = false;
@@ -20,6 +33,7 @@ function escanearRemontar(){
 }
 function registrarPallet(){
     codigo = document.getElementById('codigo').value;
+    codigo_comercial = document.getElementById('codigo_comercial').value;
     dp = document.getElementById('dp').value;
     presentacion = document.getElementById('presentacion').value;
     variedad = document.getElementById('variedad').value;
@@ -32,7 +46,7 @@ function registrarPallet(){
         let guia = document.getElementById('guia'+j).value;
         let numero_de_cajas = document.getElementById('cajas'+j).value;
         let lote = document.getElementById('lote'+j).value;
-        if(guia=="" && numero_de_cajas > 0){
+        if(guia == "" && numero_de_cajas > 0){
 	    document.getElementById('guia'+j).focus();
 	    j=i; //break
 	    falta_campo = true;
@@ -62,6 +76,7 @@ function registrarPallet(){
             data : { 
                 csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
                 codigo : codigo,
+		codigo_comercial: codigo_comercial,
                 dp : dp,
                 presentacion : presentacion,
                 variedad : variedad,
@@ -111,6 +126,7 @@ function crearNuevoDetalle(){
 }
 function editarPallet(codigo){
     resetearModal();
+    //codigo = codigo.substring(0,codigo.length - 1);
     obtenerDatos(codigo);
     $("#modalRegistro").modal("show");
 }
@@ -156,12 +172,13 @@ function obtenerDatos(content){
             if(xhr.responseJSON.success){
                 ocultarAlerta();
             }else{
+		    console.log(xhr);
                 Swal.fire({
                     position: 'top-end',
                     icon: status,
                     title: xhr.responseJSON.message,
                     showConfirmButton: false,
-                    timer: 400
+                    timer: 1500
                 })
             }
         }
@@ -298,11 +315,13 @@ function resetearModal(){
     for(element of rowDetalles){
         element.remove();
     }
-    document.getElementById('dp').value = "";
-    document.getElementById('presentacion').value = "";
-    document.getElementById('variedad').value = "";
-    document.getElementById('categoria').value = "";
-    document.getElementById('calibre').value = "";
+    document.getElementById('codigo').value = "";
+    document.getElementById('codigo_comercial').value = "";
+    //document.getElementById('dp').value = "";
+    //document.getElementById('presentacion').value = "";
+    //document.getElementById('variedad').value = "";
+    //document.getElementById('categoria').value = "";
+    //document.getElementById('calibre').value = "";
 }
 $('#modalRegistro').on('hidden.bs.modal', function (event) {
     if(!recargar_tabla_registro){
@@ -313,27 +332,9 @@ $('#modalRegistro').on('hidden.bs.modal', function (event) {
     resetearModal();
     pallet_activo = "";
 })
-$('#modalPallet').on('hidden.bs.modal', function (event) {
-    $('#codigo_pallet').val('');
-    if(!recargar_tabla_pallet){
-        recargar_tabla_pallet = true;
-    }else{
-	cargarTabla();
-    }
-});
 $('#modalRemontar').on('hidden.bs.modal', function (event) {
     $('#codigo_remontar').val('');
 })
-$('#codigo_pallet').on('keypress',e=>{
-    if (e.keyCode === 13 && !e.shiftKey) {
-        let codigo_pallet = $('#codigo_pallet').val();
-	recargar_tabla_pallet = false;
-        e.preventDefault();
-        $('#modalPallet').modal('hide');
-        obtenerDatos(codigo_pallet);
-        $('#modalRegistro').modal('show');
-    }
-});
 $('#codigo_remontar').on('keypress',e=>{
     if (e.keyCode === 13 && !e.shiftKey) {
         let pallet_a_poner = pallet_activo;

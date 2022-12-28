@@ -13,26 +13,28 @@
               <input type="text" class="form-control" id="codigo" placeholder="Codigo" readonly="true">
             </div>
             <div class="mb-3 col">
+              <label for="codigo" class="form-label">Comercial</label>
+              <input type="text" class="form-control" id="codigo_comercial" placeholder="BU-123123">
+	    </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 col">
+              <label for="dni" class="form-label">Presentación</label>
+              <select name="presentacion" class="form-control" id="presentacion">
+                {% for presentacion in presentaciones %}
+		<option value="{{ presentacion.id }}">{{ presentacion.tipo_caja.tipo_caja }} {{ presentacion.peso }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3 col">
               <label for="dp" class="form-label">DP</label>
               <input type="text" class="form-control" id="dp" placeholder="dp">
             </div>
           </div>
           <div class="row">
             <div class="mb-3 col">
-              <label for="dni" class="form-label">Presentación</label>
-              <select name="presentacion" class="form-control" id="presentacion">
-                <option value="">Seleccione una presentación</option>
-                {% for presentacion in presentaciones %}
-                  <option value="{{ presentacion.id }}">{{ presentacion.presentacion }}</option>
-                {% endfor %}
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="mb-3 col">
               <label for="variedad" class="form-label">Variedad</label>
               <select name="presentacion" class="form-control" id="variedad">
-                <option value="">Seleccione</option>
                 {% for variedad in variedades %}
                   <option value="{{ variedad.id }}">{{ variedad.variedad }}</option>
                 {% endfor %}
@@ -41,7 +43,6 @@
             <div class="mb-3 col">
               <label for="calibre" class="form-label">Calibre</label>
               <select name="calibre" class="form-control" id="calibre">
-                <option value="">Seleccione</option>
                 {% for calibre in calibres %}
                   <option value="{{ calibre.id }}">{{ calibre.calibre }}</option>
                 {% endfor %}
@@ -52,7 +53,6 @@
             <div class="mb-3 col">
               <label for="categoria" class="form-label">Categoría</label>
               <select name="categoria" class="form-control" id="categoria">
-                <option value="">Seleccione</option>
                 {% for categoria in categorias %}
                   <option value="{{ categoria.id }}">{{ categoria.categoria }}</option>
                 {% endfor %}

@@ -54,7 +54,7 @@ class Sede(BaseModel):
     zona = models.ForeignKey(Zona, on_delete=models.RESTRICT)
     
     def __str__(self):
-        return self.sede + ' | ' + self.zona.zona
+        return self.sede + ' |     ' + self.zona.zona
 
 class Fundo(BaseModel):
     fundo = models.CharField(max_length=100)
@@ -145,7 +145,7 @@ class Lote(BaseModel):
     fundo = models.ForeignKey(Fundo, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return self.lote + '|' + self.producto + ' | ' + self.fundo.fundo
+        return self.lote + ' | ' + self.producto.producto + ' | ' + self.fundo.fundo
 
 class Calibre(BaseModel):
     calibre = models.CharField(max_length=100)
@@ -155,6 +155,9 @@ class Calibre(BaseModel):
     
 class Variedad(BaseModel):
     variedad = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name_plural = "Variedades"
     
     def __str__(self):
         return self.variedad
@@ -173,8 +176,12 @@ class Presentacion(BaseModel):
     peso = models.DecimalField(max_digits=3,decimal_places=1)
     cantidad_de_cajas = models.IntegerField(default=100)
     producto = models.ForeignKey(Producto, on_delete=models.RESTRICT) 
+
+    class Meta:
+        verbose_name_plural = "Presentaciones"
+
     def __str__(self):
-        return self.tipo_caja.tipo_caja + ' ' + str(self.peso)
+        return self.tipo_caja.tipo_caja + ' ' + str(self.peso) + ' KG'
     
 class Categoria(BaseModel):
     categoria = models.CharField(max_length=50)
@@ -184,6 +191,7 @@ class Categoria(BaseModel):
 
 class Cliente(BaseModel):
     cliente = models.CharField(max_length=150)
+    abreviatura = models.CharField(max_length=10)
     destino = models.CharField(max_length=255)
 
     def __str__(self):
@@ -194,6 +202,10 @@ class Campaign(BaseModel):
     inicio = models.DateField()
     producto = models.ForeignKey(Producto, on_delete=models.RESTRICT)
     state = models.BooleanField(verbose_name="Activo",default=True)
+    presentaciones = models.ManyToManyField(Presentacion)
+    variedades = models.ManyToManyField(Variedad)
+    clientes = models.ManyToManyField(Cliente)
+    usuarios = models.ManyToManyField(Usuario, verbose_name="Personal")
 
     class Meta:
         verbose_name = "Campaña"
@@ -202,52 +214,23 @@ class Campaign(BaseModel):
         return self.planta.planta + ' | ' + self.producto.producto  + ' | ' + str(self.inicio)
 
 class CurrentCampaign(BaseModel):
-    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT, limit_choices_to={'state':True},)
+    campaign = models.ForeignKey(Campaign, verbose_name="Campaña", on_delete=models.RESTRICT, limit_choices_to={'state':True},)
     inicio =  models.DateTimeField(auto_now_add=True,editable=False)
     fin =  models.DateTimeField(auto_now=True,editable=False)
 
     class Meta:
         verbose_name = "Campaña Actual"
+        verbose_name_plural = "Campañas Actuales"
+        get_latest_by = "-inicio"
 
     def __str__(self):
         return self.campaign.planta.planta +  ' | ' + self.campaign.producto.producto + ' | ' + str(self.inicio)
 
-class PresentacionesPorCampaign(BaseModel):
-    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT, limit_choices_to={'state',True})
-    presentacion = models.ForeignKey(Presentacion, on_delete=models.RESTRICT)
-
-    class Meta:
-        verbose_name = "Presentaciones por campaña"
-
-    def __str__(self):
-        return self.campaign.planta.planta + ' | ' + self.campaign.producto.producto + ' | ' + str(self.campaign.inicio) + ' | ' + self.presentacion.tipo_caja.tipo_caja + ' ' + self.presentacion.peso
-
-class ClientesPorCampaign(BaseModel):
-    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT, limit_choices_to={'state':True});
-    cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT);
-
-    class Meta:
-        verbose_name = "Clientes por Campaña" 
-
-    def __str__(self):
-        return self.campaign.planta.planta + ' | ' + self.campaign.producto.producto + ' | ' + str(self.campaign.inicio) + ' | ' + self.cliente.cliente
-
-class PersonalPorCampaign(BaseModel):
-    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT, limit_choices_to={'state':True})
-    usuario = models.ForeignKey(Usuario, on_delete=models.RESTRICT)
-
-    class Meta:
-        verbose_name = "Personal por Campaña"
-
-    def __str__(self):
-        return self.campaign.planta.planta + '| ' + self.campaign.producto.producto + ' | ' + str(self.campaign.inicio) + ' | ' + self.usuario.nombre + ' ' + self.usuario.apellido
-
 class Pallet(BaseModel):
-    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT)
+    campaign = models.ForeignKey(Campaign, verbose_name="Campaña", on_delete=models.RESTRICT)
     codigo = models.CharField(max_length=255)
     codigo_comercial = models.CharField(max_length=50)
     dp = models.CharField(max_length=150,null=True)
-    planta = models.ForeignKey(Planta, on_delete=models.RESTRICT)
     calibre = models.ForeignKey(Calibre, on_delete=models.RESTRICT)
     variedad = models.ForeignKey(Variedad, on_delete=models.RESTRICT)
     presentacion = models.ForeignKey(Presentacion, on_delete=models.RESTRICT)
@@ -261,7 +244,7 @@ class Pallet(BaseModel):
         get_latest_by = "order_date"
     
     def __str__(self):
-        return self.codigo + ' | ' + self.planta.planta
+        return self.codigo + ' | ' + self.campaign.planta.planta + ' | ' + self.campaign.producto.producto 
     
 class DetallePallet(BaseModel):
     pallet = models.ForeignKey(Pallet, on_delete=models.RESTRICT)

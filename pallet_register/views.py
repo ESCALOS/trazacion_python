@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login,authenticate,logout
 from django.db import IntegrityError
 from django.db.models import Sum,Count
-from .models import Pallet,DetallePallet,Presentacion,Variedad,Calibre,Categoria
+from .models import Pallet,DetallePallet,Variedad,Presentacion,Calibre,Categoria,Campaign,CurrentCampaign
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -51,44 +51,72 @@ def autenticacion(request):
 def cerrarSesion(request):
     logout(request)
     return redirect('login')
+
 def index(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     elif request.user.rol == "EMB":
         return redirect('embarque')
     elif request.user.rol == "REG" or request.user.rol == "ENC":
-        pallets = Pallet.objects.all()
-        presentaciones = Presentacion.objects.values('id','tipo_caja__tipo_caja','peso')
-        variedades = Variedad.objects.values('id','variedad')
-        calibres = Calibre.objects.values('id','calibre')
-        categorias = Categoria.objects.values('id','categoria')
-        return render(request, 'index.html',{
-            'pallets':pallets,
-            'presentaciones': presentaciones,
-            'variedades' : variedades,
-            'calibres' : calibres,
-            'categorias' : categorias,
-        })
+        try:
+            campaign = Campaign.objects.get(planta=request.user.planta_id,state=True)
+            pallets = Pallet.objects.all()
+            presentaciones = Presentacion.objects.filter(campaign=campaign)
+            variedades = Variedad.objects.filter(campaign=campaign)
+            calibres = Calibre.objects.values('id','calibre')
+            categorias = Categoria.objects.values('id','categoria')
+            return render(request, 'index.html',{
+                'pallets':pallets,
+                'presentaciones': presentaciones,
+                'variedades' : variedades,
+                'calibres' : calibres,
+                'categorias' : categorias,
+            })
+        except Campaign.DoesNotExist:
+            data = {
+                'success' : False,
+                'message' : "No hay ninguna campaña activa" 
+            }
+        except Exception as e:
+            data = {
+                'success' : False,
+                'message' : str(e)
+            }
+            return JsonResponse(data, safe=False)
     else:
         cerrarSesion(request)
+
 def tablaPallet(request):
-    data = dict()
-    pallets = Pallet.objects.filter(embarcado=False).order_by('-updated_at')
-    context = {
-        'pallets':pallets
-    }
-    data['tabla'] = render_to_string('tabla_pallet.html',context,request=request)
+    try:
+        data = dict()
+        campaign = Campaign.objects.get(planta=request.user.planta_id,state=True)
+        pallets = Pallet.objects.filter(embarcado=False,campaign=campaign).order_by('-updated_at')
+        context = {
+            'pallets':pallets
+        }
+        data['tabla'] = render_to_string('tabla_pallet.html',context,request=request)
+    except:
+        data = {
+            'success' : 'False',
+            'message' : 'No hay camapaña activa'
+        }
     return JsonResponse(data)
 def datosPallet(request):
     if request.user.is_authenticated:
         try:
-            pallet = Pallet.objects.values_list('codigo','dp','presentacion','variedad','calibre','categoria','plu','cantidad_de_cajas',named=True).get(codigo=request.GET['codigo'])
-            detalle = DetallePallet.objects.filter(pallet__codigo = request.GET['codigo']).values('numero_de_guia','numero_de_cajas','lote')
+            campaign = Campaign.objects.get(planta=request.user.planta_id,state=True)
+            pallet = Pallet.objects.values_list('codigo','dp','presentacion__peso','variedad','calibre','categoria','plu','cantidad_de_cajas',named=True).get(codigo=request.GET['codigo'],campaign=campaign)
+            detalle = DetallePallet.objects.filter(pallet=pallet).values('numero_de_guia','numero_de_cajas','lote')
             data = {
                 'success': True,
                 'pallet': pallet,
                 'detalle': list(detalle),
                 'message': 'Pallet encontrado'
+            }
+        except Campaign.DoesNotExist:
+            data = {
+                'success' : False,
+                'message' : 'No hay campaña activa'
             }
         except Pallet.DoesNotExist:
             data = {
@@ -98,12 +126,16 @@ def datosPallet(request):
         except Exception as e:
             data = {
                 'success' : False,
-                'message' : e
-            }
+                'message' : str(e)
+             }
     else:
-        data = {'success': 'No identificado'}
+        data = {
+            'success' : False,
+            'message' : 'No identificado'
+        }
         
     return JsonResponse(data, safe=False)
+
 def registrarPallet(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -126,11 +158,17 @@ def registrarPallet(request):
                  categoria_post = "0"
             else:
                 categoria_post = request.POST['categoria']
-                
+
             if request.POST['codigo'] == "":
                 data = {
                     'success' : False,
                     'message' : 'Falta el código del Pallet',
+                    'icon' : 'warning'
+                }
+            elif request.POST['codigo_comercial'] == "":
+                data = {
+                    'success' : False,
+                    'message' : 'Falta el código comercial',
                     'icon' : 'warning'
                 }
             elif request.POST['dp'] == "":
@@ -171,10 +209,12 @@ def registrarPallet(request):
                     total_cajas = total_cajas + int(detalle[1])
                 if(total_cajas<=presentacion.cantidad_de_cajas):
                     try:
-                        pallet = Pallet.objects.get(codigo=request.POST['codigo'],embarcado=False)
+                        campaign = Campaign.objects.get(planta=request.user.planta_id,state=True)
+                        pallet.campaign = Pallet.objects.get(codigo=request.POST['codigo'],campaign=campaign,embarcado=False)
+                        pallet.codigo_comercial = request.POST['codigo_comercial']
                         pallet.dp = request.POST['dp']
                         pallet.calibre_id = request.POST['calibre']
-                        pallet.variedad_id =request.POST['variedad']
+                        pallet.variedad_id = request.POST['variedad']
                         pallet.presentacion_id = request.POST['presentacion']
                         pallet.categoria_id = request.POST['categoria']
                         pallet.plu = eval(request.POST['plu'].capitalize())
@@ -183,11 +223,11 @@ def registrarPallet(request):
                         DetallePallet.objects.filter(pallet=pallet).delete()
                         for detalle in detalles:
                             DetallePallet.objects.create(
-                                numero_de_guia=detalle[0],
-                                numero_de_cajas=detalle[1],
-                                lote=detalle[2],
-                                pallet_id=pallet.pk,
-                                usuario_id=request.user.id
+                                numero_de_guia = detalle[0],
+                                numero_de_cajas = detalle[1],
+                                lote = detalle[2],
+                                pallet_id = pallet.pk,
+                                usuario_id = request.user.id
                             )                
                         data =  {
                             'success': True,
@@ -196,9 +236,10 @@ def registrarPallet(request):
                         }
                     except Pallet.DoesNotExist:
                         pallet = Pallet(
+                            campaign = Campaign.objects.get(planta=request.user.planta_id,state=True),
                             codigo = request.POST['codigo'],
+                            codigo_comercial = request.POST['codigo_comercial'],
                             dp = request.POST['dp'],
-                            planta_id = request.user.planta_id,
                             calibre_id = request.POST['calibre'],
                             variedad_id = request.POST['variedad'],
                             presentacion_id = request.POST['presentacion'],
@@ -222,10 +263,16 @@ def registrarPallet(request):
                             'message':'Se creó el pallet con éxito',
                             'icon' : 'success'
                         }
+                    except Campaign.DoesNotExist:
+                        data = {
+                            'success' : False,
+                            'message' : 'No hay camapaña activa',
+                            'icon' : 'error'
+                        }
                     except Exception as e:
                         data = {
                             'success' : False,
-                            'message' : e,
+                            'message' : str(e),
                             'icon' : 'error'
                         }
                 else:
