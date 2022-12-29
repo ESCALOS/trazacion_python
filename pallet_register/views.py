@@ -443,32 +443,20 @@ def remontar(request):
                 while cajas_a_remontar > 0:
                     if cajas_a_remontar - detalle.numero_de_cajas < 0:
                         detalle.numero_de_cajas -= cajas_a_remontar
-                        try:
-                            detalle_para_actualizar = DetallePallet.objects.get(pallet=pallet_para_poner,numero_de_guia=detalle.numero_de_guia,lote=detallie.lote)
-                            detalle_para_actualizar.numero_de_cajas += cajas_a_remontar
-                            detalle_para_actualizar.usuario_id = request.user.id
-                            detalle_para_actualizar.save()
-                        except DetallePallet.DoesNotExist:
-                            DetallePallet.objects.create(
-                                numero_de_guia=detalle.numero_de_guia,
-                                numero_de_cajas=cajas_a_remontar,
-                                lote=detalle.lote,
-                                pallet_id=pallet_para_poner,
-                                usuario_id=request.user.id
-                            ) 
+                        DetallePallet.objects.create(
+                            numero_de_guia=detalle.numero_de_guia,
+                            numero_de_cajas=cajas_a_remontar,
+                            lote=detalle.lote,
+                            pallet_id=pallet_para_poner,
+                            usuario_id=request.user.id
+                        ) 
                         detalle.save()
                         cajas_a_remontar = 0
                     else:
                         cajas_a_remontar -= detalle.numero_de_cajas
-                        try:
-                            detalle_para_actualizar = DetallePallet.objects.get(pallet=pallet_para_poner,numero_de_guia=detalle.numero_de_guia,lote=detalle.lote)
-                            detalle_para_actualizar.numero_de_cajas += detalle.numero_de_cajas
-                            detalle_para_actualizar.usuario_id = request.user.id
-                            detalle_para_actualizar.save()
-                        except DetallePallet.DoesNotExist:
-                            detalle.pallet_id = pallet_para_poner
-                            detalle.usuario_id = request.user.id
-                            detalle.save()
+                        detalle.pallet_id = pallet_para_poner
+                        detalle.usuario_id = request.user.id
+                        detalle.save()
                     break
             data = {
                 'success'   : True,
@@ -522,27 +510,43 @@ def embarcar(request):
     else:
         try:
             pallet = Pallet.objects.get(codigo=request.POST['codigo_pallet'],completo=True)
-            pallet.embarcado = not pallet.embarcado
-            pallet.save()
-            if(pallet.embarcado):    
-                title = "¡Embarcado!"
-                message = "Se embarcó el pallet correctamente",
-                icon = "success"
-            else:
-                title = "¡Desembarcado!"
-                message = "El pallet volvió a almacén",
-                icon = "info"
-            data = {
+            modo_embarque = eval(request.POST['modo_embarque'].capitalize())
+            if(pallet.embarcado != modo_embarque):
+                pallet.embarcado = modo_embarque;
+                pallet.save()
+                if(modo_embarque):
+                    title =  "¡Embarcado!",
+                    message = "N° " + request.POST['codigo_pallet'],
+                    icon = "success"
+                else:
+                    title = 'N° ' +request.POST['codigo_pallet'] + " ¡Desembarcado!",
+                    message = "El pallet volvió a almacén",
+                    icon = "info"
+                data = {
                     'success' : True,
                     'title': title,
                     'message': message,
                     'icon': icon
+                } 
+            else:
+                data = {
+                    'success' : False,
+                    'title' : 'PALLET REPETIDO ',
+                    'message' : 'N° ' + request.POST['codigo_pallet'],
+                    'icon' : 'warning'
                 }
+        except Pallet.DoesNotExist:
+            data = {
+                'success' : False,
+                'title' : '¡Error!',
+                'message' : 'El pallet aún no está completo',
+                'icon' : 'warning'
+            }
         except Exception as e:
             data = {
             'success' : True,
             'title': "¡Pallet incompleto!",
-            'message': "No se puede embarcar",
+            'message' : str(e),
             'icon': "warning"
         }
 

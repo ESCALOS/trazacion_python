@@ -1,6 +1,18 @@
 $(document).ready( function () {
     cargarTabla();
-} );
+    document.addEventListener('keydown',function escanearQr(e){
+	if(e.keyCode === 13 && !e.keyShift && codigo_qr != ""){
+	    codigo_qr = codigo_qr.substring(0, codigo_qr.length - 1);
+	    e.preventDefault();
+   	    embarcar(codigo_qr);
+	    codigo_qr = "";
+        }else{
+	    codigo_qr += e.key;	
+        }
+    });
+});
+let codigo_qr = "";
+let modo_embarque = true;
 function cargarTabla(){
     $.ajax({
         url: "../tabla_embarque/",
@@ -9,12 +21,12 @@ function cargarTabla(){
             pantallaCarga();
         },
         success : data => {
-            $('#div_embarque').html(data.tabla);
-            
+            $('#div_embarque').html(data.tabla);    
             $('#table_embarque').DataTable({
                 ordering: false,
-                dom: 'frtip'
-            });
+                dom: 'rtip',
+		pageLength: 6
+	    });
         },
         error : (xhr,status) => {
             Swal.fire({
@@ -25,20 +37,54 @@ function cargarTabla(){
         },
         complete : (xhr,status) =>{
             document.getElementsByClassName("swal2-container")[0].style.display = "none";
-        } 
+        }
     })
 }
-function escanearPallet(){
-    $('#modalPallet').modal('show');
+function confirmarCambiarModo(){
+    Swal.fire({
+	title: 'Seguro que desea de cambiar de modo',
+	showDenyButton : true,
+	confirmButtonText : 'Cambiar Modo',
+	denyButtonText : 'Cancelar',
+    }).then(result=>{
+	if(result.isConfirmed){
+	    $.toast({
+		heading : 'MODO CAMBIADO',
+		icon : 'success',
+		showHideTransition : 'slide',
+		hideAfter : 2000,
+		beforeShow: function() {
+		    cambiarModo();
+		}
+	    });
+	}else{
+	    $.toast({
+		heading: 'SIN CAMBIOS',
+		icon : 'info',
+		showHideTransition : 'slide',
+		hideAfter : 2000
+	    })
+	}
+    })
 }
-$('#codigo_pallet').on('keypress',e=>{
-    if (e.keyCode === 13 && !e.shiftKey) {
-        let codigo_pallet = $('#codigo_pallet').val();
-        e.preventDefault();
-        $('#modalPallet').modal('hide');
+function cambiarModo(){
+    modo_embarque = !modo_embarque;
+    if(modo_embarque){
+	color = 'success';
+	modo = 'MODO EMBARQUE';
+    }else{
+	color = 'warning';
+	modo = 'MODO DESEMBARQUE';
+    }
+    document.getElementById('btn-toggle-embarque').setAttribute('class','btn btn-md btn-'+color+' text-white font-bold w-100 fw-bolder');
+    document.getElementById('btn-toggle-embarque').textContent = modo; 
+}
+function embarcar(codigo_pallet){
         $.ajax({
-            url: "../embarcar/",data : {
+            url: "../embarcar/",
+	    data : {
                 codigo_pallet : codigo_pallet,
+		modo_embarque : modo_embarque,
                 csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
             },
             type : 'POST',
@@ -46,14 +92,20 @@ $('#codigo_pallet').on('keypress',e=>{
                 pantallaCarga();
             },
             success : data => {
-                Swal.fire({
-                    title: data.message, 
-                    icon: data.icon,
-                }).then(result=>{
-                    if(result.isConfirmed){
-                        cargarTabla()
-                    }
-                });
+		$.toast({
+		    text : data.message,
+		    heading: data.title,
+	    	    showHideTransition : 'slide',
+		    icon : data.icon,
+		    stack : 5,
+		    hideAfter: 5000,
+		    beforeShow: function(){
+			if(data.success){
+			    cargarTabla();
+			}
+		        ocultarAlerta();
+		    }
+		})
             },
             error : (xhr,status) => {
                 Swal.fire({
@@ -66,8 +118,7 @@ $('#codigo_pallet').on('keypress',e=>{
                 //document.getElementsByClassName("swal2-container")[0].style.display = "none";
             } 
         })
-    }
-});
+}
 $('#modalPallet').on('hidden.bs.modal', function (event) {
     $('#codigo_pallet').val('');
 })

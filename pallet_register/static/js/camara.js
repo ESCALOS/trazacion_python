@@ -1,6 +1,18 @@
 $(document).ready( function () {
     cargarTabla();
-    listenerQr(); 
+    document.addEventListener('keydown',function obtenerQr(e){
+        if(modal_cerrado){
+	    if (e.keyCode === 13 && !e.shiftKey && codigo_qr != "") {
+                codigo_qr = codigo_qr.substring(0, codigo_qr.length - 1);
+	        e.preventDefault();
+	        obtenerDatos(codigo_qr);
+	        codigo_qr = "";
+	        $('#modalRegistro').modal('show'); 
+            }else{
+	        codigo_qr += e.key;
+            }
+	}
+    });
 });
 let codigo_qr = "";
 let i = 0;
@@ -9,23 +21,6 @@ let numero_de_la_camara = 0;
 let modal_cerrado = true;
 let escaner_qr = true;
 let pallet_activo = "";
-function listenerQr(){
-    document.addEventListener('keydown',function obtenerQr(e){
-        if(modal_cerrado){
-	    if (e.keyCode === 13 && !e.shiftKey && codigo_qr != "") {
-                codigo_qr = codigo_qr.substring(0, codigo_qr.length - 1);
-	        console.log(codigo_qr);
-	        e.preventDefault();
-	        obtenerDatos(codigo_qr);
-	        codigo_qr = "";
-	        $('#modalRegistro').modal('show'); 
-            }else{
-	        codigo_qr += e.key;
-	        console.log(codigo_qr);
-            }
-	}
-    });
-}
 function escanearRemontar(){
     $('#modalRemontar').modal('show');
 }
@@ -52,30 +47,31 @@ function registrarPallet(){
 	    document.getElementById('guia'+j).focus();
 	    j=i; //break
 	    falta_campo = true;
-	    Swal.fire({
-	    	icon: "warning",
-		showConfirmButton: false,
-                title: "Falta la guía",
-		timer: 800
+	    $.toast({
+		heading: 'Falta la guía',
+		showHideTransition : 'slide',
+		icon : 'warning',
+		hideAfter: 1500
 	    });
 	}else if(lote=="" && numero_de_cajas > 0){
             document.getElementById('lote'+j).focus();
 	    j=i; //break
 	    falta_campo = true;
-	    Swal.fire({
-	        icon: "warning",
-		showConfirmButton: false,
-		title: "Falta el lote",
-		timer: 800
+	    $.toast({
+		heading : 'Falta el lote',
+		showHideTransition : 'slide',
+		icon : 'warning',
+		hideAfter: 1500
 	    });
 	}else if(numero_de_cajas == 0 && (guia != "" || lote != "")){
 	    document.getElementById('cajas'+j).focus();
 	    falta_campo = true;
-	    Swal.fire({
+	    $.toast({
+		heading: 'Cantidad Inválida',
+		text : 'Ingrese una cantidad válida',
+		showHideTransition : 'slide',
 		icon : 'warning',
-		showConfirmButton : false,
-		title : 'Ingrese una cantidad válida',
-		timer : 800
+		hideAfter: 1500
 	    });
 	}else if(guia != '' && numero_de_cajas > 0  && lote != ''){
 	    detalle.push([guia,numero_de_cajas,lote]);
@@ -95,7 +91,7 @@ function registrarPallet(){
                 calibre : calibre,
 		cliente : cliente,
                 plu : plu,
-               detalles:JSON.stringify(detalle)
+                detalles:JSON.stringify(detalle)
             },
             type : 'POST',
             dataType : 'json',
@@ -113,19 +109,27 @@ function registrarPallet(){
             complete : function(xhr, status) {
                 if(status == "success"){
                     if(xhr.responseJSON.success){
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: xhr.responseJSON.icon,
-                            title: xhr.responseJSON.message,
-                            showConfirmButton: false,
-                            timer: 1000
-                          })
+			$.toast({
+			    heading : xhr.responseJSON.message,
+			    icon : xhr.responseJSON.icon,
+			    showHideTransition : 'slide',
+			    hideAfter : 2000,
+			    beforeShow : function () {	
+		                resetearModal();
+				obtenerDatos(pallet_activo);
+			    }
+			});
                     }else{
-                        Swal.fire(
-                            xhr.responseJSON.message,
-                            'No guardado',
-                            xhr.responseJSON.icon,
-                          )
+                        $.toast({
+			    heading : 'No guardado',
+			    text : xhr.responseJSON.message,
+		 	    showHideTransition : 'slide',
+		            icon : xhr.responseJSON.icon,
+			    hideAfter : 3500,
+			    beforeShow: function (){
+				ocultarAlerta();
+			    }
+			})
                     }
                 }
             }
@@ -184,17 +188,32 @@ function obtenerDatos(content){
             if(xhr.responseJSON.success){
                 ocultarAlerta();
             }else{
-		    console.log(xhr);
-                Swal.fire({
-                    position: 'top-end',
-                    icon: status,
-                    title: xhr.responseJSON.message,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+		$.toast({
+		    heading : xhr.responseJSON.message,
+		    showHideTransition : 'slide',
+		    hideAfter : 1500,
+		    icon : status,
+		    beforeShow: function (){
+			ocultarAlerta();
+		    }
+		});
             }
         }
     });
+}
+function alertToast(heading,text,icon){
+    $.toast({
+	    heading : heading,
+	    text : text,
+	    icon : icon,
+	    showHideTransition : 'slide',
+	    hideAfter : 5000,
+	    stack : 4,
+	    loader : false,
+	    beforeShow: function(){
+		ocultarAlerta();
+	    }
+    })
 }
 function obtenerCantidadCajas(codigo,presentacion){
     $.ajax({
@@ -285,12 +304,12 @@ function verificarCajas(self){
             }
         });
     }else{
-        Swal.fire({
-            icon: 'warning',
-            title: "Seleccione una presentación",
-            showConfirmButton: false,
-            timer: 850
-          })
+	$.toast({
+	    heading : 'Seleccione una presentación',
+	    icon : 'warning',
+	    showHideTransition : 'slide',
+	    hideAfter : 1500
+	});
     }
 }
 function cargarTabla(){
@@ -305,7 +324,8 @@ function cargarTabla(){
             
             $('#table_id').DataTable({
                 ordering: false,
-                dom: 'frtip'
+                dom: 'rtip',
+		pageLength : 7
             });
         },
         error : (xhr,status) => {
@@ -383,15 +403,27 @@ $('#codigo_remontar').on('keypress',e=>{
                                     if(json.success){
 					resetearModal();
 					obtenerDatos(json.codigo);
-                                    }
-                                    Swal.fire(json.title, json.message, json.icon);
+				    }
+                                    $.toast({
+					heading : json.title,
+					text : json.message,
+				    	icon : json.icon,
+				    	showHideTransition : 'slice',
+					hideAfter : 2000
+				    })
                                 },
                                 error : function(xhr, status) {
                                     console.log(xhr.responseJSON);
                                 },
                             }); 
-                        } else if (result.isDenied) {
-                          Swal.fire('No remontado', 'El pallet no se remontó', 'info')
+                        }else if (result.isDenied) {
+			    $.toast({
+				heading : 'No remontado',
+				text : 'Pallet N° ' + pallet_activo + 'no remontado',
+				showHideTransition : 'slice',
+				icon : 'info',
+				hideAfter : 2000
+			    })
                         }
                       });
                 }else{

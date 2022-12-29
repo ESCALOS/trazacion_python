@@ -2,31 +2,17 @@
     <thead>
         <tr>
             <th>Código</th>
-            <th>Presentación</th>
-            <th>Variedad</th>
-            <th>Calibre</th>
-            <th>Categoría</th>
-            <th>Planta</th>
-            <th>DP</th>
-            <th>PLU</th>
-            <th>Estado</th>
-            <th>Modificado</th>
+            <th>Cliente</th>
+            <th>Destino</th>
         </tr>
     </thead>
     <tbody>
       {% for pallet in pallets %}
-      <tr>
+      <tr class="{% if pallet.embarcado %} bg-success {% else %} bg-warning {% endif %} text-white">
         <td>{{ pallet.codigo }}</td>
-	<td>{{ pallet.presentacion.tipo_caja.tipo_caja }} {{ pallet.presentacion.peso }} KG</td>
-        <td>{{ pallet.variedad.variedad }}</td>
-        <td>{{ pallet.calibre.calibre }}</td>
-        <td>{{ pallet.categoria.categoria }}</td>
-        <td>{{ pallet.campaign.planta.planta }}</td>
-	<td>{{ pallet.dp }}</td>
-        <td>{% if pallet.plu %} SI {% else %} NO {% endif %}</td>
-        <td>{% if pallet.embarcado %} EMBARCADO {% else %} EN ALMACÉN {% endif %}  </td>
-        <td>{{ pallet.updated_at|date:'Y-m-d H:i'}}</td>
-    </tr>
+	<td>{{ pallet.cliente.cliente }}</td>
+	<td>{{ pallet.cliente.destino }}</td>
+      </tr>
       {% endfor %} 
     </tbody>
   </table>
