@@ -68,6 +68,8 @@ function nuevoDetalle(){
     divRow.appendChild(divColLote);
     divColLote.appendChild(labelLote);
     divColLote.appendChild(entradaLote);
+
+    document.getElementById('guia'+i).focus();
 }
 function pantallaCarga(){
     Swal.fire({

@@ -9,7 +9,7 @@
             <th>Planta</th>
             <th>DP</th>
             <th>PLU</th>
-            <th>¿Completo?</th>
+            <th>Estado</th>
             <th>Modificado</th>
         </tr>
     </thead>
@@ -17,12 +17,12 @@
       {% for pallet in pallets %}
       <tr>
         <td>{{ pallet.codigo }}</td>
-        <td>{{ pallet.presentacion.presentacion }}</td>
+	<td>{{ pallet.presentacion.tipo_caja.tipo_caja }} {{ pallet.presentacion.peso }} KG</td>
         <td>{{ pallet.variedad.variedad }}</td>
         <td>{{ pallet.calibre.calibre }}</td>
         <td>{{ pallet.categoria.categoria }}</td>
-        <td>{{ pallet.planta.planta }}</td>
-        <td>{{ pallet.dp }}</td>
+        <td>{{ pallet.campaign.planta.planta }}</td>
+	<td>{{ pallet.dp }}</td>
         <td>{% if pallet.plu %} SI {% else %} NO {% endif %}</td>
         <td>{% if pallet.embarcado %} EMBARCADO {% else %} EN ALMACÉN {% endif %}  </td>
         <td>{{ pallet.updated_at|date:'Y-m-d H:i'}}</td>

@@ -236,6 +236,7 @@ class Pallet(BaseModel):
     presentacion = models.ForeignKey(Presentacion, on_delete=models.RESTRICT)
     categoria = models.ForeignKey(Categoria, on_delete=models.RESTRICT)
     plu = models.BooleanField(default=False)
+    cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT)
     completo = models.BooleanField(default=False)
     embarcado = models.BooleanField(default=False)
     cantidad_de_cajas = models.IntegerField(default=90)

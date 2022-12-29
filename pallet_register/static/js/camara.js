@@ -1,32 +1,30 @@
 $(document).ready( function () {
     cargarTabla();
-    document.addEventListener('keydown', function(e) {   
-	if (e.keyCode === 13 && !e.shiftKey && codigo_qr != "") {
-	    recargar_tabla_pallet = false;
-	    codigo_qr = codigo_qr.substring(0, codigo_qr.length - 2);
-	    console.log(codigo_qr);
-       	    e.preventDefault();
-            obtenerDatos(codigo_qr);
-	    codigo_qr = "";
-	    $('#modalRegistro').modal('show');
-    	}else{
-	    codigo_qr += e.key;
-	    console.log(codigo_qr);
-	}
-    });
+    listenerQr(); 
 });
 let codigo_qr = "";
 let i = 0;
 let camaraActiva = false;
 let numero_de_la_camara = 0;
-let recargar_tabla_pallet = true;
-let recargar_tabla_registro = true;
+let modal_cerrado = true;
 let escaner_qr = true;
 let pallet_activo = "";
-function escanearPallet(){
-    recargar_tabla_registro = false;
-    $('#modalRegistro').modal('hide');
-    $('#modalPallet').modal('show');
+function listenerQr(){
+    document.addEventListener('keydown',function obtenerQr(e){
+        if(modal_cerrado){
+	    if (e.keyCode === 13 && !e.shiftKey && codigo_qr != "") {
+                codigo_qr = codigo_qr.substring(0, codigo_qr.length - 1);
+	        console.log(codigo_qr);
+	        e.preventDefault();
+	        obtenerDatos(codigo_qr);
+	        codigo_qr = "";
+	        $('#modalRegistro').modal('show'); 
+            }else{
+	        codigo_qr += e.key;
+	        console.log(codigo_qr);
+            }
+	}
+    });
 }
 function escanearRemontar(){
     $('#modalRemontar').modal('show');
@@ -38,6 +36,7 @@ function registrarPallet(){
     presentacion = document.getElementById('presentacion').value;
     variedad = document.getElementById('variedad').value;
     calibre = document.getElementById('calibre').value;
+    cliente = document.getElementById('cliente').value;
     categoria = document.getElementById('categoria').value;
     plu = document.getElementById('plu').value;
     detalle = [];
@@ -46,6 +45,9 @@ function registrarPallet(){
         let guia = document.getElementById('guia'+j).value;
         let numero_de_cajas = document.getElementById('cajas'+j).value;
         let lote = document.getElementById('lote'+j).value;
+	if(numero_de_cajas == ''){
+	    numero_de_cajas = 0;
+	}
         if(guia == "" && numero_de_cajas > 0){
 	    document.getElementById('guia'+j).focus();
 	    j=i; //break
@@ -66,7 +68,16 @@ function registrarPallet(){
 		title: "Falta el lote",
 		timer: 800
 	    });
-	}else{
+	}else if(numero_de_cajas == 0 && (guia != "" || lote != "")){
+	    document.getElementById('cajas'+j).focus();
+	    falta_campo = true;
+	    Swal.fire({
+		icon : 'warning',
+		showConfirmButton : false,
+		title : 'Ingrese una cantidad válida',
+		timer : 800
+	    });
+	}else if(guia != '' && numero_de_cajas > 0  && lote != ''){
 	    detalle.push([guia,numero_de_cajas,lote]);
 	}
     }
@@ -82,6 +93,7 @@ function registrarPallet(){
                 variedad : variedad,
                 categoria : categoria,
                 calibre : calibre,
+		cliente : cliente,
                 plu : plu,
                detalles:JSON.stringify(detalle)
             },
@@ -126,7 +138,6 @@ function crearNuevoDetalle(){
 }
 function editarPallet(codigo){
     resetearModal();
-    //codigo = codigo.substring(0,codigo.length - 1);
     obtenerDatos(codigo);
     $("#modalRegistro").modal("show");
 }
@@ -144,14 +155,15 @@ function obtenerDatos(content){
         success : json => {
             if(json.success){
                 document.getElementById('modalTitle').textContent="Editar Pallet";
-                obtenerCantidadCajas(json.pallet[0],json.pallet[2]);
-                document.getElementById('codigo').value = json.pallet[0];
-                document.getElementById('dp').value = json.pallet[1];
-                document.getElementById('presentacion').value = json.pallet[2];
-                document.getElementById('variedad').value = json.pallet[3];
-                document.getElementById('calibre').value = json.pallet[4];
-                document.getElementById('categoria').value = json.pallet[5];
-                document.getElementById('plu').value = json.pallet[6];
+                obtenerCantidadCajas(json.codigo,json.presentacion);
+                document.getElementById('codigo').value = json.codigo; 
+		document.getElementById('codigo_comercial').value = json.codigo_comercial;
+                document.getElementById('dp').value = json.dp;
+                document.getElementById('presentacion').value = json.presentacion;
+                document.getElementById('variedad').value = json.variedad;
+                document.getElementById('calibre').value = json.calibre;
+                document.getElementById('categoria').value = json.categoria;
+                document.getElementById('plu').value = json.plu;
                 for(i = 0; i<json.detalle.length;i++){
                     nuevoDetalle();
                     document.getElementById('guia'+i).value = json.detalle[i].numero_de_guia; 
@@ -196,7 +208,7 @@ function obtenerCantidadCajas(codigo,presentacion){
         success : json => {
             if(json.success){
                 mensajesCajas(json.maximo_cajas,json.total_cajas);
-            }
+	    }
         },
         error : function(xhr, status) {
             console.log(xhr);
@@ -233,7 +245,6 @@ function mensajesCajas(maximo_cajas,total_cajas){
         document.getElementById('div-agregar-cajas').style.display = "none";
         document.getElementById('div-remontar').style.display = "none";
         document.getElementById('btn-registrar-pallet').style.display = "none";
-
     }else{
         document.getElementById('cajas_restantes').setAttribute('class','text-danger');
         document.getElementById('cajas_restantes').textContent = "Faltan " + (cajas_restantes);
@@ -317,20 +328,12 @@ function resetearModal(){
     }
     document.getElementById('codigo').value = "";
     document.getElementById('codigo_comercial').value = "";
-    //document.getElementById('dp').value = "";
-    //document.getElementById('presentacion').value = "";
-    //document.getElementById('variedad').value = "";
-    //document.getElementById('categoria').value = "";
-    //document.getElementById('calibre').value = "";
 }
 $('#modalRegistro').on('hidden.bs.modal', function (event) {
-    if(!recargar_tabla_registro){
-        recargar_tabla_registro = true; 
-    }else{
-        cargarTabla();
-    }
     resetearModal();
     pallet_activo = "";
+    modal_cerrado = true;
+    cargarTabla();
 })
 $('#modalRemontar').on('hidden.bs.modal', function (event) {
     $('#codigo_remontar').val('');
@@ -339,6 +342,7 @@ $('#codigo_remontar').on('keypress',e=>{
     if (e.keyCode === 13 && !e.shiftKey) {
         let pallet_a_poner = pallet_activo;
         let pallet_a_sacar = $('#codigo_remontar').val();
+	pallet_a_sacar = pallet_a_sacar.substring(0,pallet_a_sacar.length-1);
         e.preventDefault();
         $.ajax({
             url : 'remontabilidad/',
@@ -377,7 +381,8 @@ $('#codigo_remontar').on('keypress',e=>{
                                 },
                                 success : json => {
                                     if(json.success){
-                                        obtenerCantidadCajas(json.codigo,json.presentacion);
+					resetearModal();
+					obtenerDatos(json.codigo);
                                     }
                                     Swal.fire(json.title, json.message, json.icon);
                                 },
@@ -410,8 +415,9 @@ $('#codigo_remontar').on('keypress',e=>{
         });
     }
 });
-$('#modalPallet').on('shown.bs.modal', function () {
-    document.getElementById('codigo_pallet').focus();
+$('#modalRegistro').on('shown.bs.modal', function (){
+    modal_cerrado = false;
+    document.getElementById('codigo_comercial').focus();
 });
 $('#modalRemontar').on('shown.bs.modal', function (){
     document.getElementById('codigo_remontar').focus();
