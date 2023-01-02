@@ -2,8 +2,8 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login,authenticate,logout
 from django.db import IntegrityError
-from django.db.models import Sum,Count,Q
-from .models import Pallet,DetallePallet,Variedad,Presentacion,Lote,Calibre,Categoria,Campaign,CurrentCampaign,Cliente
+from django.db.models import Sum,Count
+from .models import Pallet,DetallePallet,Variedad,Presentacion,Calibre,Categoria,Campaign,CurrentCampaign,Cliente
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -105,76 +105,39 @@ def tablaPallet(request):
     return JsonResponse(data)
 def datosPallet(request):
     if request.user.is_authenticated:
-        codigo_del_pallet = request.GET['codigo']
-        codigo_desglozado = codigo_del_pallet.split('-')
-        if len(codigo_desglozado) == 2:
-            try:
-                campaign = Campaign.objects.get(planta=request.user.planta_id,state=True)
-                codigo_de_la_variedad = str(codigo_desglozado[0])
-                numero_del_pallet = int(codigo_desglozado[1])
-                if not Variedad.objects.filter(codigo=codigo_de_la_variedad,campaign=campaign).exists():
-                    data = {
-                        'success' : False,
-                        'message' : 'Código de la variedad no inválido',
-                        'icon' : 'error'
-                    }
-                elif numero_del_pallet <= 0:
-                    data = {
-                        'success' : False,
-                        'message': 'Falta el número del Pallet',
-                        'icon' : 'error'
-                    }
-                else:
-                    try:
-                        pallet = Pallet.objects.get(codigo=request.GET['codigo'],campaign=campaign,embarcado=False)
-                        detalle = DetallePallet.objects.filter(pallet=pallet).values('numero_de_guia','numero_de_cajas','lote')
-                        data = {
-                            'success': True,
-                            'codigo' : pallet.codigo,
-                            'codigo_comercial': pallet.codigo_comercial,
-                            'presentacion' : pallet.presentacion_id, 
-                            'dp' : pallet.dp,
-                            'variedad' : pallet.variedad.variedad,
-                            'variedad_id' : pallet.variedad_id,
-                            'calibre' : pallet.calibre_id,
-                            'cliente' : pallet.cliente_id,
-                            'categoria' : pallet.categoria_id,
-                            'plu' : pallet.plu,
-                            'detalle': list(detalle),
-                            'message': 'Pallet encontrado',
-                            'icon' : 'success' 
-                        }
-                    except Pallet.DoesNotExist:
-                        variedad = Variedad.objects.get(codigo=codigo_de_la_variedad)
-                        data = {
-                            'success': False,
-                            'message': "Registre el pallet",
-                            'icon' : 'success',
-                            'variedad_id' : variedad.pk,
-                            'variedad' : variedad.variedad ,
-                        }
-                    except Exception as e:
-                        data = {
-                            'success' : False,
-                            'message' : str(e),
-                            'icon' : 'error'
-                        }
-            except Campaign.DoesNotExist:
-                data = {
-                    'success' : False,
-                    'message' : 'No hay campaña activa',
-                    'icon' : 'error'
-                }
-            except ValueError:
-                data = {
-                    'success' : False,
-                    'message' : 'Codigo Inválido',
-                    'icon' : 'error'
-                 }
-        else:
+        try:
+            campaign = Campaign.objects.get(planta=request.user.planta_id,state=True)
+            pallet = Pallet.objects.get(codigo=request.GET['codigo'],campaign=campaign,embarcado=False)
+            detalle = DetallePallet.objects.filter(pallet=pallet).values('numero_de_guia','numero_de_cajas','lote')
+            data = {
+                'success': True,
+                'codigo' : pallet.codigo,
+                'codigo_comercial': pallet.codigo_comercial,
+                'presentacion' : pallet.presentacion_id, 
+                'dp' : pallet.dp,
+                'variedad' : pallet.variedad.variedad,
+                'variedad_id' : pallet.variedad_id,
+                'calibre' : pallet.calibre_id,
+                'cliente' : pallet.cliente_id,
+                'categoria' : pallet.categoria_id,
+                'plu' : pallet.plu,
+                'detalle': list(detalle),
+                'message': 'Pallet encontrado',
+                'icon' : 'success' 
+            }
+        except Pallet.DoesNotExist:
+            variedad = Variedad.objects.get(codigo="RG")
+            data = {
+                'success': False,
+                'message': "Registre el pallet",
+                'icon' : 'success',
+                'variedad_id' : variedad.pk,
+                'variedad' : variedad.variedad ,
+            }
+        except Exception as e:
             data = {
                 'success' : False,
-                'message' : 'Código Inválido',
+                'message' : str(e),
                 'icon' : 'error'
             }
     else:
@@ -184,31 +147,6 @@ def datosPallet(request):
         }
         
     return JsonResponse(data, safe=False)
-
-def obtenerLotes(request):
-    if(request.method != "GET"):
-        data = {
-            'success' : False,
-            'message' : 'Método http no soportado',
-            'icon' : 'error'
-        }
-    else:
-        try:
-            lotes = Lote.objects.filter(Q(lote__icontains=request.GET['lote']) | Q(fundo__fundo__icontains=request.GET['lote'])).values('id','lote','fundo__fundo')
-            data = {
-                'success' : True,
-                'message' : 'Transacción éxitosa',
-                'lotes' : list(lotes),
-                'icon' : 'error'
-            }
-        except Exception as e:
-            data = {
-                'success' : True,
-                'message' : str(e),
-                'icon' : 'error'
-            }
-    return JsonResponse(data,safe=False)
-
 
 def registrarPallet(request):
     if request.user.is_authenticated:

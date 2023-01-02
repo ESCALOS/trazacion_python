@@ -5,9 +5,8 @@ $(document).ready( function () {
 	    if (e.keyCode === 13 && !e.shiftKey && codigo_qr != "") {
                 codigo_qr = codigo_qr.substring(0, codigo_qr.length - 1);
 	        e.preventDefault();
-	        obtenerDatos(codigo_qr);
-	        codigo_qr = "";
-	        $('#modalRegistro').modal('show'); 
+		obtenerDatos(codigo_qr)
+		codigo_qr = "";
             }else{
 	        codigo_qr += e.key;
             }
@@ -174,9 +173,25 @@ function obtenerDatos(content){
                     document.getElementById('cajas'+i).value = json.detalle[i].numero_de_cajas; 
                     document.getElementById('lote'+i).value = json.detalle[i].lote; 
                 };
+		$('#modalRegistro').modal('show');
             }else{
-                document.getElementById('codigo').value = content;
-                mensajesCajas(0,0);
+		if(json.icon == 'success'){
+                    document.getElementById('codigo').value = content;
+		    document.getElementById('variedad').value = json.variedad_id;
+                    mensajesCajas(0,0);
+		    ocultarAlerta();
+		    $('#modalRegistro').modal('show');
+		}else{
+		    $.toast({
+			heading : json.message,
+			icon : json.icon,
+			showHideTransition : 'slide',
+			hideAfter : 2000,
+			beforeShow: function() {
+			    ocultarAlerta();
+			}
+		    })
+		}
             }
             pallet_activo = content;
         },
@@ -187,16 +202,6 @@ function obtenerDatos(content){
         complete : function(xhr, status) {
             if(xhr.responseJSON.success){
                 ocultarAlerta();
-            }else{
-		$.toast({
-		    heading : xhr.responseJSON.message,
-		    showHideTransition : 'slide',
-		    hideAfter : 1500,
-		    icon : status,
-		    beforeShow: function (){
-			ocultarAlerta();
-		    }
-		});
             }
         }
     });

@@ -1,13 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
   {% block scripts %}
-    {% if user.rol == "REG" %}
     <script src="{% static 'js/camara.js' %}" defer></script>
-    {% else %}
-    <script src="{% static 'js/reporte.js' %}" defer></script>
-    {% endif %}
     <script src="{% static 'js/general.js' %}" defer></script>
-    {% endblock scripts %}
+    <script src="{% static 'js/library/select.min.js' %}" defer></script>
+  {% endblock scripts %}
   {% block content %}
   <div class="container px-4 py-2">
     {% if user.rol == "REG" %}

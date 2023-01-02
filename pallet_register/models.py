@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import (BaseUserManager,AbstractBaseUser)
 from django.utils.translation import gettext_lazy as _
+from smart_selects.db_fields import ChainedManyToManyField
         
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,editable=False)
@@ -141,11 +142,11 @@ class Usuario(AbstractBaseUser):
     
 class Lote(BaseModel):
     lote = models.CharField(max_length=50)
-    producto = models.ForeignKey(Producto, on_delete=models.RESTRICT)
+    codigo_lugar_produccion = models.CharField(verbose_name="Codigo de Lugar de Producción",max_length=150)
     fundo = models.ForeignKey(Fundo, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return self.lote + ' | ' + self.producto.producto + ' | ' + self.fundo.fundo
+        return self.lote + ' | ' + self.codigo_lugar_produccion + ' | ' + self.fundo.fundo
 
 class Calibre(BaseModel):
     calibre = models.CharField(max_length=100)
@@ -154,7 +155,9 @@ class Calibre(BaseModel):
         return self.calibre
     
 class Variedad(BaseModel):
+    codigo = models.CharField(max_length=3,default='RG')
     variedad = models.CharField(max_length=100)
+    producto = models.ForeignKey(Producto, on_delete=models.RESTRICT)
 
     class Meta:
         verbose_name_plural = "Variedades"
@@ -173,15 +176,16 @@ class TipoCaja(BaseModel):
 
 class Presentacion(BaseModel):
     tipo_caja = models.ForeignKey(TipoCaja, on_delete=models.RESTRICT)
+    descripcion = models.CharField(verbose_name='Descripción',max_length=255,default='')
     peso = models.DecimalField(max_digits=3,decimal_places=1)
-    cantidad_de_cajas = models.IntegerField(default=100)
-    producto = models.ForeignKey(Producto, on_delete=models.RESTRICT) 
+    cantidad_de_cajas = models.IntegerField(default=100) 
+    productos = models.ManyToManyField(Producto)
 
     class Meta:
         verbose_name_plural = "Presentaciones"
 
     def __str__(self):
-        return self.tipo_caja.tipo_caja + ' ' + str(self.peso) + ' KG'
+        return self.descripcion + ' ' + str(self.peso) + ' KG'
     
 class Categoria(BaseModel):
     categoria = models.CharField(max_length=50)
@@ -189,10 +193,16 @@ class Categoria(BaseModel):
     def __str__(self):
         return self.categoria
 
+class Destino(BaseModel):
+    destino = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.destino
+
 class Cliente(BaseModel):
     cliente = models.CharField(max_length=150)
     abreviatura = models.CharField(max_length=10)
-    destino = models.CharField(max_length=255)
+    destino = models.ManyToManyField(Destino)
 
     def __str__(self):
         return self.cliente
@@ -200,12 +210,28 @@ class Cliente(BaseModel):
 class Campaign(BaseModel):
     planta = models.ForeignKey(Planta,on_delete=models.RESTRICT)
     inicio = models.DateField()
-    producto = models.ForeignKey(Producto, on_delete=models.RESTRICT)
+    producto = models.ForeignKey(Producto, on_delete=models.RESTRICT,default=1)
     state = models.BooleanField(verbose_name="Activo",default=True)
-    presentaciones = models.ManyToManyField(Presentacion)
-    variedades = models.ManyToManyField(Variedad)
+    presentaciones = ChainedManyToManyField(
+            Presentacion,
+            horizontal = True,
+            chained_field = 'producto',
+            chained_model_field = 'productos'
+    )
+    variedades = ChainedManyToManyField(
+        Variedad,
+        horizontal = True,
+        chained_field = 'producto',
+        chained_model_field = 'producto'
+    )
     clientes = models.ManyToManyField(Cliente)
-    usuarios = models.ManyToManyField(Usuario, verbose_name="Personal")
+    usuarios = ChainedManyToManyField(
+        Usuario, 
+        verbose_name = 'Personal',
+        horizontal = True,
+        chained_field = 'planta',
+        chained_model_field = 'planta'
+    )
 
     class Meta:
         verbose_name = "Campaña"
@@ -249,7 +275,7 @@ class Pallet(BaseModel):
     
 class DetallePallet(BaseModel):
     pallet = models.ForeignKey(Pallet, on_delete=models.RESTRICT)
-    lote = models.CharField(max_length=255)
+    lote = models.ForeignKey(Lote, on_delete=models.RESTRICT)
     numero_de_guia = models.CharField(max_length=255)
     numero_de_cajas = models.BigIntegerField(default=0)
     usuario = models.ForeignKey(Usuario, on_delete=models.RESTRICT)

@@ -46,6 +46,7 @@ function nuevoDetalle(){
     entradaCajas.type = "number";
     entradaCajas.setAttribute('placeholder','00');
     entradaCajas.setAttribute('id','cajas'+i);
+    entradaCajas.setAttribute('min',1)
     entradaCajas.setAttribute('onchange','verificarCajas(this)');
 
     entradaLote.setAttribute('class','form-control');

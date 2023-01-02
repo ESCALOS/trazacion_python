@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-xe!x&puvq&7g0(@bsq+pylqjt#yw$^u^r4dqezt)sqgn63!e(l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.116']
+ALLOWED_HOSTS = ['192.168.82.45']
 
 # Application definition
 
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pallet_register',
-    "django_extensions",
+    'django_extensions',
+    'smart_selects'
 ]
 
 MIDDLEWARE = [
@@ -78,10 +79,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'trazacion',
-        'USER': 'balanza',
-        'PASSWORD': 'asgi@Balanza2021',
+        'USER': 'trazacion@localhost',
+        'PASSWORD': '',
         'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'PORT': '3306'
     }
 }
 
@@ -130,3 +131,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'pallet_register.Usuario'
 
 LOGIN_URL = '/login'
+
+USE_DJANGO_JQUERY = True

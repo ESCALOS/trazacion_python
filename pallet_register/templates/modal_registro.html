@@ -13,24 +13,24 @@
               <input type="text" class="form-control" id="codigo" placeholder="Codigo" readonly="true">
             </div>
             <div class="mb-3 col">
-              <label for="codigo" class="form-label">Comercial</label>
-              <input type="text" class="form-control" id="codigo_comercial" placeholder="BU-123123">
-	    </div>
-          </div>
-          <div class="row">
-            <div class="mb-3 col">
-              <label for="dni" class="form-label">Presentación</label>
-              <select name="presentacion" class="form-control" id="presentacion">
-                {% for presentacion in presentaciones %}
-		<option value="{{ presentacion.id }}">{{ presentacion.tipo_caja.tipo_caja }} {{ presentacion.peso }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <div class="mb-3 col">
               <label for="variedad" class="form-label">Variedad</label>
               <select name="presentacion" class="form-control" id="variedad">
                 {% for variedad in variedades %}
                   <option value="{{ variedad.id }}">{{ variedad.variedad }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 col">
+              <label for="codigo" class="form-label">Comercial</label>
+              <input type="text" class="form-control" id="codigo_comercial" placeholder="BU-123123">
+	    </div>
+            <div class="mb-3 col">
+              <label for="dni" class="form-label">Presentación</label>
+              <select name="presentacion" class="form-control" id="presentacion">
+                {% for presentacion in presentaciones %}
+		<option value="{{ presentacion.id }}">{{ presentacion.descripcion }} {{ presentacion.peso }}</option>
                 {% endfor %}
               </select>
             </div>

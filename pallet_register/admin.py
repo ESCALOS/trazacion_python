@@ -29,7 +29,10 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('codigo',)
     ordering = ('codigo',)
     filter_horizontal = ()
-    
+
+class CampaignAdmin(admin.ModelAdmin):
+    filter_horizontal = ('clientes',)
+
 admin.site.register(models.Usuario, UserAdmin)
 admin.site.register(models.Zona)
 admin.site.register(models.Sede)
@@ -37,8 +40,9 @@ admin.site.register(models.Fundo)
 admin.site.register(models.Planta)
 admin.site.register(models.Lote)
 admin.site.register(models.Cliente)
+admin.site.register(models.Destino)
 admin.site.register(models.TipoCaja)
-admin.site.register(models.Campaign)
+admin.site.register(models.Campaign,CampaignAdmin)
 admin.site.register(models.Producto)
 admin.site.register(models.Calibre)
 admin.site.register(models.CurrentCampaign)
