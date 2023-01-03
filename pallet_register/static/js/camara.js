@@ -159,7 +159,8 @@ function obtenerDatos(content){
             if(json.success){
                 document.getElementById('modalTitle').textContent="Editar Pallet";
                 obtenerCantidadCajas(json.codigo,json.presentacion);
-                document.getElementById('codigo').value = json.codigo; 
+                document.getElementById('codigo').value = json.codigo;
+		document.getElementById('variedad').innerHTML = json.variedad;
 		document.getElementById('codigo_comercial').value = json.codigo_comercial;
                 document.getElementById('dp').value = json.dp;
                 document.getElementById('presentacion').value = json.presentacion;
@@ -170,9 +171,10 @@ function obtenerDatos(content){
                 for(i = 0; i<json.detalle.length;i++){
                     nuevoDetalle();
                     document.getElementById('guia'+i).value = json.detalle[i].numero_de_guia; 
-                    document.getElementById('cajas'+i).value = json.detalle[i].numero_de_cajas; 
-                    document.getElementById('lote'+i).value = json.detalle[i].lote; 
-                };
+                    document.getElementById('cajas'+i).value = json.detalle[i].numero_de_cajas;  
+		    let newOption = new Option(json.detalle[i].fundoLote,json.detalle[i].lote,false,false);
+		    $('#lote'+i).append(newOption).trigger('change');
+		};
 		$('#modalRegistro').modal('show');
             }else{
 		if(json.icon == 'success'){

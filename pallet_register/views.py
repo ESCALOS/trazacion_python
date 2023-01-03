@@ -2,7 +2,8 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login,authenticate,logout
 from django.db import IntegrityError
-from django.db.models import Sum,Count,Q
+from django.db.models import Sum,Count,Q,Value
+from django.db.models.functions import Concat
 from .models import Pallet,DetallePallet,Variedad,Presentacion,Lote,Calibre,Categoria,Campaign,CurrentCampaign,Cliente
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -66,13 +67,16 @@ def index(request):
             calibres = Calibre.objects.values('id','calibre')
             categorias = Categoria.objects.values('id','categoria')
             clientes = Cliente.objects.filter(campaign=campaign)
+            lotes = Lote.objects.annotate(text=Concat('fundo__fundo',Value(' '),'lote')).values('id','text')
+            
             return render(request, 'index.html',{
                 'pallets':pallets,
                 'presentaciones': presentaciones,
                 'variedades' : variedades,
                 'calibres' : calibres,
                 'categorias' : categorias,
-                'clientes' : clientes
+                'clientes' : clientes,
+                'lotes' : lotes
             })
         except Campaign.DoesNotExist:
             data = {
@@ -127,7 +131,7 @@ def datosPallet(request):
                 else:
                     try:
                         pallet = Pallet.objects.get(codigo=request.GET['codigo'],campaign=campaign,embarcado=False)
-                        detalle = DetallePallet.objects.filter(pallet=pallet).values('numero_de_guia','numero_de_cajas','lote')
+                        detalle = DetallePallet.objects.annotate(fundoLote=Concat('lote__fundo__fundo',Value(' '),'lote__lote')).filter(pallet=pallet).values('numero_de_guia','numero_de_cajas','lote','fundoLote')
                         data = {
                             'success': True,
                             'codigo' : pallet.codigo,
@@ -194,7 +198,7 @@ def obtenerLotes(request):
         }
     else:
         try:
-            lotes = Lote.objects.filter(Q(lote__icontains=request.GET['lote']) | Q(fundo__fundo__icontains=request.GET['lote'])).values('id','lote','fundo__fundo')
+            lotes = Lote.objects.annotate(text=Concat('fundo__fundo',Value(' '),'lote')).filter(text__icontains=request.GET['term']).values('id','text')
             data = {
                 'success' : True,
                 'message' : 'Transacción éxitosa',
@@ -217,12 +221,7 @@ def registrarPallet(request):
                  presentacion_post = "0";
             else:
                 presentacion_post = request.POST['presentacion']
-                
-            if request.POST['variedad'] == "":
-                 variedad_post = "0"
-            else:
-                variedad_post = request.POST['variedad']
-                
+                                
             if request.POST['calibre'] == "":
                  calibre_post = "0"
             else:
@@ -262,12 +261,6 @@ def registrarPallet(request):
                     'message' : 'Presentación incorrecta',
                     'icon' : 'warning'
                 }
-            elif not Variedad.objects.filter(id=int(variedad_post)).exists():
-                data = {
-                    'success' : False,
-                    'message' : 'Falta la variedad',
-                    'icon' : 'warning'
-                }
             elif not Calibre.objects.filter(id=int(calibre_post)).exists():
                 data = {
                     'success' : False,
@@ -296,11 +289,12 @@ def registrarPallet(request):
                     try:
                         campaign = Campaign.objects.get(planta=request.user.planta_id,state=True)
                         pallet = Pallet.objects.get(codigo=request.POST['codigo'],campaign=campaign,embarcado=False)
+
                         pallet.codigo_comercial = request.POST['codigo_comercial']
                         pallet.dp = request.POST['dp']
                         pallet.calibre_id = request.POST['calibre']
                         pallet.cliente_id =request.POST['cliente']
-                        pallet.variedad_id = request.POST['variedad']
+                        pallet.variedad = Variedad.objects.get(codigo=request.POST['codigo'].split("-")[0])
                         pallet.presentacion_id = request.POST['presentacion']
                         pallet.categoria_id = request.POST['categoria']
                         pallet.plu = eval(request.POST['plu'].capitalize())
@@ -308,10 +302,11 @@ def registrarPallet(request):
                         pallet.save()
                         DetallePallet.objects.filter(pallet=pallet).delete()
                         for detalle in detalles:
+                            lote = Lote.objects.get(id=detalle[2])
                             DetallePallet.objects.create(
                                 numero_de_guia = detalle[0],
                                 numero_de_cajas = detalle[1],
-                                lote = detalle[2],
+                                lote = lote,
                                 pallet_id = pallet.pk,
                                 usuario_id = request.user.id
                             )                

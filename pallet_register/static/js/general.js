@@ -4,16 +4,19 @@ function nuevoDetalle(){
     let divColGuia = document.createElement("div");
     let divColCajas = document.createElement("div");
     let divColLote = document.createElement("div");
+    let divRowColGC = document.createElement("div");
     let labelGuia = document.createElement("label");
     let labelCajas = document.createElement("label");
     let labelLote = document.createElement("label");
     let entradaGuia = document.createElement("input");
     let entradaCajas = document.createElement("input");
-    let entradaLote = document.createElement("input");
+    let entradaLote = document.createElement("select");
     let divDetalle = document.getElementById('detalle');
+    let hr = document.createElement('hr');
 
     //ASIGNANDO LOS ATRIBUTOS
     divRow.setAttribute('id','divRow'+i);
+    divRowColGC.setAttribute('id','divRowColGC'+i);
 
     divColGuia.setAttribute('id','divColGuia'+i);
     divColCajas.setAttribute('id','divColCajas'+i);
@@ -21,8 +24,10 @@ function nuevoDetalle(){
     labelGuia.setAttribute('id','labelGuia'+i);
     labelCajas.setAttribute('id','labelCaja'+i);
     labelLote.setAttribute('id','labelLote'+i);
-
-    divRow.setAttribute('class','row rowDetalle');
+  
+    divRow.setAttribute('class','rowDetalle');
+    divRowColGC.setAttribute('class','row');
+    hr.setAttribute('class','rowDetalle');
 
     divColGuia.setAttribute('class','mb-3 col');
     divColCajas.setAttribute('class','mb-3 col');
@@ -50,25 +55,45 @@ function nuevoDetalle(){
     entradaCajas.setAttribute('onchange','verificarCajas(this)');
 
     entradaLote.setAttribute('class','form-control');
-    entradaLote.type = "text";
-    entradaLote.setAttribute('placeholder','545646');
     entradaLote.setAttribute('id','lote'+i);
-
+    entradaLote.setAttribute('style','display:none;width:100%');
 
     //PONIENDO LOS ELEMENTOS EN EL DIV DE DETALLE
     divDetalle.appendChild(divRow);
- 
-    divRow.appendChild(divColGuia);
+
+    divRow.appendChild(divRowColGC);
+
+    divRowColGC.appendChild(divColGuia);
     divColGuia.appendChild(labelGuia);
     divColGuia.appendChild(entradaGuia);
 
-    divRow.appendChild(divColCajas);
+    divRowColGC.appendChild(divColCajas);
     divColCajas.appendChild(labelCajas);
     divColCajas.appendChild(entradaCajas);
     
     divRow.appendChild(divColLote);
     divColLote.appendChild(labelLote);
     divColLote.appendChild(entradaLote);
+    divDetalle.appendChild(hr);
+
+    $('#lote'+i).select2({
+	ajax: {
+	    method : "GET",
+	    url : 'lotes',
+	    dataType: 'json',
+	    delay: 300,
+	    processResults: function(data){
+		return {
+		    results : data.lotes
+		}
+	    },
+	    cache: true
+	},
+	language : "es",
+	minimumInputLength : 3,
+	dropdownParent : $("#divColLote"+i),
+	width : 'resolve'
+    });
 
     document.getElementById('guia'+i).focus();
 }

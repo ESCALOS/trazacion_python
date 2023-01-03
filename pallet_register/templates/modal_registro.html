@@ -1,4 +1,4 @@
-<div class="modal modal-md fade" id="modalRegistro" tabindex="-1" aria-hidden="true">
+<div class="modal modal-md fade" id="modalRegistro" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-success" style="align-text:center">
@@ -14,11 +14,7 @@
             </div>
             <div class="mb-3 col">
               <label for="variedad" class="form-label">Variedad</label>
-              <select name="presentacion" class="form-control" id="variedad">
-                {% for variedad in variedades %}
-                  <option value="{{ variedad.id }}">{{ variedad.variedad }}</option>
-                {% endfor %}
-              </select>
+              <label name="variedad" class="form-control" id="variedad"></label>
             </div>
           </div>
           <div class="row">
@@ -27,7 +23,7 @@
               <input type="text" class="form-control" id="codigo_comercial" placeholder="BU-123123">
 	    </div>
             <div class="mb-3 col">
-              <label for="dni" class="form-label">Presentación</label>
+              <label for="presentacion" class="form-label">Presentación</label>
               <select name="presentacion" class="form-control" id="presentacion">
                 {% for presentacion in presentaciones %}
 		<option value="{{ presentacion.id }}">{{ presentacion.descripcion }} {{ presentacion.peso }}</option>
@@ -74,7 +70,9 @@
               </select>
             </div>
           </div>
-          <hr>
+	</div>
+	  <hr>
+	<div class="text-center">
           <div>
             <h5><span style="font-weight:800" id="cajas_restantes"></span></h5>
             <div id="detalle" style="overflow-y:auto;overflow-x:hidden;height:175px">
