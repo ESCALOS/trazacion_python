@@ -10,7 +10,7 @@
       {% for pallet in pallets %}
       <tr class="{% if pallet.completo %} bg-success {% else %} bg-warning {% endif %}  text-white" onclick="editarPallet('{{ pallet.codigo }}')">
         <td>{{ pallet.codigo }}</td>
- 	<td>{{ pallet.presentacion.tipo_caja.tipo_caja }}  {{ pallet.presentacion.peso }} KG</td>
+ 	<td>{{ pallet.presentacion.descripcion }}  {{ pallet.presentacion.peso }} KG</td>
 	<td>{{ pallet.variedad }}</td>
     </tr>
       {% endfor %} 

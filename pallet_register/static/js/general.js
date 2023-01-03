@@ -29,9 +29,9 @@ function nuevoDetalle(){
     divRowColGC.setAttribute('class','row');
     hr.setAttribute('class','rowDetalle');
 
-    divColGuia.setAttribute('class','mb-3 col');
-    divColCajas.setAttribute('class','mb-3 col');
-    divColLote.setAttribute('class','mb-3 col');
+    divColGuia.setAttribute('class','col');
+    divColCajas.setAttribute('class','col');
+    divColLote.setAttribute('class','col');
 
     labelGuia.setAttribute('class','form-label');
     labelCajas.setAttribute('class','form-label');

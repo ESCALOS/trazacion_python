@@ -179,7 +179,7 @@ function obtenerDatos(content){
             }else{
 		if(json.icon == 'success'){
                     document.getElementById('codigo').value = content;
-		    document.getElementById('variedad').value = json.variedad_id;
+		    document.getElementById('variedad').innerHTML = json.variedad;
                     mensajesCajas(0,0);
 		    ocultarAlerta();
 		    $('#modalRegistro').modal('show');
@@ -249,34 +249,39 @@ function mensajesCajas(maximo_cajas,total_cajas){
     let cajas_restantes = maximo_cajas - total_cajas;
     if(maximo_cajas == 0){
         document.getElementById('cajas_restantes').removeAttribute('class');
-        document.getElementById('cajas_restantes').textContent = "Detalle del Pallet";
+        document.getElementById('cajas_restantes').textContent = "Agregue Cajas";
         document.getElementById('div-agregar-cajas').removeAttribute('style');
         document.getElementById('div-remontar').style.display = "none";
         document.getElementById('btn-registrar-pallet').removeAttribute('style');
+	document.getElementById('mensaje_pallet_completo').style.display = 'none';
     }else if(total_cajas == 0){
         document.getElementById('cajas_restantes').removeAttribute('class');
         document.getElementById('cajas_restantes').textContent = "Ninguna caja registrada";
         document.getElementById('div-agregar-cajas').removeAttribute('style');
         document.getElementById('div-remontar').removeAttribute('style');
         document.getElementById('btn-registrar-pallet').removeAttribute('style');
+	document.getElementById('mensaje_pallet_completo').style.display = 'none';
     }else if(cajas_restantes < 0){
         document.getElementById('cajas_restantes').setAttribute('class','text-warning');
         document.getElementById('cajas_restantes').textContent = "Sobran " + (cajas_restantes*-1);
         document.getElementById('div-agregar-cajas').removeAttribute('style');
         document.getElementById('div-remontar').removeAttribute('style');
         document.getElementById('btn-registrar-pallet').removeAttribute('style');
+	document.getElementById('mensaje_pallet_completo').style.display = 'none';
     }else if(cajas_restantes == 0){
         document.getElementById('cajas_restantes').setAttribute('class','text-success');
         document.getElementById('cajas_restantes').textContent = "Pallet Completo";
         document.getElementById('div-agregar-cajas').style.display = "none";
         document.getElementById('div-remontar').style.display = "none";
         document.getElementById('btn-registrar-pallet').style.display = "none";
+	document.getElementById('mensaje_pallet_completo').style.display = 'block';
     }else{
         document.getElementById('cajas_restantes').setAttribute('class','text-danger');
         document.getElementById('cajas_restantes').textContent = "Faltan " + (cajas_restantes);
         document.getElementById('div-agregar-cajas').removeAttribute('style');
         document.getElementById('div-remontar').removeAttribute('style');
         document.getElementById('btn-registrar-pallet').removeAttribute('style');
+	document.getElementById('mensaje_pallet_completo').style.display = 'none';
     }
 }
 function verificarCajas(self){
@@ -355,6 +360,7 @@ function resetearModal(){
     }
     document.getElementById('codigo').value = "";
     document.getElementById('codigo_comercial').value = "";
+    document.getElementById('dp').value = "";
 }
 $('#modalRegistro').on('hidden.bs.modal', function (event) {
     resetearModal();

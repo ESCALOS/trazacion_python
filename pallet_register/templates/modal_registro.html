@@ -1,28 +1,29 @@
 <div class="modal modal-md fade" id="modalRegistro" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header bg-success" style="align-text:center">
+      <div class="modal-header bg-success" style="align-text:center;display:none">
         <h1 class="modal-title fs-5 text-white" id="modalTitle">Registrar Pallet</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body" style="max-height:690px;overflow-y:auto">
-        <div id="formulario" class="text-center">
+      <div class="modal-body mySwiper" style="height:410px;width:340px">
+	<div class="swiper-wrapper">
+        <div id="formulario" class="swiper-slide text-center">
           <div class="row">
-            <div class="mb-3 col">
+            <div class="mb-4 col">
               <label for="codigo" class="form-label">Código</label>
               <input type="text" class="form-control" id="codigo" placeholder="Codigo" readonly="true">
             </div>
-            <div class="mb-3 col">
+            <div class="mb-4 col">
               <label for="variedad" class="form-label">Variedad</label>
               <label name="variedad" class="form-control" id="variedad"></label>
             </div>
           </div>
           <div class="row">
-            <div class="mb-3 col">
-              <label for="codigo" class="form-label">Comercial</label>
+            <div class="mb-4 col">
+              <label for="codigo_comercial" class="form-label">Comercial</label>
               <input type="text" class="form-control" id="codigo_comercial" placeholder="BU-123123">
 	    </div>
-            <div class="mb-3 col">
+            <div class="mb-4 col">
               <label for="presentacion" class="form-label">Presentación</label>
               <select name="presentacion" class="form-control" id="presentacion">
                 {% for presentacion in presentaciones %}
@@ -32,7 +33,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="mb-3 col">
+            <div class="mb-4 col">
               <label for="calibre" class="form-label">Calibre</label>
               <select name="calibre" class="form-control" id="calibre">
                 {% for calibre in calibres %}
@@ -40,7 +41,7 @@
                 {% endfor %}
               </select>
             </div>
-            <div class="mb-3 col">
+            <div class="mb-4 col">
               <label for="cliente" class="form-label">Cliente</label>
               <select name="cliente" class="form-control" id="cliente">
                 {% for cliente in clientes %}
@@ -50,7 +51,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="mb-3 col">
+            <div class="mb-4 col">
               <label for="categoria" class="form-label">Categoría</label>
               <select name="categoria" class="form-control" id="categoria">
                 {% for categoria in categorias %}
@@ -58,11 +59,11 @@
                 {% endfor %}
               </select>
             </div>
-            <div class="mb-3 col">
+            <div class="mb-4 col">
               <label for="dp" class="form-label">DP</label>
               <input type="text" class="form-control" id="dp" placeholder="dp">
             </div>
-            <div class="mb-3 col">
+            <div class="mb-4 col">
               <label for="plu" class="form-label">Plu</label>
               <select name="plu" class="form-control" id="plu">
                 <option value="true">Sí</option>
@@ -71,14 +72,13 @@
             </div>
           </div>
 	</div>
-	  <hr>
-	<div class="text-center">
+	
+	<div class="text-center swiper-slide">
           <div>
             <h5><span style="font-weight:800" id="cajas_restantes"></span></h5>
-            <div id="detalle" style="overflow-y:auto;overflow-x:hidden;height:175px">
+            <div id="detalle" style="overflow-y:auto;overflow-x:hidden;height:302px">
               
             </div>
-            {% if user.rol == "REG" %}
             <div class="row mt-2">
               <div class="col mx-2" id="div-agregar-cajas">
                 <button onclick="crearNuevoDetalle()" class="btn btn-warning w-100 rounded-md text-white">Agregar Cajas</button>
@@ -87,15 +87,14 @@
                 <button onclick="escanearRemontar()" class="btn btn-danger w-100 rounded-md text-white">Remontar</button>
               </div>
             </div>
-            {% endif %}
+	    <h1 id="mensaje_pallet_completo"><span style="font-weight:800" class="text-success">Pallet Completo</span></h1>
           </div>
         </div>
+	</div>
       </div>
-      <div class="modal-footer">          
+      <div class="modal-footer">       
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-      {% if user.rol == "REG" %}
         <button type="button" onclick="registrarPallet()" id="btn-registrar-pallet" class="btn btn-primary">Guardar Cambios</button>
-      {% endif %}
       </div>
     </div>
   </div>

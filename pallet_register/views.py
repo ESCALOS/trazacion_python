@@ -323,7 +323,7 @@ def registrarPallet(request):
                             dp = request.POST['dp'],
                             calibre_id = request.POST['calibre'],
                             cliente_id = request.POST['cliente'],
-                            variedad_id = request.POST['variedad'],
+                            variedad = Variedad.objects.get(codigo=request.POST['codigo'].split("-")[0]),
                             presentacion_id = request.POST['presentacion'],
                             categoria_id = request.POST['categoria'],
                             plu = eval(request.POST['plu'].capitalize()),

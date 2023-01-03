@@ -10,9 +10,13 @@
     <link href="{% static 'css/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'css/library/datatable2.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/library/jquery.toast.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/library/swiper.min.css' %}">
     <style>
 	input,select{
-		text-align : center
+	    text-align : center;
+	}
+	hr{
+	    margin: 0.75rem 0!important;	
 	}
     </style>
     <script src="{% static 'js/library/jquery.min.js' %}" defer></script>
@@ -20,6 +24,7 @@
     <script src="{% static 'js/library/datatable2.js' %}" defer></script>
     <script src="{% static 'js/library/jquery.toast.min.js' %}" defer></script>
     <script src="{% static 'js/library/sweetalert2.min.js' %}" defer></script>
+    <script src="{% static 'js/library/swiper.min.js' %}"></script>
     {% block scripts %}{% endblock scripts %}
 </head>
 <body style="max-height: 100vh;overflow-y:auto">

@@ -13,5 +13,12 @@
     <div id="tabla_prueba" class="table-responsive"></div>
     {% include 'modal_registro.html' %}
     {% include 'modal_remontar.html' %}
+	<script>
+	    var swiper = new Swiper(".mySwiper",{
+		speed: 400,
+		spaceBetween: 100,
+		effect: 'flip'
+	    })
+	</script>
   </div>
   {% endblock content %}
