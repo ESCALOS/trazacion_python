@@ -3,7 +3,7 @@ $(document).ready( function () {
     document.addEventListener('keydown',function obtenerQr(e){
         if(modal_cerrado){
 	    if (e.keyCode === 13 && !e.shiftKey && codigo_qr != "") {
-                codigo_qr = codigo_qr.substring(0, codigo_qr.length - 1);
+            codigo_qr = codigo_qr.replace(".","");
 	        e.preventDefault();
 		obtenerDatos(codigo_qr)
 		codigo_qr = "";
@@ -177,23 +177,23 @@ function obtenerDatos(content){
 		};
 		$('#modalRegistro').modal('show');
             }else{
-		if(json.icon == 'success'){
+                if(json.icon == 'success'){
                     document.getElementById('codigo').value = content;
-		    document.getElementById('variedad').innerHTML = json.variedad;
+                    document.getElementById('variedad').innerHTML = json.variedad;
                     mensajesCajas(0,0);
-		    ocultarAlerta();
-		    $('#modalRegistro').modal('show');
-		}else{
-		    $.toast({
-			heading : json.message,
-			icon : json.icon,
-			showHideTransition : 'slide',
-			hideAfter : 2000,
-			beforeShow: function() {
-			    ocultarAlerta();
-			}
-		    })
-		}
+                    ocultarAlerta();
+                    $('#modalRegistro').modal('show');
+                }else{
+                    $.toast({
+                        heading : json.message,
+                        icon : json.icon,
+                        showHideTransition : 'slide',
+                        hideAfter : 2000,
+                        beforeShow: function() {
+                            ocultarAlerta();
+                        }
+                    })
+                }
             }
             pallet_activo = content;
         },
@@ -375,7 +375,7 @@ $('#codigo_remontar').on('keypress',e=>{
     if (e.keyCode === 13 && !e.shiftKey) {
         let pallet_a_poner = pallet_activo;
         let pallet_a_sacar = $('#codigo_remontar').val();
-	pallet_a_sacar = pallet_a_sacar.substring(0,pallet_a_sacar.length-1);
+	    pallet_a_sacar = pallet_a_sacar.replace(".","");
         e.preventDefault();
         $.ajax({
             url : 'remontabilidad/',

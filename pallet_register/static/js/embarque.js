@@ -2,7 +2,7 @@ $(document).ready( function () {
     cargarTabla();
     document.addEventListener('keydown',function escanearQr(e){
 	if(e.keyCode === 13 && !e.keyShift && codigo_qr != ""){
-	    codigo_qr = codigo_qr.substring(0, codigo_qr.length - 1);
+	    codigo_qr = codigo_qr.replace(".", "");
 	    e.preventDefault();
    	    embarcar(codigo_qr);
 	    codigo_qr = "";

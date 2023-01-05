@@ -149,14 +149,22 @@ def datosPallet(request):
                             'icon' : 'success' 
                         }
                     except Pallet.DoesNotExist:
-                        variedad = Variedad.objects.get(codigo=codigo_de_la_variedad)
-                        data = {
-                            'success': False,
-                            'message': "Registre el pallet",
-                            'icon' : 'success',
-                            'variedad_id' : variedad.pk,
-                            'variedad' : variedad.variedad ,
-                        }
+                        try:
+                            pallet = Pallet.objects.get(codigo=request.GET['codigo'],campaign=campaign)
+                            data = {
+                                'success': False,
+                                'message': "El pallet ya fue embarcado",
+                                'icon' : 'warning'
+                            }
+                        except Pallet.DoesNotExist:
+                            variedad = Variedad.objects.get(codigo=codigo_de_la_variedad)
+                            data = {
+                                'success': False,
+                                'message': "Registre el pallet",
+                                'icon' : 'success',
+                                'variedad_id' : variedad.pk,
+                                'variedad' : variedad.variedad,
+                            }
                     except Exception as e:
                         data = {
                             'success' : False,
@@ -312,7 +320,7 @@ def registrarPallet(request):
                             )                
                         data =  {
                             'success': True,
-                            'message': 'Se actualizó el pallet con éxito',
+                            'message': 'Se actualizó el pallet ' + request.POST['codigo'].upper(),
                             'icon' : 'success'
                         }
                     except Pallet.DoesNotExist:
@@ -342,7 +350,7 @@ def registrarPallet(request):
                             )
                         data = {
                             'success':True,
-                            'message':'Se creó el pallet con éxito',
+                            'message':'Se creó el pallet ' + request.POST['codigo'].upper(),
                             'icon' : 'success'
                         }
                     except Campaign.DoesNotExist:
@@ -575,11 +583,11 @@ def embarcar(request):
                 pallet.save()
                 if(modo_embarque):
                     title =  "¡Embarcado!",
-                    message = "N° " + request.POST['codigo_pallet'],
+                    message = "N° " + request.POST['codigo_pallet'].upper(),
                     icon = "success"
                 else:
-                    title = 'N° ' +request.POST['codigo_pallet'] + " ¡Desembarcado!",
-                    message = "El pallet volvió a almacén",
+                    title = "¡Desembarcado!",
+                    message = 'N° ' +request.POST['codigo_pallet'].upper(),
                     icon = "info"
                 data = {
                     'success' : True,
@@ -590,8 +598,8 @@ def embarcar(request):
             else:
                 data = {
                     'success' : False,
-                    'title' : 'PALLET REPETIDO ',
-                    'message' : 'N° ' + request.POST['codigo_pallet'],
+                    'title' : 'Pallet Repetido',
+                    'message' : 'N° ' + request.POST['codigo_pallet'].upper(),
                     'icon' : 'warning'
                 }
         except Pallet.DoesNotExist:
