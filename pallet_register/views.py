@@ -18,9 +18,7 @@ def autenticacion(request):
                 'form' : UserCreationForm
             })
         else:
-            if request.user.rol == "ENC":
-                return redirect('detalle')
-            elif request.user.rol == "REG":
+            if request.user.rol == "REG":
                 return redirect('index')
             elif request.user.rol == "EMB":
                 return redirect('embarque')
@@ -31,9 +29,7 @@ def autenticacion(request):
             user = authenticate(username=request.POST['user'], password=request.POST['password'])
             if user is not None:    
                 login(request,user)
-                if request.user.rol == "ENC":
-                    return redirect('detalle')
-                elif request.user.rol == "REG":
+                if request.user.rol == "REG":
                     return redirect('index')
                 elif request.user.rol == "EMB":
                     return redirect('embarque')
@@ -58,7 +54,7 @@ def index(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     elif request.user.rol == "EMB":
         return redirect('embarque')
-    elif request.user.rol == "REG" or request.user.rol == "ENC":
+    elif request.user.rol == "REG":
         try:
             campaign = Campaign.objects.get(planta=request.user.planta_id,state=True)
             pallets = Pallet.objects.all()
@@ -83,6 +79,7 @@ def index(request):
                 'success' : False,
                 'message' : "No hay ninguna campaña activa" 
             }
+            return JsonResponse(data, safe=False)
         except Exception as e:
             data = {
                 'success' : False,
@@ -416,17 +413,12 @@ def cantidadCajas(request):
 def tablaDetalle(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-    elif request.user.rol == "ENC":
-        detalle_pallets = DetallePallet.objects.all()
-        return render(request, 'detalle.html',{
-            'detalle_pallets': detalle_pallets,
-        })
     elif request.user.rol == "EMB":
         return redirect('embarque')
     elif request.user.rol == "REG":
         return redirect("index")
     else:
-        cerrarSesion(request)
+        return redirect("login")
 def remontabilidad(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -445,7 +437,7 @@ def remontabilidad(request):
     else:
         try:
             pallet_para_sacar = Pallet.objects.get(codigo = request.GET['codigo_pallet_para_sacar'],completo=False,embarcado=False)
-            pallet_para_poner = Pallet.objects.get(codigo=request.GET['codigo_pallet_para_poner'],completo=False,embarcado=False,presentacion=pallet_para_sacar.presentacion,variedad=pallet_para_sacar.variedad,calibre=pallet_para_sacar.calibre,categoria=pallet_para_sacar.categoria,dp=pallet_para_sacar.dp)
+            pallet_para_poner = Pallet.objects.get(codigo=request.GET['codigo_pallet_para_poner'],completo=False,embarcado=False,presentacion=pallet_para_sacar.presentacion,variedad=pallet_para_sacar.variedad,calibre=pallet_para_sacar.calibre,categoria=pallet_para_sacar.categoria,cliente=pallet_para_sacar.cliente)
             
             cajas_puestas = DetallePallet.objects.filter(pallet=pallet_para_poner).aggregate(cajas = Sum('numero_de_cajas'))
             cajas_disponibles_para_sacar = DetallePallet.objects.filter(pallet=pallet_para_sacar).aggregate(cajas = Sum('numero_de_cajas'))
