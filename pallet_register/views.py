@@ -546,7 +546,7 @@ def tablaEmbarque(request):
     data = dict()
     try:
         campaign = Campaign.objects.get(planta=request.user.planta,state=True)
-        pallets = Pallet.objects.filter(completo=True,campaign=campaign).order_by('-updated_at')
+        pallets = Pallet.objects.filter(completo=True,campaign=campaign,embarcado=eval(request.GET['modo'].capitalize())).order_by('-updated_at')
         context = {
             'pallets':pallets
         }

@@ -16,6 +16,9 @@ let modo_embarque = true;
 function cargarTabla(){
     $.ajax({
         url: "../tabla_embarque/",
+	data:{
+	    modo: !modo_embarque
+	},
         dataType: 'json',
         beforeSend: () => {
             pantallaCarga();
@@ -77,7 +80,8 @@ function cambiarModo(){
 	modo = 'MODO DESEMBARQUE';
     }
     document.getElementById('btn-toggle-embarque').setAttribute('class','btn btn-md btn-'+color+' text-white font-bold w-100 fw-bolder');
-    document.getElementById('btn-toggle-embarque').textContent = modo; 
+    document.getElementById('btn-toggle-embarque').textContent = modo;
+    cargarTabla();
 }
 function embarcar(codigo_pallet){
         $.ajax({

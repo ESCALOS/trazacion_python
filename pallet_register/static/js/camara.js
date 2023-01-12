@@ -162,6 +162,7 @@ function obtenerDatos(content){
                 document.getElementById('codigo').value = json.codigo;
 		document.getElementById('variedad').innerHTML = json.variedad;
 		document.getElementById('codigo_comercial').value = json.codigo_comercial;
+		document.getElementById('cliente').value = json.cliente;
                 document.getElementById('dp').value = json.dp;
                 document.getElementById('presentacion').value = json.presentacion;
                 document.getElementById('variedad').value = json.variedad;
