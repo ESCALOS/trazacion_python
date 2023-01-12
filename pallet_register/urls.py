@@ -10,6 +10,7 @@ urlpatterns = [
     path('tabla/', views.tablaPallet, name='tabla_pallet'),
     path('add_pallet/', views.registrarPallet, name='add_pallet'),
     path('cantidad_cajas/', views.cantidadCajas, name='cantidad_cajas'),
+    path('lector/', views.lector, name='lector'),
     path('detalle/', views.tablaDetalle, name='detalle'),
     path('remontabilidad/', views.remontabilidad, name='remontabilidad'),
     path('remontar/', views.remontar, name='remontar'),

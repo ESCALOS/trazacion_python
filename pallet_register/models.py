@@ -81,8 +81,9 @@ class Producto(BaseModel):
 class Usuario(AbstractBaseUser):
 
     class Roles(models.TextChoices):
-        ENCARGADO = 'ENC', _('Encargado')
+        ENCARGADO = "LEC", _('Lector')
         REGISTRADOR = "REG", _('Registrador')
+        REMONTADOR = "REM",_('Remontador')
         EMBARCADOR = "EMB", _('Embarcador')
 
     codigo = models.CharField(max_length=6,unique=True)

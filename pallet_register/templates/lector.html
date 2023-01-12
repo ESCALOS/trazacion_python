@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+  {% block scripts %}
+    <script src="{% static 'js/library/instascan.min.js' %}" defer></script>
+    <script src="{% static 'js/lector.js' %}" defer></script>
+    <script src="{% static 'js/library/select.min.js' %}" defer></script>
+  {% endblock scripts %}
+  {% block content %}
+  <div class="container px-4 py-2">
+    <div class="mt-2 mb-4">
+        <button class="btn btn-md btn-success w-100 fw-bolder" id="btn-activar-camara" onclick="activarCamara()">Escanear código</button>
+    </div>
+    <div id="tabla_pallets" class="table-responsive"></div>
+    {% include 'modal_lector.html' %}
+    {% include 'modal_pallet.html' %}
+	<script>
+	    var swiper = new Swiper(".mySwiper",{
+    		speed: 400,
+    		spaceBetween: 100,
+    		effect: 'flip',
+        keyboard: {
+          enabled: true,
+        },
+	    })
+	</script>
+  </div>
+  {% endblock content %}

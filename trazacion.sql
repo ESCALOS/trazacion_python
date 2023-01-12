@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-12-2022 a las 19:55:18
+-- Tiempo de generación: 13-01-2023 a las 00:30:15
 -- Versión del servidor: 10.4.20-MariaDB
 -- Versión de PHP: 8.0.8
 
@@ -32,13 +32,6 @@ CREATE TABLE `auth_group` (
   `name` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `auth_group`
---
-
-INSERT INTO `auth_group` (`id`, `name`) VALUES
-(1, 'Encargado');
-
 -- --------------------------------------------------------
 
 --
@@ -50,35 +43,6 @@ CREATE TABLE `auth_group_permissions` (
   `group_id` int(11) NOT NULL,
   `permission_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `auth_group_permissions`
---
-
-INSERT INTO `auth_group_permissions` (`id`, `group_id`, `permission_id`) VALUES
-(1, 1, 21),
-(2, 1, 24),
-(3, 1, 25),
-(4, 1, 26),
-(5, 1, 28),
-(6, 1, 29),
-(7, 1, 30),
-(8, 1, 32),
-(9, 1, 33),
-(10, 1, 34),
-(11, 1, 36),
-(12, 1, 37),
-(13, 1, 38),
-(14, 1, 40),
-(15, 1, 41),
-(16, 1, 42),
-(17, 1, 44),
-(18, 1, 53),
-(19, 1, 54),
-(20, 1, 56),
-(21, 1, 61),
-(22, 1, 62),
-(23, 1, 64);
 
 -- --------------------------------------------------------
 
@@ -126,46 +90,70 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (26, 'Can change calibre', 7, 'change_calibre'),
 (27, 'Can delete calibre', 7, 'delete_calibre'),
 (28, 'Can view calibre', 7, 'view_calibre'),
-(29, 'Can add categoria', 8, 'add_categoria'),
-(30, 'Can change categoria', 8, 'change_categoria'),
-(31, 'Can delete categoria', 8, 'delete_categoria'),
-(32, 'Can view categoria', 8, 'view_categoria'),
-(33, 'Can add fundo', 9, 'add_fundo'),
-(34, 'Can change fundo', 9, 'change_fundo'),
-(35, 'Can delete fundo', 9, 'delete_fundo'),
-(36, 'Can view fundo', 9, 'view_fundo'),
-(37, 'Can add presentacion', 10, 'add_presentacion'),
-(38, 'Can change presentacion', 10, 'change_presentacion'),
-(39, 'Can delete presentacion', 10, 'delete_presentacion'),
-(40, 'Can view presentacion', 10, 'view_presentacion'),
-(41, 'Can add variedad', 11, 'add_variedad'),
-(42, 'Can change variedad', 11, 'change_variedad'),
-(43, 'Can delete variedad', 11, 'delete_variedad'),
-(44, 'Can view variedad', 11, 'view_variedad'),
-(45, 'Can add zona', 12, 'add_zona'),
-(46, 'Can change zona', 12, 'change_zona'),
-(47, 'Can delete zona', 12, 'delete_zona'),
-(48, 'Can view zona', 12, 'view_zona'),
-(49, 'Can add sede', 13, 'add_sede'),
-(50, 'Can change sede', 13, 'change_sede'),
-(51, 'Can delete sede', 13, 'delete_sede'),
-(52, 'Can view sede', 13, 'view_sede'),
-(53, 'Can add planta', 14, 'add_planta'),
-(54, 'Can change planta', 14, 'change_planta'),
-(55, 'Can delete planta', 14, 'delete_planta'),
-(56, 'Can view planta', 14, 'view_planta'),
-(57, 'Can add pallet', 15, 'add_pallet'),
-(58, 'Can change pallet', 15, 'change_pallet'),
-(59, 'Can delete pallet', 15, 'delete_pallet'),
-(60, 'Can view pallet', 15, 'view_pallet'),
-(61, 'Can add lote', 16, 'add_lote'),
-(62, 'Can change lote', 16, 'change_lote'),
-(63, 'Can delete lote', 16, 'delete_lote'),
-(64, 'Can view lote', 16, 'view_lote'),
-(65, 'Can add detalle pallet', 17, 'add_detallepallet'),
-(66, 'Can change detalle pallet', 17, 'change_detallepallet'),
-(67, 'Can delete detalle pallet', 17, 'delete_detallepallet'),
-(68, 'Can view detalle pallet', 17, 'view_detallepallet');
+(29, 'Can add Campaña', 8, 'add_campaign'),
+(30, 'Can change Campaña', 8, 'change_campaign'),
+(31, 'Can delete Campaña', 8, 'delete_campaign'),
+(32, 'Can view Campaña', 8, 'view_campaign'),
+(33, 'Can add categoria', 9, 'add_categoria'),
+(34, 'Can change categoria', 9, 'change_categoria'),
+(35, 'Can delete categoria', 9, 'delete_categoria'),
+(36, 'Can view categoria', 9, 'view_categoria'),
+(37, 'Can add cliente', 10, 'add_cliente'),
+(38, 'Can change cliente', 10, 'change_cliente'),
+(39, 'Can delete cliente', 10, 'delete_cliente'),
+(40, 'Can view cliente', 10, 'view_cliente'),
+(41, 'Can add destino', 11, 'add_destino'),
+(42, 'Can change destino', 11, 'change_destino'),
+(43, 'Can delete destino', 11, 'delete_destino'),
+(44, 'Can view destino', 11, 'view_destino'),
+(45, 'Can add fundo', 12, 'add_fundo'),
+(46, 'Can change fundo', 12, 'change_fundo'),
+(47, 'Can delete fundo', 12, 'delete_fundo'),
+(48, 'Can view fundo', 12, 'view_fundo'),
+(49, 'Can add producto', 13, 'add_producto'),
+(50, 'Can change producto', 13, 'change_producto'),
+(51, 'Can delete producto', 13, 'delete_producto'),
+(52, 'Can view producto', 13, 'view_producto'),
+(53, 'Can add Tipo de Caja', 14, 'add_tipocaja'),
+(54, 'Can change Tipo de Caja', 14, 'change_tipocaja'),
+(55, 'Can delete Tipo de Caja', 14, 'delete_tipocaja'),
+(56, 'Can view Tipo de Caja', 14, 'view_tipocaja'),
+(57, 'Can add zona', 15, 'add_zona'),
+(58, 'Can change zona', 15, 'change_zona'),
+(59, 'Can delete zona', 15, 'delete_zona'),
+(60, 'Can view zona', 15, 'view_zona'),
+(61, 'Can add variedad', 16, 'add_variedad'),
+(62, 'Can change variedad', 16, 'change_variedad'),
+(63, 'Can delete variedad', 16, 'delete_variedad'),
+(64, 'Can view variedad', 16, 'view_variedad'),
+(65, 'Can add sede', 17, 'add_sede'),
+(66, 'Can change sede', 17, 'change_sede'),
+(67, 'Can delete sede', 17, 'delete_sede'),
+(68, 'Can view sede', 17, 'view_sede'),
+(69, 'Can add presentacion', 18, 'add_presentacion'),
+(70, 'Can change presentacion', 18, 'change_presentacion'),
+(71, 'Can delete presentacion', 18, 'delete_presentacion'),
+(72, 'Can view presentacion', 18, 'view_presentacion'),
+(73, 'Can add planta', 19, 'add_planta'),
+(74, 'Can change planta', 19, 'change_planta'),
+(75, 'Can delete planta', 19, 'delete_planta'),
+(76, 'Can view planta', 19, 'view_planta'),
+(77, 'Can add pallet', 20, 'add_pallet'),
+(78, 'Can change pallet', 20, 'change_pallet'),
+(79, 'Can delete pallet', 20, 'delete_pallet'),
+(80, 'Can view pallet', 20, 'view_pallet'),
+(81, 'Can add lote', 21, 'add_lote'),
+(82, 'Can change lote', 21, 'change_lote'),
+(83, 'Can delete lote', 21, 'delete_lote'),
+(84, 'Can view lote', 21, 'view_lote'),
+(85, 'Can add detalle pallet', 22, 'add_detallepallet'),
+(86, 'Can change detalle pallet', 22, 'change_detallepallet'),
+(87, 'Can delete detalle pallet', 22, 'delete_detallepallet'),
+(88, 'Can view detalle pallet', 22, 'view_detallepallet'),
+(89, 'Can add Campaña Actual', 23, 'add_currentcampaign'),
+(90, 'Can change Campaña Actual', 23, 'change_currentcampaign'),
+(91, 'Can delete Campaña Actual', 23, 'delete_currentcampaign'),
+(92, 'Can view Campaña Actual', 23, 'view_currentcampaign');
 
 -- --------------------------------------------------------
 
@@ -189,30 +177,55 @@ CREATE TABLE `django_admin_log` (
 --
 
 INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`, `action_flag`, `change_message`, `content_type_id`, `user_id`) VALUES
-(1, '2022-11-21 06:17:12.872425', '2', '419738 - Carlos Daniel Escate Román', 2, '[{\"changed\": {\"fields\": [\"Planta\", \"Dni\", \"Nombre\", \"Apellido\"]}}]', 6, 2),
-(2, '2022-11-21 06:23:03.158743', '1', 'CAJA CARTON 4.5', 1, '[{\"added\": {}}]', 10, 2),
-(3, '2022-11-21 06:23:05.394047', '1', 'CAJA CARTON 4.5', 2, '[]', 10, 2),
-(4, '2022-11-21 06:23:13.229967', '2', 'CAJA PLASTICO 8.2', 1, '[{\"added\": {}}]', 10, 2),
-(5, '2022-11-21 06:23:20.956974', '3', 'CAJA PLASTICO 8.2', 1, '[{\"added\": {}}]', 10, 2),
-(6, '2022-11-21 06:23:32.205769', '1', 'CATEGORIA 1', 1, '[{\"added\": {}}]', 8, 2),
-(7, '2022-11-21 06:23:34.399290', '2', 'CATEGORIA 2', 1, '[{\"added\": {}}]', 8, 2),
-(8, '2022-11-21 06:23:36.283947', '3', 'CATEGORIA 3', 1, '[{\"added\": {}}]', 8, 2),
-(9, '2022-11-21 06:23:42.301859', '1', 'MD', 1, '[{\"added\": {}}]', 7, 2),
-(10, '2022-11-21 06:23:44.141777', '2', 'JB', 1, '[{\"added\": {}}]', 7, 2),
-(11, '2022-11-21 06:23:45.759638', '3', 'XL', 1, '[{\"added\": {}}]', 7, 2),
-(12, '2022-11-21 06:23:47.452786', '4', 'XXL', 1, '[{\"added\": {}}]', 7, 2),
-(13, '2022-11-21 06:23:53.099619', '1', 'CRIMSOM', 1, '[{\"added\": {}}]', 11, 2),
-(14, '2022-11-21 06:23:56.108596', '2', 'RED GLOBE', 1, '[{\"added\": {}}]', 11, 2),
-(15, '2022-11-21 06:24:01.289810', '3', 'ALISOM', 1, '[{\"added\": {}}]', 11, 2),
-(16, '2022-11-21 07:36:31.675695', '2', 'CAJA PLASTICO 8.2', 2, '[{\"changed\": {\"fields\": [\"Cantidad de cajas\"]}}]', 10, 2),
-(17, '2022-11-21 07:36:39.226644', '3', 'CAJA PLASTICO 8.2', 2, '[{\"changed\": {\"fields\": [\"Cantidad de cajas\"]}}]', 10, 2),
-(18, '2022-11-21 09:43:08.689661', '2', 'CAJA CARTON 8.2', 2, '[{\"changed\": {\"fields\": [\"Presentacion\"]}}]', 10, 2),
-(19, '2022-11-29 12:31:12.085615', '3', 'CATEGORIA-3', 2, '[{\"changed\": {\"fields\": [\"Categoria\"]}}]', 8, 2),
-(20, '2022-11-29 12:31:17.436594', '2', 'CATEGORIA-2', 2, '[{\"changed\": {\"fields\": [\"Categoria\"]}}]', 8, 2),
-(21, '2022-11-29 12:31:22.451540', '1', 'CATEGORIA-1', 2, '[{\"changed\": {\"fields\": [\"Categoria\"]}}]', 8, 2),
-(22, '2022-12-01 09:10:14.701488', '1', 'Encargado', 1, '[{\"added\": {}}]', 3, 2),
-(23, '2022-12-01 09:26:03.514042', '3', '666666 -  ', 1, '[{\"added\": {}}]', 6, 2),
-(24, '2022-12-01 09:26:32.286561', '3', '666666 - Mario Mendoza', 2, '[{\"changed\": {\"fields\": [\"Dni\", \"Nombre\", \"Apellido\"]}}]', 6, 2);
+(1, '2023-01-11 14:45:43.900577', '1', 'MD', 1, '[{\"added\": {}}]', 7, 1),
+(2, '2023-01-11 14:45:45.944615', '2', 'XL', 1, '[{\"added\": {}}]', 7, 1),
+(3, '2023-01-11 14:45:48.363709', '3', 'LG', 1, '[{\"added\": {}}]', 7, 1),
+(4, '2023-01-11 14:45:52.299878', '4', 'J', 1, '[{\"added\": {}}]', 7, 1),
+(5, '2023-01-11 14:45:57.906450', '5', 'JJ', 1, '[{\"added\": {}}]', 7, 1),
+(6, '2023-01-11 14:46:08.071822', '1', 'SUR', 1, '[{\"added\": {}}]', 15, 1),
+(7, '2023-01-11 14:46:17.598440', '1', 'UVA DE MESA', 1, '[{\"added\": {}}]', 13, 1),
+(8, '2023-01-11 14:46:19.628102', '1', 'RED GLOBE', 1, '[{\"added\": {}}]', 16, 1),
+(9, '2023-01-11 14:46:52.879668', '2', 'SWEET GLOBE', 1, '[{\"added\": {}}]', 16, 1),
+(10, '2023-01-11 14:47:17.979786', '1', 'ICA |     SUR', 1, '[{\"added\": {}}]', 17, 1),
+(11, '2023-01-11 14:47:19.770371', '1', 'ICA | ICA | SUR', 1, '[{\"added\": {}}]', 19, 1),
+(12, '2023-01-11 14:47:25.592465', '2', '123456 -  ', 1, '[{\"added\": {}}]', 6, 1),
+(13, '2023-01-11 15:00:03.187504', '2', '123456 - RAMÓN AGUADO APAZA', 2, '[{\"changed\": {\"fields\": [\"Dni\", \"Nombre\", \"Apellido\"]}}]', 6, 1),
+(14, '2023-01-11 15:00:16.118710', '1', '419738 - CARLOS DANIEL ESCATE ROMÁN', 2, '[{\"changed\": {\"fields\": [\"Planta\", \"Dni\", \"Nombre\", \"Apellido\"]}}]', 6, 1),
+(15, '2023-01-11 15:01:23.002139', '1', 'PLÁSTICO', 1, '[{\"added\": {}}]', 14, 1),
+(16, '2023-01-11 15:01:28.963725', '2', 'MADERA', 1, '[{\"added\": {}}]', 14, 1),
+(17, '2023-01-11 15:01:31.146441', '3', 'CARTÓN', 1, '[{\"added\": {}}]', 14, 1),
+(18, '2023-01-11 15:01:51.437017', '1', 'SHANGHAI', 1, '[{\"added\": {}}]', 11, 1),
+(19, '2023-01-11 15:01:53.384073', '2', 'AFRICA', 1, '[{\"added\": {}}]', 11, 1),
+(20, '2023-01-11 15:01:55.204287', '3', 'EE.UU', 1, '[{\"added\": {}}]', 11, 1),
+(21, '2023-01-11 15:02:01.414537', '4', 'AMSTERDAM', 1, '[{\"added\": {}}]', 11, 1),
+(22, '2023-01-11 15:02:15.575753', '1', 'ESMERALD VALLEY', 1, '[{\"added\": {}}]', 10, 1),
+(23, '2023-01-11 15:02:22.976706', '2', 'LION', 1, '[{\"added\": {}}]', 10, 1),
+(24, '2023-01-11 15:02:29.810577', '1', 'CAT-1', 1, '[{\"added\": {}}]', 9, 1),
+(25, '2023-01-11 15:02:33.371251', '2', 'CAT-2', 1, '[{\"added\": {}}]', 9, 1),
+(26, '2023-01-11 15:04:00.961281', '1', 'CAJA GENERICA 8.2 KG', 1, '[{\"added\": {}}]', 18, 1),
+(27, '2023-01-11 15:04:15.272791', '2', 'CAJA VERDE 7.3 KG', 1, '[{\"added\": {}}]', 18, 1),
+(28, '2023-01-11 15:04:34.363537', '3', 'CAJA ROJA 4.5 KG', 1, '[{\"added\": {}}]', 18, 1),
+(29, '2023-01-11 15:04:46.319916', '1', 'ICA | UVA DE MESA | 2022-12-27', 1, '[{\"added\": {}}]', 8, 1),
+(30, '2023-01-11 15:05:02.833861', '1', 'SANTA MARGARITA | ICA | SUR', 1, '[{\"added\": {}}]', 12, 1),
+(31, '2023-01-11 15:05:05.620665', '2', 'LA CASTELLANA | ICA | SUR', 1, '[{\"added\": {}}]', 12, 1),
+(32, '2023-01-11 15:05:08.801878', '3', 'SANTA INÉS | ICA | SUR', 1, '[{\"added\": {}}]', 12, 1),
+(33, '2023-01-11 15:05:12.152623', '4', 'SAN HILARION | ICA | SUR', 1, '[{\"added\": {}}]', 12, 1),
+(34, '2023-01-11 15:05:16.815868', '5', 'LOS CASTILLOS | ICA | SUR', 1, '[{\"added\": {}}]', 12, 1),
+(35, '2023-01-11 15:05:24.512709', '1', '5161 | 001-001 | SANTA MARGARITA', 1, '[{\"added\": {}}]', 21, 1),
+(36, '2023-01-11 15:05:30.070842', '2', '5162 | 001-001 | LA CASTELLANA', 1, '[{\"added\": {}}]', 21, 1),
+(37, '2023-01-11 15:05:39.724505', '3', '5163 | 001-002 | SANTA MARGARITA', 1, '[{\"added\": {}}]', 21, 1),
+(38, '2023-01-11 15:05:50.265011', '4', '5164 | 001-003 | SANTA MARGARITA', 1, '[{\"added\": {}}]', 21, 1),
+(39, '2023-01-11 15:05:56.708146', '5', '5261 | 001-001 | LA CASTELLANA', 1, '[{\"added\": {}}]', 21, 1),
+(40, '2023-01-11 15:06:17.901037', '6', '5366 | 001-006 | SAN HILARION', 1, '[{\"added\": {}}]', 21, 1),
+(41, '2023-01-11 15:06:25.352738', '7', '5367 | 001-008 | SAN HILARION', 1, '[{\"added\": {}}]', 21, 1),
+(42, '2023-01-11 15:06:39.886842', '8', '5422 | 001-003 | SANTA INÉS', 1, '[{\"added\": {}}]', 21, 1),
+(43, '2023-01-11 15:06:46.248789', '9', '5423 | 001-008 | SANTA INÉS', 1, '[{\"added\": {}}]', 21, 1),
+(44, '2023-01-11 15:06:53.380475', '10', '5633 | 001-002 | LOS CASTILLOS', 1, '[{\"added\": {}}]', 21, 1),
+(45, '2023-01-11 15:52:32.457477', '3', '419737 -  ', 1, '[{\"added\": {}}]', 6, 1),
+(46, '2023-01-11 15:52:52.374849', '3', '419737 - DEF AFGNAF', 2, '[{\"changed\": {\"fields\": [\"Dni\", \"Nombre\", \"Apellido\"]}}]', 6, 1),
+(47, '2023-01-12 14:39:22.075913', '2', '123456 - RAMÓN AGUADO APAZA', 2, '[{\"changed\": {\"fields\": [\"Staff\"]}}]', 6, 1),
+(48, '2023-01-12 14:39:53.457478', '1', 'RG-6696 | ICA | UVA DE MESA', 2, '[{\"changed\": {\"fields\": [\"Completo\"]}}]', 20, 2),
+(49, '2023-01-12 18:21:30.235285', '1', 'RG-6696 | ICA | UVA DE MESA', 2, '[{\"changed\": {\"fields\": [\"Completo\"]}}]', 20, 1);
 
 -- --------------------------------------------------------
 
@@ -236,17 +249,23 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (2, 'auth', 'permission'),
 (4, 'contenttypes', 'contenttype'),
 (7, 'pallet_register', 'calibre'),
-(8, 'pallet_register', 'categoria'),
-(17, 'pallet_register', 'detallepallet'),
-(9, 'pallet_register', 'fundo'),
-(16, 'pallet_register', 'lote'),
-(15, 'pallet_register', 'pallet'),
-(14, 'pallet_register', 'planta'),
-(10, 'pallet_register', 'presentacion'),
-(13, 'pallet_register', 'sede'),
+(8, 'pallet_register', 'campaign'),
+(9, 'pallet_register', 'categoria'),
+(10, 'pallet_register', 'cliente'),
+(23, 'pallet_register', 'currentcampaign'),
+(11, 'pallet_register', 'destino'),
+(22, 'pallet_register', 'detallepallet'),
+(12, 'pallet_register', 'fundo'),
+(21, 'pallet_register', 'lote'),
+(20, 'pallet_register', 'pallet'),
+(19, 'pallet_register', 'planta'),
+(18, 'pallet_register', 'presentacion'),
+(13, 'pallet_register', 'producto'),
+(17, 'pallet_register', 'sede'),
+(14, 'pallet_register', 'tipocaja'),
 (6, 'pallet_register', 'usuario'),
-(11, 'pallet_register', 'variedad'),
-(12, 'pallet_register', 'zona'),
+(16, 'pallet_register', 'variedad'),
+(15, 'pallet_register', 'zona'),
 (5, 'sessions', 'session');
 
 -- --------------------------------------------------------
@@ -267,25 +286,26 @@ CREATE TABLE `django_migrations` (
 --
 
 INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
-(1, 'pallet_register', '0001_initial', '2022-11-21 06:12:56.310889'),
-(2, 'contenttypes', '0001_initial', '2022-11-21 06:12:56.421337'),
-(3, 'admin', '0001_initial', '2022-11-21 06:12:56.609114'),
-(4, 'admin', '0002_logentry_remove_auto_add', '2022-11-21 06:12:56.625724'),
-(5, 'admin', '0003_logentry_add_action_flag_choices', '2022-11-21 06:12:56.641590'),
-(6, 'contenttypes', '0002_remove_content_type_name', '2022-11-21 06:12:56.767483'),
-(7, 'auth', '0001_initial', '2022-11-21 06:12:57.164956'),
-(8, 'auth', '0002_alter_permission_name_max_length', '2022-11-21 06:12:57.285387'),
-(9, 'auth', '0003_alter_user_email_max_length', '2022-11-21 06:12:57.306188'),
-(10, 'auth', '0004_alter_user_username_opts', '2022-11-21 06:12:57.326443'),
-(11, 'auth', '0005_alter_user_last_login_null', '2022-11-21 06:12:57.350884'),
-(12, 'auth', '0006_require_contenttypes_0002', '2022-11-21 06:12:57.370650'),
-(13, 'auth', '0007_alter_validators_add_error_messages', '2022-11-21 06:12:57.387307'),
-(14, 'auth', '0008_alter_user_username_max_length', '2022-11-21 06:12:57.405569'),
-(15, 'auth', '0009_alter_user_last_name_max_length', '2022-11-21 06:12:57.417322'),
-(16, 'auth', '0010_alter_group_name_max_length', '2022-11-21 06:12:57.454576'),
-(17, 'auth', '0011_update_proxy_permissions', '2022-11-21 06:12:57.479275'),
-(18, 'auth', '0012_alter_user_first_name_max_length', '2022-11-21 06:12:57.492658'),
-(19, 'sessions', '0001_initial', '2022-11-21 06:12:57.556912');
+(1, 'pallet_register', '0001_initial', '2023-01-11 14:35:40.927468'),
+(2, 'contenttypes', '0001_initial', '2023-01-11 14:35:40.974329'),
+(3, 'admin', '0001_initial', '2023-01-11 14:35:41.083678'),
+(4, 'admin', '0002_logentry_remove_auto_add', '2023-01-11 14:35:41.083678'),
+(5, 'admin', '0003_logentry_add_action_flag_choices', '2023-01-11 14:35:41.099301'),
+(6, 'contenttypes', '0002_remove_content_type_name', '2023-01-11 14:35:41.177407'),
+(7, 'auth', '0001_initial', '2023-01-11 14:35:41.396106'),
+(8, 'auth', '0002_alter_permission_name_max_length', '2023-01-11 14:35:41.458593'),
+(9, 'auth', '0003_alter_user_email_max_length', '2023-01-11 14:35:41.474212'),
+(10, 'auth', '0004_alter_user_username_opts', '2023-01-11 14:35:41.474212'),
+(11, 'auth', '0005_alter_user_last_login_null', '2023-01-11 14:35:41.489833'),
+(12, 'auth', '0006_require_contenttypes_0002', '2023-01-11 14:35:41.489833'),
+(13, 'auth', '0007_alter_validators_add_error_messages', '2023-01-11 14:35:41.505455'),
+(14, 'auth', '0008_alter_user_username_max_length', '2023-01-11 14:35:41.521077'),
+(15, 'auth', '0009_alter_user_last_name_max_length', '2023-01-11 14:35:41.521077'),
+(16, 'auth', '0010_alter_group_name_max_length', '2023-01-11 14:35:41.599188'),
+(17, 'auth', '0011_update_proxy_permissions', '2023-01-11 14:35:41.630426'),
+(18, 'auth', '0012_alter_user_first_name_max_length', '2023-01-11 14:35:41.630426'),
+(19, 'sessions', '0001_initial', '2023-01-11 14:35:41.661668'),
+(20, 'pallet_register', '0002_alter_usuario_rol', '2023-01-11 14:59:36.540858');
 
 -- --------------------------------------------------------
 
@@ -304,46 +324,19 @@ CREATE TABLE `django_session` (
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
-('0hn81yhmiptvgclcuoyiegamatsh5t78', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1ox4nF:qn5SWq6WI-olLdUOnQyc9Ex3dfXq0YoLnssF0RmSi8Y', '2022-12-05 06:16:53.892517'),
-('0x73tnabwjs2i13ozvqqr50r4g76eti8', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1p0hv0:RAlIR2AcFfNNl2Qvvy4OEP7xS9Xa6-Cqy7rKczhmThM', '2022-12-15 06:39:54.945034'),
-('13htovuctge4dl4hbocgywfpdcnsgpwz', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oyAEk:AQz8ncODuAYrp-ofIaGHZaQWlkUO38eAb3bz_pNJZKs', '2022-12-08 06:17:46.604318'),
-('1p07lfpd2abuy8ybzdb8637ngi6nlr5j', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxsYt:ZyuaUjo4SzQXNmjpFFwiSAL0PXiy9YX_xHBIbxIQ9lI', '2022-12-07 11:25:23.977434'),
-('1rrycxcskg357i2ghfks7ntheqinejcx', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxWXB:mIeG_5A-KuVE5a4h-UwEXrql6KurQFQJC2bJxKf5DQc', '2022-12-06 11:54:09.817843'),
-('1v0gpoz3o5uzsc0epews7ra8c0jqr6wt', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1p0jG2:CgcYBfPKb632lJlPVn86IR3XNsVgeN4oMXRHYkCdNwM', '2022-12-15 08:05:42.548271'),
-('2mr4q5um55s1i92shc1vojysoybqamzh', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxseg:_eGsPFYyEDrdIJE3r-LWqkWYLwBg7ISFYq-BAS1jotk', '2022-12-07 11:31:22.851910'),
-('2wl60kfktt7b53nvyirexo5cglh71h6q', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxYLV:CpUuCwNdfpUYW_KoOAVKgMCiBXMl4sjf8fCUxtg4F_k', '2022-12-06 13:50:13.163801'),
-('3qtbo06ga8ctedmizkp14xi4vfsiulz4', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oyAFq:IdAjHApFKh0zw8_dtvcEKDWBsIyU6uXuxekH6utaVdY', '2022-12-08 06:18:54.987393'),
-('40tmwb9v40js2lrcjzt781gyyrvglrj9', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxXS8:L0iYiNfO7ITA_nnr8AZ5O-e7yD-I6ctqfdMWYvHaFBI', '2022-12-06 12:53:00.313932'),
-('4vc3p71yvpswmku3cyfqbhjzok1hrxaz', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oycpP:-9_x1kdJL4t0s-qWIuTIP_X0nMlCxoXrU_VGzW3w8hk', '2022-12-09 12:49:31.356431'),
-('64jxw7zogq6j91o4buhov3uc1bn8wsaz', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oyc8C:S_24SHGrEKGwxIGMv6KVcEqEnNkoyp1ja_oZGzql6Hc', '2022-12-09 12:04:52.170509'),
-('6u4qftwz91tyv3f7jvpf3bpfgmidjeb9', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxscI:I4TwrBeJGmklborfw9meZFOk_zKrGW9qayorXTQpMIw', '2022-12-07 11:28:54.409452'),
-('6yed66xrsluxx0box00siqfuavxv22tl', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oyA0R:-f4casvA6uaYjrjgWKszNDSD_cxMkvLhWkT5kscPbG0', '2022-12-08 06:02:59.352033'),
-('78t75zsyh0bvhdgsgoimlx9qt1xtxomv', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxXio:v_GjN1vgutnWNB-XDczF4dhvGjOQoAiM-Ux6zup0sZU', '2022-12-06 13:10:14.981210'),
-('8214lpbdzax6unud1b67e05l1tzv8c14', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxuXk:OlYQJ1k9arYnPzkkqg_010qiQVd0EG5diWkt3ch0M0o', '2022-12-07 13:32:20.620187'),
-('8ap0hgbzfheulijffv8g5uugo2v8gpmx', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1ozdiC:QPDu2nJViZClt4e7yzsPvPg40gvXObr8MzsbAI7zppM', '2022-12-12 07:58:16.907466'),
-('a6zvyj1dn7u90gew96rleazg4p5vfdwi', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oyA3J:0Bu9-3ZXK6OzouVYzNbNbOtdjK3K-BaFu2f5_CKOCD8', '2022-12-08 06:05:57.145781'),
-('blc5ws2zv59d8sm5bss2h799z2u17rcq', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oycE3:I_I-T3xMao-1_eC86RnR33DLoY83kWlPGvCu4njNFAA', '2022-12-09 12:10:55.517866'),
-('bm4howzmuovl5zrracgf5g6mpe4qu6np', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxsjI:-sJnl8L0qkXOXjHt4WsUK7K8NPrjIPcLQCm6E7anv64', '2022-12-07 11:36:08.777431'),
-('bzkppgg0q0b348c2t8d1xyev1s2k79vl', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxXIv:f6GULM_WaHogcF5YaXEss2XS3advCgkv9x9yy_ibfRE', '2022-12-06 12:43:29.883932'),
-('cb2n6s2ok4ds8ojrei7pjlfhmpa4x46u', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxoiZ:c8qd12UL6G8YX8IlqW9lgr5a1_4leaJNTl_nSbFFauo', '2022-12-07 07:19:07.699594'),
-('hptgam1pl6roxztbshcqbohnasm61a1k', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxsfp:jQQFWXOjxhScwOUVFsUBRzSfkj2fxX7JfolD8qWTIlI', '2022-12-07 11:32:33.217701'),
-('iqgrrkgmb5exke32rln6qiisjlmyoksf', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxYcf:3ugTrE9naKjtGTuDaB6dsGA3GutB5KGdRNmgxp7AU98', '2022-12-06 14:07:57.140408'),
-('jjr6b16bzrcm6787291dyu56ni10956m', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oyASC:tim-YUW9b9tUnTaaugrJIqKi6qi_VNTpFav55_b0xgY', '2022-12-08 06:31:40.357203'),
-('kdg750qjl03bfkic7gbza7r9wexs3trd', '.eJxVjDsOwjAQBe_iGlmOLXYNJT1nsPbj4ABypDipIu5OIqWA9s3MW02iZS5paXlKg5qrCeb0uzHJK9cd6JPqY7Qy1nka2O6KPWiz91Hz-3a4fweFWtnqXj2gBlaHyJ0HyAFCRJYNiETJ_oLA4NB54XMfBDokBz4KESqD-XwB7TA4MQ:1p0kXF:FhTGSCnChiEmQn8_kQZcaVOXctmQelhPoGFx3tdcjMo', '2022-12-15 09:27:33.452965'),
-('m0ft3osw4nd7d0kd956ewqlmw2xro76d', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1ozdgT:TYogaZ6gaRa3nkjwdpSku5InE7cbZ4GAmwJVMoaXRJs', '2022-12-12 07:56:29.576442'),
-('mmmxfgg9sakfdirsbmn6gp018igngtwf', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxuTa:H2e66QnjsAGvLGjrLLiwGLDVYFE0kmvH6aOOz8HumVc', '2022-12-07 13:28:02.395268'),
-('n466p9esvlvkox64aks9eh3mirlvs2zi', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1p0RZs:1LA_lZRd2G_jvfccIgXxQ2s2lyJGUzeFre4S9gmN--A', '2022-12-14 13:13:00.718989'),
-('pkytvlimb7tp8vsn00oq1b2lc9a1pyk4', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1p04RU:sMfOVFqW-b3dHlMM71pcHlX3wuDp9Lc5Ky2cHqRn0qY', '2022-12-13 12:30:48.231344'),
-('qxy4wmxiy4grgdhp10tmbxxy8uqo7yf8', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxolh:2vE9vrzx1cS74Ycntqy08moL-8RFuqeoiELpvo3FO5A', '2022-12-07 07:22:21.701629'),
-('rek3fc3u18kb5eegke6wp7mrtlzuvz1b', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1p0jTg:JuciDdvWgT0bTxAB3YRiKLxQ6aVdersZNB7xnr6V5-s', '2022-12-15 08:19:48.715640'),
-('rg1emki851spi6rx5vu8o9u4ih8xl6mo', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxXUI:eg2YVPoo_4pfKPMwrRfU56aoI3rLZ1r3bV3WEHXb8zU', '2022-12-06 12:55:14.593919'),
-('s86h3kscjfmutvxddip1eifl23nvsftw', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oycU6:5fz7kxOnme_5XSarzPh3NnIduafZCec5i9I561q0PWs', '2022-12-09 12:27:30.424212'),
-('uttq37ko0oyajwbohjdjdjwxd177pyhl', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1p0hlI:gLapPVZwNGxeiGIoDT_FGQ1duRLssH-PYz_maLJ47HU', '2022-12-15 06:29:52.590353'),
-('x4o20qxsd9ufefxathdxltoq716wo3hu', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oyd5E:Bi5b7aGwgjcMvmS7p6WrakUaRpBm19ukLuC5m5hC2jY', '2022-12-09 13:05:52.040539'),
-('xqe9ck23rq3b0g3skz5knjhz2uhzttk7', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxtpr:iIlMHYWc6UVaF7-icU0LXdCp8_5gnPc4t9rA36vWrfQ', '2022-12-07 12:46:59.561224'),
-('y26nkvvcdqb1cxz2zkqmoofxcvzdylya', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oyAGa:unBMwgcZIu-Au8-i4pc1VdvYL7l1gc9lkU3KBEaYoL0', '2022-12-08 06:19:40.574614'),
-('y2m2e7i2c36kduqy59goejk26vt6qnst', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxYCN:fBW4iLOd4NLYwTK2utpb-XHa9f4v-G1E9biY9qLp5Is', '2022-12-06 13:40:47.122401'),
-('yjelsb9u2fcq4jowo6admme21afmbial', '.eJxVjEEOwiAQAP_C2RCgKy0evfcNhF0WqRpISnsy_l1JetDrzGRewod9y35vvPoliosw4vTLMNCDSxfxHsqtSqplWxeUPZGHbXKukZ_Xo_0b5NBy3xpnCVCpEQyBxah40gNZq4konQPDkACcGg06Y_nLU8TJsHI91yjeH82zN2c:1oxuZA:y0YvP9wrIik3IScijOnyEVUv1wqV69BBxBHNNO8uWfA', '2022-12-07 13:33:48.015101');
+('0uapizevmmdzrxj8ouwak254ryijptur', '.eJxVjDkOwjAUBe_iGlmys31T0nMG62_GAWRLcVIh7g6RUkD7Zua9TMRtzXFrusRZzNl05vS7EfJDyw7kjuVWLdeyLjPZXbEHbfZaRZ-Xw_07yNjyt06BnJ_Q-cBuAI_QS09BwA-gzNIRTo5RaUREDU6FyAORhJRGUFHz_gABTDm1:1pG67T:inFwPPwfjmqU1sBvmHFO44bzj6SI7NeivlyZzM0ovj0', '2023-01-26 17:32:23.140345'),
+('5krbjmeuuc74uc1wjnpjkam5bba2y3yu', '.eJxVjLsOAiEURP-F2hBgl5elvd9ALnCvrBpIlt3K-O9KsoU2U8w5My8WYN9K2DuuYcnszBQ7_XYR0gPrAPkO9dZ4anVbl8iHwg_a-bVlfF4O9--gQC_ftUjaCaOsAjI2EjkSkGkyYJNOPqOPyvns0mzkTAgSpdNyMhRHTCjZ-wP0CDg_:1pG3Mr:T6FKN4PqwRlO3FtTqGCl1Ki734cYjEl4aZUo3y85wBQ', '2023-01-26 14:36:05.893450'),
+('6uheri26nhezy60bz2xpht1zazp8xayl', '.eJxVjDkOwjAUBe_iGlmys31T0nMG62_GAWRLcVIh7g6RUkD7Zua9TMRtzXFrusRZzNl05vS7EfJDyw7kjuVWLdeyLjPZXbEHbfZaRZ-Xw_07yNjyt06BnJ_Q-cBuAI_QS09BwA-gzNIRTo5RaUREDU6FyAORhJRGUFHz_gABTDm1:1pG4mp:ttq6jkxWTmjb1Kz4VMSXpaxtdLRZuw-8i5s1uB-c9gE', '2023-01-26 16:06:59.984259'),
+('82p3cl5w5y6nz4u6qfe9gmucu5fj62gn', '.eJxVjDkOwjAUBe_iGlmys31T0nMG62_GAWRLcVIh7g6RUkD7Zua9TMRtzXFrusRZzNl05vS7EfJDyw7kjuVWLdeyLjPZXbEHbfZaRZ-Xw_07yNjyt06BnJ_Q-cBuAI_QS09BwA-gzNIRTo5RaUREDU6FyAORhJRGUFHz_gABTDm1:1pG4Xw:pF1VPW7RwiILrUh-OGUrSRxhGpBS3w8eJH_7czLEjBc', '2023-01-26 15:51:36.947400'),
+('8t2iacb7svrdz350htnby4997i9w2zl6', '.eJxVjEsKwjAUAO-StYQ-XtKkLt17hvI-qa1KAk27Kt5dAl3odmaYw4y0b_O417SOi5qrAXP5ZUzySrkJfVJ-FCslb-vCtiX2tNXei6b37Wz_BjPVuW2RNZBXkRCpjxEGlA48O0rKE6IXL4NjcICuF6cwdQlpCBIgofRgPl_s-Dfy:1pG6se:V2dyfUEtNlJJ06tSOzJB5CLw1Yfw0G3h3ECWRk7lXWs', '2023-01-26 18:21:08.744034'),
+('8y2lpvo4f6vouaflqu0x7iqtxb0cb1nd', '.eJxVjDkOwjAUBe_iGlmys31T0nMG62_GAWRLcVIh7g6RUkD7Zua9TMRtzXFrusRZzNl05vS7EfJDyw7kjuVWLdeyLjPZXbEHbfZaRZ-Xw_07yNjyt06BnJ_Q-cBuAI_QS09BwA-gzNIRTo5RaUREDU6FyAORhJRGUFHz_gABTDm1:1pG321:xwUKq--LYwzEWf8LQt080rKEhC5Z9FWEoAeyqe5c7TY', '2023-01-26 14:14:33.107041'),
+('9dr9zovyhon4jckkkq39e1j4zo0m8kt5', '.eJxVjDkOwjAUBe_iGlmys31T0nMG62_GAWRLcVIh7g6RUkD7Zua9TMRtzXFrusRZzNl05vS7EfJDyw7kjuVWLdeyLjPZXbEHbfZaRZ-Xw_07yNjyt06BnJ_Q-cBuAI_QS09BwA-gzNIRTo5RaUREDU6FyAORhJRGUFHz_gABTDm1:1pG4iU:wYmefudyYNLL8G_cmg-9fvo80lAWXY_veiCK7ZLwDTY', '2023-01-26 16:02:30.251652'),
+('ags6oj9n4l0y71xr4qs6smbq819ofjvz', '.eJxVjLsOAiEURP-F2hBgl5elvd9ALnCvrBpIlt3K-O9KsoU2U8w5My8WYN9K2DuuYcnszBQ7_XYR0gPrAPkO9dZ4anVbl8iHwg_a-bVlfF4O9--gQC_ftUjaCaOsAjI2EjkSkGkyYJNOPqOPyvns0mzkTAgSpdNyMhRHTCjZ-wP0CDg_:1pG3RC:tY4jdYS95GOcFLUAgmoMy5RPGAXAuDPCFEUI9Ck3Y0A', '2023-01-26 14:40:34.156599'),
+('cec02n4ehjz4cza1rt6pnogrncvhze4y', '.eJxVjDkOwjAUBe_iGlmys31T0nMG62_GAWRLcVIh7g6RUkD7Zua9TMRtzXFrusRZzNl05vS7EfJDyw7kjuVWLdeyLjPZXbEHbfZaRZ-Xw_07yNjyt06BnJ_Q-cBuAI_QS09BwA-gzNIRTo5RaUREDU6FyAORhJRGUFHz_gABTDm1:1pFi8R:64W6Jv1z-ldJPQN9FYsbBzHLIqG5KnECDqRw6uTn_lY', '2023-01-25 15:55:47.907184'),
+('hc1lya7w8ftmoyhcfrm9z1s0bv4k6ruc', '.eJxVjDkOwjAUBe_iGlmys31T0nMG62_GAWRLcVIh7g6RUkD7Zua9TMRtzXFrusRZzNl05vS7EfJDyw7kjuVWLdeyLjPZXbEHbfZaRZ-Xw_07yNjyt06BnJ_Q-cBuAI_QS09BwA-gzNIRTo5RaUREDU6FyAORhJRGUFHz_gABTDm1:1pG68g:iPovWs94Llh5pNbjdfnBU2GuPunY6U_yHDytRqDpaq0', '2023-01-26 17:33:38.571068'),
+('kru0vwp8gdwdcqpjil2z3ithrtcbnzh4', '.eJxVjDkOwjAUBe_iGlmys31T0nMG62_GAWRLcVIh7g6RUkD7Zua9TMRtzXFrusRZzNl05vS7EfJDyw7kjuVWLdeyLjPZXbEHbfZaRZ-Xw_07yNjyt06BnJ_Q-cBuAI_QS09BwA-gzNIRTo5RaUREDU6FyAORhJRGUFHz_gABTDm1:1pG51Q:-vfRrOlfsYx0bp6GowYEt3SAIb1Z6yBMe_ZRL6ZwcTg', '2023-01-26 16:22:04.940205'),
+('nxl8xd32g9q03jj19u10nid65vx6cels', '.eJxVjDkOwjAUBe_iGlmys31T0nMG62_GAWRLcVIh7g6RUkD7Zua9TMRtzXFrusRZzNl05vS7EfJDyw7kjuVWLdeyLjPZXbEHbfZaRZ-Xw_07yNjyt06BnJ_Q-cBuAI_QS09BwA-gzNIRTo5RaUREDU6FyAORhJRGUFHz_gABTDm1:1pG50L:GeGZGXjb8jd5qQVrYm4EZXbzQRnBTwDFcrsFn46xZOI', '2023-01-26 16:20:57.355489'),
+('ygoaht8flv9rngm4xkqp48wqyv88wak9', '.eJxVjDkOwjAUBe_iGlmys31T0nMG62_GAWRLcVIh7g6RUkD7Zua9TMRtzXFrusRZzNl05vS7EfJDyw7kjuVWLdeyLjPZXbEHbfZaRZ-Xw_07yNjyt06BnJ_Q-cBuAI_QS09BwA-gzNIRTo5RaUREDU6FyAORhJRGUFHz_gABTDm1:1pG5B1:7qoD5kXhfKWGbnBTl0FB7zA7jpfSn2b3GwOHw1aFOgc', '2023-01-26 16:31:59.404381');
 
 -- --------------------------------------------------------
 
@@ -363,10 +356,115 @@ CREATE TABLE `pallet_register_calibre` (
 --
 
 INSERT INTO `pallet_register_calibre` (`id`, `created_at`, `updated_at`, `calibre`) VALUES
-(1, '2022-11-21 06:23:42.301413', '2022-11-21 06:23:42.301413', 'MD'),
-(2, '2022-11-21 06:23:44.139779', '2022-11-21 06:23:44.139779', 'JB'),
-(3, '2022-11-21 06:23:45.758673', '2022-11-21 06:23:45.758673', 'XL'),
-(4, '2022-11-21 06:23:47.452290', '2022-11-21 06:23:47.452290', 'XXL');
+(1, '2023-01-11 14:45:43.896589', '2023-01-11 14:45:43.896589', 'MD'),
+(2, '2023-01-11 14:45:45.943616', '2023-01-11 14:45:45.943616', 'XL'),
+(3, '2023-01-11 14:45:48.362743', '2023-01-11 14:45:48.362743', 'LG'),
+(4, '2023-01-11 14:45:52.299878', '2023-01-11 14:45:52.299878', 'J'),
+(5, '2023-01-11 14:45:57.905456', '2023-01-11 14:45:57.905456', 'JJ');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_campaign`
+--
+
+CREATE TABLE `pallet_register_campaign` (
+  `id` bigint(20) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  `inicio` date NOT NULL,
+  `state` tinyint(1) NOT NULL,
+  `planta_id` bigint(20) NOT NULL,
+  `producto_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_campaign`
+--
+
+INSERT INTO `pallet_register_campaign` (`id`, `created_at`, `updated_at`, `inicio`, `state`, `planta_id`, `producto_id`) VALUES
+(1, '2023-01-11 15:04:46.289443', '2023-01-11 15:04:46.289443', '2022-12-27', 1, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_campaign_clientes`
+--
+
+CREATE TABLE `pallet_register_campaign_clientes` (
+  `id` bigint(20) NOT NULL,
+  `campaign_id` bigint(20) NOT NULL,
+  `cliente_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_campaign_clientes`
+--
+
+INSERT INTO `pallet_register_campaign_clientes` (`id`, `campaign_id`, `cliente_id`) VALUES
+(1, 1, 1),
+(2, 1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_campaign_presentaciones`
+--
+
+CREATE TABLE `pallet_register_campaign_presentaciones` (
+  `id` bigint(20) NOT NULL,
+  `campaign_id` bigint(20) NOT NULL,
+  `presentacion_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_campaign_presentaciones`
+--
+
+INSERT INTO `pallet_register_campaign_presentaciones` (`id`, `campaign_id`, `presentacion_id`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 1, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_campaign_usuarios`
+--
+
+CREATE TABLE `pallet_register_campaign_usuarios` (
+  `id` bigint(20) NOT NULL,
+  `campaign_id` bigint(20) NOT NULL,
+  `usuario_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_campaign_usuarios`
+--
+
+INSERT INTO `pallet_register_campaign_usuarios` (`id`, `campaign_id`, `usuario_id`) VALUES
+(1, 1, 1),
+(2, 1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_campaign_variedades`
+--
+
+CREATE TABLE `pallet_register_campaign_variedades` (
+  `id` bigint(20) NOT NULL,
+  `campaign_id` bigint(20) NOT NULL,
+  `variedad_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_campaign_variedades`
+--
+
+INSERT INTO `pallet_register_campaign_variedades` (`id`, `campaign_id`, `variedad_id`) VALUES
+(1, 1, 1),
+(2, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -386,9 +484,91 @@ CREATE TABLE `pallet_register_categoria` (
 --
 
 INSERT INTO `pallet_register_categoria` (`id`, `created_at`, `updated_at`, `categoria`) VALUES
-(1, '2022-11-21 06:23:32.203814', '2022-11-29 12:31:22.450459', 'CATEGORIA-1'),
-(2, '2022-11-21 06:23:34.397375', '2022-11-29 12:31:17.435753', 'CATEGORIA-2'),
-(3, '2022-11-21 06:23:36.282981', '2022-11-29 12:31:12.084582', 'CATEGORIA-3');
+(1, '2023-01-11 15:02:29.805592', '2023-01-11 15:02:29.805592', 'CAT-1'),
+(2, '2023-01-11 15:02:33.370290', '2023-01-11 15:02:33.370290', 'CAT-2');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_cliente`
+--
+
+CREATE TABLE `pallet_register_cliente` (
+  `id` bigint(20) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  `cliente` varchar(150) NOT NULL,
+  `abreviatura` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_cliente`
+--
+
+INSERT INTO `pallet_register_cliente` (`id`, `created_at`, `updated_at`, `cliente`, `abreviatura`) VALUES
+(1, '2023-01-11 15:02:15.566777', '2023-01-11 15:02:15.566777', 'ESMERALD VALLEY', 'E / V'),
+(2, '2023-01-11 15:02:22.972411', '2023-01-11 15:02:22.972411', 'LION', 'LION');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_cliente_destino`
+--
+
+CREATE TABLE `pallet_register_cliente_destino` (
+  `id` bigint(20) NOT NULL,
+  `cliente_id` bigint(20) NOT NULL,
+  `destino_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_cliente_destino`
+--
+
+INSERT INTO `pallet_register_cliente_destino` (`id`, `cliente_id`, `destino_id`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 2, 2),
+(4, 2, 3),
+(5, 2, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_currentcampaign`
+--
+
+CREATE TABLE `pallet_register_currentcampaign` (
+  `id` bigint(20) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  `inicio` datetime(6) NOT NULL,
+  `fin` datetime(6) NOT NULL,
+  `campaign_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_destino`
+--
+
+CREATE TABLE `pallet_register_destino` (
+  `id` bigint(20) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  `destino` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_destino`
+--
+
+INSERT INTO `pallet_register_destino` (`id`, `created_at`, `updated_at`, `destino`) VALUES
+(1, '2023-01-11 15:01:51.436055', '2023-01-11 15:01:51.436055', 'SHANGHAI'),
+(2, '2023-01-11 15:01:53.383076', '2023-01-11 15:01:53.383076', 'AFRICA'),
+(3, '2023-01-11 15:01:55.203291', '2023-01-11 15:01:55.203291', 'EE.UU'),
+(4, '2023-01-11 15:02:01.413539', '2023-01-11 15:02:01.413539', 'AMSTERDAM');
 
 -- --------------------------------------------------------
 
@@ -400,9 +580,9 @@ CREATE TABLE `pallet_register_detallepallet` (
   `id` bigint(20) NOT NULL,
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) NOT NULL,
-  `lote` varchar(255) NOT NULL,
   `numero_de_guia` varchar(255) NOT NULL,
   `numero_de_cajas` bigint(20) NOT NULL,
+  `lote_id` bigint(20) NOT NULL,
   `pallet_id` bigint(20) NOT NULL,
   `usuario_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -411,43 +591,8 @@ CREATE TABLE `pallet_register_detallepallet` (
 -- Volcado de datos para la tabla `pallet_register_detallepallet`
 --
 
-INSERT INTO `pallet_register_detallepallet` (`id`, `created_at`, `updated_at`, `lote`, `numero_de_guia`, `numero_de_cajas`, `pallet_id`, `usuario_id`) VALUES
-(13, '2022-11-21 08:53:21.457298', '2022-11-21 08:53:21.457298', 'L-334', 'G-012', 40, 3, 2),
-(14, '2022-11-21 08:53:21.461313', '2022-11-21 08:53:21.461313', 'L-334', 'G-013', 33, 3, 2),
-(61, '2022-11-22 12:26:40.255674', '2022-11-22 12:26:40.255674', 'l-900', 'g-88', 12, 6, 2),
-(62, '2022-11-22 12:26:40.257672', '2022-11-22 12:26:40.257672', 'l-22', 'g-33', 78, 6, 2),
-(64, '2022-11-22 13:57:26.735043', '2022-11-22 13:57:26.735043', 'L-23', 'G-1222', 70, 5, 2),
-(65, '2022-11-22 13:57:26.735043', '2022-11-22 13:57:26.735043', 'L-666', 'G-233', 10, 5, 2),
-(73, '2022-11-22 13:58:08.407528', '2022-11-22 13:58:08.407528', 'L-33', 'G-21', 23, 4, 2),
-(74, '2022-11-22 13:58:08.407528', '2022-11-22 13:58:08.407528', 'L-33', 'G-45', 57, 4, 2),
-(75, '2022-11-22 13:58:08.407528', '2022-11-22 13:58:08.407528', 'L-777', 'G-46', 10, 4, 2),
-(76, '2022-11-23 07:35:11.319359', '2022-11-23 07:35:11.319359', 'L-57', 'G-004', 37, 2, 2),
-(77, '2022-11-23 07:35:11.319359', '2022-11-23 07:35:11.319359', 'L-44', 'G-005', 41, 2, 2),
-(79, '2022-11-23 09:25:53.325339', '2022-11-23 09:25:53.325339', '445', 'G-12', 80, 7, 2),
-(80, '2022-11-23 09:25:53.328194', '2022-11-23 09:25:53.328194', '122', 'G-122', 10, 7, 2),
-(107, '2022-11-23 09:38:34.444454', '2022-11-23 09:38:34.444454', 'L-12', 'G-666', 60, 11, 2),
-(108, '2022-11-23 09:38:34.460092', '2022-11-23 09:38:34.460092', 'L-44', 'G-233', 30, 11, 2),
-(113, '2022-11-23 12:27:56.942717', '2022-11-23 12:27:56.942717', 'L-77', 'G-666', 58, 12, 2),
-(114, '2022-11-23 12:27:56.943550', '2022-11-23 12:27:56.943550', '98', 'G-88', 42, 12, 2),
-(133, '2022-11-23 14:15:44.174729', '2022-11-23 14:15:44.174729', 'L-98', 'G-77', 36, 10, 2),
-(134, '2022-11-23 14:15:44.176436', '2022-11-23 14:15:44.176436', '98', 'G-88', 44, 10, 2),
-(175, '2022-11-29 12:33:10.460980', '2022-11-29 12:33:10.460980', 'l-900', 'g-88', 21, 8, 2),
-(176, '2022-11-29 12:33:10.463287', '2022-11-29 12:33:10.463287', 'as', 'ss', 36, 8, 2),
-(177, '2022-11-29 12:33:10.464669', '2022-11-29 12:33:10.464669', 'sas', 'as', 23, 8, 2),
-(178, '2022-11-29 12:33:10.465856', '2022-11-29 12:33:10.465856', 'as', 's', 19, 8, 2),
-(179, '2022-11-29 12:34:09.243353', '2022-11-29 12:34:09.243353', 'L-23', 'G-001', 21, 1, 2),
-(180, '2022-11-29 12:34:09.245854', '2022-11-29 12:34:09.245854', 'L-22', 'G-002', 29, 1, 2),
-(181, '2022-11-29 12:34:09.246860', '2022-11-29 12:34:09.246860', 'L-12', 'G-003', 30, 1, 2),
-(182, '2022-11-29 12:34:09.247856', '2022-11-29 12:34:09.247856', 'LOTE-3', 'G-003', 19, 1, 2),
-(188, '2022-12-01 08:57:41.792148', '2022-12-01 08:57:41.792148', 'U20', 'G77', 25, 13, 2),
-(189, '2022-12-01 08:57:41.794147', '2022-12-01 08:57:41.794147', '78', 'G66', 36, 13, 2),
-(190, '2022-12-01 08:57:41.796147', '2022-12-01 08:57:41.796147', '76', 'G88', 39, 13, 2),
-(194, '2022-12-01 10:57:47.027676', '2022-12-01 10:57:47.027676', '98', 'G-666', 40, 9, 3),
-(195, '2022-12-01 10:57:47.031288', '2022-12-01 10:57:47.031288', '98', 'G-88', 14, 9, 3),
-(196, '2022-12-01 10:57:47.032298', '2022-12-01 10:57:47.032298', '9', 'G-66', 25, 9, 3),
-(202, '2022-12-01 13:52:22.459605', '2022-12-01 13:52:22.459605', 'U20', 'G77', 33, 14, 3),
-(203, '2022-12-01 13:52:22.461844', '2022-12-01 13:52:22.461844', '78', 'G66', 21, 14, 3),
-(204, '2022-12-01 13:52:22.466530', '2022-12-01 13:52:22.466530', 'Oi', 'Tg', 35, 14, 3);
+INSERT INTO `pallet_register_detallepallet` (`id`, `created_at`, `updated_at`, `numero_de_guia`, `numero_de_cajas`, `lote_id`, `pallet_id`, `usuario_id`) VALUES
+(1, '2023-01-11 15:08:31.038866', '2023-01-11 15:08:31.038866', 'G-001', 55, 4, 1, 1);
 
 --
 -- Disparadores `pallet_register_detallepallet`
@@ -483,6 +628,17 @@ CREATE TABLE `pallet_register_fundo` (
   `sede_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `pallet_register_fundo`
+--
+
+INSERT INTO `pallet_register_fundo` (`id`, `created_at`, `updated_at`, `fundo`, `sede_id`) VALUES
+(1, '2023-01-11 15:05:02.831862', '2023-01-11 15:05:02.831862', 'SANTA MARGARITA', 1),
+(2, '2023-01-11 15:05:05.616708', '2023-01-11 15:05:05.616708', 'LA CASTELLANA', 1),
+(3, '2023-01-11 15:05:08.800881', '2023-01-11 15:05:08.800881', 'SANTA INÉS', 1),
+(4, '2023-01-11 15:05:12.150657', '2023-01-11 15:05:12.150657', 'SAN HILARION', 1),
+(5, '2023-01-11 15:05:16.813872', '2023-01-11 15:05:16.813872', 'LOS CASTILLOS', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -494,8 +650,25 @@ CREATE TABLE `pallet_register_lote` (
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) NOT NULL,
   `lote` varchar(50) NOT NULL,
+  `codigo_lugar_produccion` varchar(150) NOT NULL,
   `fundo_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_lote`
+--
+
+INSERT INTO `pallet_register_lote` (`id`, `created_at`, `updated_at`, `lote`, `codigo_lugar_produccion`, `fundo_id`) VALUES
+(1, '2023-01-11 15:05:24.511741', '2023-01-11 15:05:24.511741', '5161', '001-001', 1),
+(2, '2023-01-11 15:05:30.069843', '2023-01-11 15:05:30.069843', '5162', '001-001', 2),
+(3, '2023-01-11 15:05:39.724505', '2023-01-11 15:05:39.724505', '5163', '001-002', 1),
+(4, '2023-01-11 15:05:50.263015', '2023-01-11 15:05:50.263015', '5164', '001-003', 1),
+(5, '2023-01-11 15:05:56.707124', '2023-01-11 15:05:56.707124', '5261', '001-001', 2),
+(6, '2023-01-11 15:06:17.900039', '2023-01-11 15:06:17.900039', '5366', '001-006', 4),
+(7, '2023-01-11 15:06:25.350752', '2023-01-11 15:06:25.350752', '5367', '001-008', 4),
+(8, '2023-01-11 15:06:39.884874', '2023-01-11 15:06:39.884874', '5422', '001-003', 3),
+(9, '2023-01-11 15:06:46.247794', '2023-01-11 15:06:46.247794', '5423', '001-008', 3),
+(10, '2023-01-11 15:06:53.379505', '2023-01-11 15:06:53.379505', '5633', '001-002', 5);
 
 -- --------------------------------------------------------
 
@@ -508,13 +681,16 @@ CREATE TABLE `pallet_register_pallet` (
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) NOT NULL,
   `codigo` varchar(255) NOT NULL,
+  `codigo_comercial` varchar(50) NOT NULL,
   `dp` varchar(150) DEFAULT NULL,
   `plu` tinyint(1) NOT NULL,
   `completo` tinyint(1) NOT NULL,
+  `embarcado` tinyint(1) NOT NULL,
   `cantidad_de_cajas` int(11) NOT NULL,
   `calibre_id` bigint(20) NOT NULL,
+  `campaign_id` bigint(20) NOT NULL,
   `categoria_id` bigint(20) NOT NULL,
-  `planta_id` bigint(20) NOT NULL,
+  `cliente_id` bigint(20) NOT NULL,
   `presentacion_id` bigint(20) NOT NULL,
   `variedad_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -523,21 +699,8 @@ CREATE TABLE `pallet_register_pallet` (
 -- Volcado de datos para la tabla `pallet_register_pallet`
 --
 
-INSERT INTO `pallet_register_pallet` (`id`, `created_at`, `updated_at`, `codigo`, `dp`, `plu`, `completo`, `cantidad_de_cajas`, `calibre_id`, `categoria_id`, `planta_id`, `presentacion_id`, `variedad_id`) VALUES
-(1, '2022-11-21 06:25:39.885277', '2022-11-29 12:34:09.230353', '70821326', 'DP-1', 0, 0, 100, 2, 2, 1, 2, 1),
-(2, '2022-11-21 07:36:45.450610', '2022-11-23 07:35:11.300868', '1-300242.', 'DP-2', 1, 0, 100, 3, 2, 1, 2, 2),
-(3, '2022-11-21 08:53:21.432381', '2022-11-21 08:53:21.432381', '18-213643.', 'DP-12', 0, 0, 80, 1, 2, 1, 3, 3),
-(4, '2022-11-22 11:58:22.538152', '2022-11-22 13:58:08.389093', '18-213639.', 'DP-123', 0, 1, 90, 1, 1, 1, 1, 1),
-(5, '2022-11-22 12:00:03.960725', '2022-11-22 13:57:26.723268', '18-213637.', 'DP-33', 1, 1, 80, 4, 2, 1, 3, 2),
-(6, '2022-11-22 12:18:50.088574', '2022-11-22 12:26:40.241535', '18-213625.', 'DP-32', 1, 1, 90, 4, 3, 1, 1, 2),
-(7, '2022-11-23 09:19:23.789643', '2022-11-23 09:25:53.311189', '18-213569.', '9191', 1, 1, 90, 2, 1, 1, 1, 2),
-(8, '2022-11-23 09:28:32.508932', '2022-11-29 12:33:10.456523', '18-213554.', 'DP-32', 1, 0, 100, 3, 3, 1, 2, 2),
-(9, '2022-11-23 09:34:37.011153', '2022-12-01 10:57:47.012617', '18-213602.', 'DP-1212', 0, 0, 80, 3, 3, 1, 3, 2),
-(10, '2022-11-23 09:36:18.288993', '2022-11-23 14:15:44.159548', '18-213591.', 'DP-122', 1, 1, 80, 4, 3, 1, 3, 3),
-(11, '2022-11-23 09:38:34.444454', '2022-11-23 09:38:34.444454', '18-213603.', 'DP-122', 1, 1, 90, 2, 1, 1, 1, 1),
-(12, '2022-11-23 09:39:44.381439', '2022-11-23 12:27:56.939422', '18-213611.', 'DP-122', 0, 1, 100, 2, 3, 1, 2, 2),
-(13, '2022-12-01 08:57:23.977389', '2022-12-01 08:57:41.777574', '18-213645.', '56', 1, 1, 100, 3, 3, 1, 2, 2),
-(14, '2022-12-01 13:49:20.377682', '2022-12-01 13:52:22.442591', '18-213640.', '56', 0, 0, 90, 4, 3, 1, 1, 2);
+INSERT INTO `pallet_register_pallet` (`id`, `created_at`, `updated_at`, `codigo`, `codigo_comercial`, `dp`, `plu`, `completo`, `embarcado`, `cantidad_de_cajas`, `calibre_id`, `campaign_id`, `categoria_id`, `cliente_id`, `presentacion_id`, `variedad_id`) VALUES
+(1, '2023-01-11 15:08:13.885747', '2023-01-12 18:21:30.235285', 'RG-6696', 'BU-003', '55', 1, 0, 0, 100, 1, 1, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -558,7 +721,7 @@ CREATE TABLE `pallet_register_planta` (
 --
 
 INSERT INTO `pallet_register_planta` (`id`, `created_at`, `updated_at`, `planta`, `sede_id`) VALUES
-(1, '2022-11-21 06:14:25.000000', '2022-11-21 06:14:25.000000', 'ICA', 1);
+(1, '2023-01-11 14:47:19.766385', '2023-01-11 14:47:19.766385', 'ICA', 1);
 
 -- --------------------------------------------------------
 
@@ -570,18 +733,61 @@ CREATE TABLE `pallet_register_presentacion` (
   `id` bigint(20) NOT NULL,
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) NOT NULL,
-  `presentacion` varchar(100) NOT NULL,
-  `cantidad_de_cajas` int(11) NOT NULL
+  `descripcion` varchar(255) NOT NULL,
+  `peso` decimal(3,1) NOT NULL,
+  `cantidad_de_cajas` int(11) NOT NULL,
+  `tipo_caja_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `pallet_register_presentacion`
 --
 
-INSERT INTO `pallet_register_presentacion` (`id`, `created_at`, `updated_at`, `presentacion`, `cantidad_de_cajas`) VALUES
-(1, '2022-11-21 06:23:03.156410', '2022-11-21 06:23:05.391178', 'CAJA CARTON 4.5', 90),
-(2, '2022-11-21 06:23:13.228356', '2022-11-21 09:43:08.684672', 'CAJA CARTON 8.2', 100),
-(3, '2022-11-21 06:23:20.955976', '2022-11-21 07:36:39.225400', 'CAJA PLASTICO 8.2', 80);
+INSERT INTO `pallet_register_presentacion` (`id`, `created_at`, `updated_at`, `descripcion`, `peso`, `cantidad_de_cajas`, `tipo_caja_id`) VALUES
+(1, '2023-01-11 15:04:00.957288', '2023-01-11 15:04:00.957288', 'CAJA GENERICA', '8.2', 100, 1),
+(2, '2023-01-11 15:04:15.268801', '2023-01-11 15:04:15.268801', 'CAJA VERDE', '7.3', 110, 2),
+(3, '2023-01-11 15:04:34.360545', '2023-01-11 15:04:34.360545', 'CAJA ROJA', '4.5', 140, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_presentacion_productos`
+--
+
+CREATE TABLE `pallet_register_presentacion_productos` (
+  `id` bigint(20) NOT NULL,
+  `presentacion_id` bigint(20) NOT NULL,
+  `producto_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_presentacion_productos`
+--
+
+INSERT INTO `pallet_register_presentacion_productos` (`id`, `presentacion_id`, `producto_id`) VALUES
+(1, 1, 1),
+(2, 2, 1),
+(3, 3, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_producto`
+--
+
+CREATE TABLE `pallet_register_producto` (
+  `id` bigint(20) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  `producto` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_producto`
+--
+
+INSERT INTO `pallet_register_producto` (`id`, `created_at`, `updated_at`, `producto`) VALUES
+(1, '2023-01-11 14:46:17.598440', '2023-01-11 14:46:17.598440', 'UVA DE MESA');
 
 -- --------------------------------------------------------
 
@@ -602,7 +808,29 @@ CREATE TABLE `pallet_register_sede` (
 --
 
 INSERT INTO `pallet_register_sede` (`id`, `created_at`, `updated_at`, `sede`, `zona_id`) VALUES
-(1, '2022-11-21 06:14:02.000000', '2022-11-21 06:14:02.000000', 'ICA', 1);
+(1, '2023-01-11 14:47:17.978790', '2023-01-11 14:47:17.978790', 'ICA', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pallet_register_tipocaja`
+--
+
+CREATE TABLE `pallet_register_tipocaja` (
+  `id` bigint(20) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  `tipo_caja` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pallet_register_tipocaja`
+--
+
+INSERT INTO `pallet_register_tipocaja` (`id`, `created_at`, `updated_at`, `tipo_caja`) VALUES
+(1, '2023-01-11 15:01:22.999148', '2023-01-11 15:01:22.999148', 'PLÁSTICO'),
+(2, '2023-01-11 15:01:28.962254', '2023-01-11 15:01:28.962254', 'MADERA'),
+(3, '2023-01-11 15:01:31.144476', '2023-01-11 15:01:31.144476', 'CARTÓN');
 
 -- --------------------------------------------------------
 
@@ -618,6 +846,7 @@ CREATE TABLE `pallet_register_usuario` (
   `dni` varchar(12) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `apellido` varchar(100) NOT NULL,
+  `rol` varchar(3) NOT NULL,
   `active` tinyint(1) NOT NULL,
   `staff` tinyint(1) NOT NULL,
   `admin` tinyint(1) NOT NULL,
@@ -628,9 +857,10 @@ CREATE TABLE `pallet_register_usuario` (
 -- Volcado de datos para la tabla `pallet_register_usuario`
 --
 
-INSERT INTO `pallet_register_usuario` (`id`, `password`, `last_login`, `codigo`, `dni`, `nombre`, `apellido`, `active`, `staff`, `admin`, `planta_id`) VALUES
-(2, 'pbkdf2_sha256$390000$5iexyZyWgAn4gALwfzZleu$WliwT5NHGwcHPzRlSqDDRJmLHfsFIuXhQIp867Vu/iY=', '2022-12-01 13:52:51.753976', '419738', '70821326', 'Carlos Daniel', 'Escate Román', 1, 1, 1, 1),
-(3, 'pbkdf2_sha256$390000$Bq1U5gjSonOe0DuNKooTqC$ktqU7/+cx8weDCzXszsUW/BS8Ebd9ucDtyB4wcD3dg0=', '2022-12-01 13:52:38.319391', '666666', '70821320', 'Mario', 'Mendoza', 1, 0, 0, 1);
+INSERT INTO `pallet_register_usuario` (`id`, `password`, `last_login`, `codigo`, `dni`, `nombre`, `apellido`, `rol`, `active`, `staff`, `admin`, `planta_id`) VALUES
+(1, 'pbkdf2_sha256$390000$9VwpmbbRJNMXwEDwp2m9K3$P4KIarWjRBIHbuLEDOKWZdoYuBSdNfjRaUYpO4uCunA=', '2023-01-12 18:21:08.744034', '419738', '12345678', 'CARLOS DANIEL', 'ESCATE ROMÁN', 'REG', 1, 1, 1, 1),
+(2, 'pbkdf2_sha256$390000$EdWNb3RLeRMu0iQMkl96JI$hsn/FARCzLUQ6KzJJ5SxlODijsQZ4+i2dTkZlkP4yrw=', '2023-01-12 14:40:34.156599', '123456', '12345678', 'RAMÓN', 'AGUADO APAZA', 'EMB', 1, 1, 0, 1),
+(3, 'pbkdf2_sha256$390000$az8lGxZb0ER7AfyRYestfb$6lo4ZSFIqBSYvW4+UV10XEWZnTNvBx3daDjEB1PjG54=', '2023-01-12 17:33:38.568685', '419737', '77777777', 'DEF', 'AFGNAF', 'LEC', 1, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -642,17 +872,18 @@ CREATE TABLE `pallet_register_variedad` (
   `id` bigint(20) NOT NULL,
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) NOT NULL,
-  `variedad` varchar(100) NOT NULL
+  `codigo` varchar(3) NOT NULL,
+  `variedad` varchar(100) NOT NULL,
+  `producto_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `pallet_register_variedad`
 --
 
-INSERT INTO `pallet_register_variedad` (`id`, `created_at`, `updated_at`, `variedad`) VALUES
-(1, '2022-11-21 06:23:53.098459', '2022-11-21 06:23:53.098459', 'CRIMSOM'),
-(2, '2022-11-21 06:23:56.107116', '2022-11-21 06:23:56.107116', 'RED GLOBE'),
-(3, '2022-11-21 06:24:01.287986', '2022-11-21 06:24:01.287986', 'ALISOM');
+INSERT INTO `pallet_register_variedad` (`id`, `created_at`, `updated_at`, `codigo`, `variedad`, `producto_id`) VALUES
+(1, '2023-01-11 14:46:19.625108', '2023-01-11 14:46:19.625108', 'RG', 'RED GLOBE', 1),
+(2, '2023-01-11 14:46:52.878671', '2023-01-11 14:46:52.878671', 'SW', 'SWEET GLOBE', 1);
 
 -- --------------------------------------------------------
 
@@ -672,7 +903,7 @@ CREATE TABLE `pallet_register_zona` (
 --
 
 INSERT INTO `pallet_register_zona` (`id`, `created_at`, `updated_at`, `zona`) VALUES
-(1, '2022-11-21 06:13:44.000000', '2022-11-21 06:13:44.000000', 'SUR');
+(1, '2023-01-11 14:46:08.069191', '2023-01-11 14:46:08.069191', 'SUR');
 
 --
 -- Índices para tablas volcadas
@@ -735,9 +966,76 @@ ALTER TABLE `pallet_register_calibre`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `pallet_register_campaign`
+--
+ALTER TABLE `pallet_register_campaign`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pallet_register_camp_planta_id_d2d60227_fk_pallet_re` (`planta_id`),
+  ADD KEY `pallet_register_camp_producto_id_75ac91de_fk_pallet_re` (`producto_id`);
+
+--
+-- Indices de la tabla `pallet_register_campaign_clientes`
+--
+ALTER TABLE `pallet_register_campaign_clientes`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pallet_register_campaign_campaign_id_cliente_id_435c0a7a_uniq` (`campaign_id`,`cliente_id`),
+  ADD KEY `pallet_register_camp_cliente_id_7878b310_fk_pallet_re` (`cliente_id`);
+
+--
+-- Indices de la tabla `pallet_register_campaign_presentaciones`
+--
+ALTER TABLE `pallet_register_campaign_presentaciones`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pallet_register_campaign_campaign_id_presentacion_80f830ca_uniq` (`campaign_id`,`presentacion_id`),
+  ADD KEY `pallet_register_camp_presentacion_id_07ce19dc_fk_pallet_re` (`presentacion_id`);
+
+--
+-- Indices de la tabla `pallet_register_campaign_usuarios`
+--
+ALTER TABLE `pallet_register_campaign_usuarios`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pallet_register_campaign_campaign_id_usuario_id_c4dcfc1e_uniq` (`campaign_id`,`usuario_id`),
+  ADD KEY `pallet_register_camp_usuario_id_2089f713_fk_pallet_re` (`usuario_id`);
+
+--
+-- Indices de la tabla `pallet_register_campaign_variedades`
+--
+ALTER TABLE `pallet_register_campaign_variedades`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pallet_register_campaign_campaign_id_variedad_id_94619e37_uniq` (`campaign_id`,`variedad_id`),
+  ADD KEY `pallet_register_camp_variedad_id_75320cc9_fk_pallet_re` (`variedad_id`);
+
+--
 -- Indices de la tabla `pallet_register_categoria`
 --
 ALTER TABLE `pallet_register_categoria`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `pallet_register_cliente`
+--
+ALTER TABLE `pallet_register_cliente`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `pallet_register_cliente_destino`
+--
+ALTER TABLE `pallet_register_cliente_destino`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pallet_register_cliente__cliente_id_destino_id_257c85ba_uniq` (`cliente_id`,`destino_id`),
+  ADD KEY `pallet_register_clie_destino_id_ec95aa82_fk_pallet_re` (`destino_id`);
+
+--
+-- Indices de la tabla `pallet_register_currentcampaign`
+--
+ALTER TABLE `pallet_register_currentcampaign`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pallet_register_curr_campaign_id_6e70ef80_fk_pallet_re` (`campaign_id`);
+
+--
+-- Indices de la tabla `pallet_register_destino`
+--
+ALTER TABLE `pallet_register_destino`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -745,6 +1043,7 @@ ALTER TABLE `pallet_register_categoria`
 --
 ALTER TABLE `pallet_register_detallepallet`
   ADD PRIMARY KEY (`id`),
+  ADD KEY `pallet_register_deta_lote_id_dafe4f68_fk_pallet_re` (`lote_id`),
   ADD KEY `pallet_register_deta_pallet_id_0277a10d_fk_pallet_re` (`pallet_id`),
   ADD KEY `pallet_register_deta_usuario_id_fef27ca9_fk_pallet_re` (`usuario_id`);
 
@@ -768,8 +1067,9 @@ ALTER TABLE `pallet_register_lote`
 ALTER TABLE `pallet_register_pallet`
   ADD PRIMARY KEY (`id`),
   ADD KEY `pallet_register_pall_calibre_id_1ab74b54_fk_pallet_re` (`calibre_id`),
+  ADD KEY `pallet_register_pall_campaign_id_b9a66ece_fk_pallet_re` (`campaign_id`),
   ADD KEY `pallet_register_pall_categoria_id_1c9da0e2_fk_pallet_re` (`categoria_id`),
-  ADD KEY `pallet_register_pall_planta_id_2dc25271_fk_pallet_re` (`planta_id`),
+  ADD KEY `pallet_register_pall_cliente_id_fec2c545_fk_pallet_re` (`cliente_id`),
   ADD KEY `pallet_register_pall_presentacion_id_0cdf61cb_fk_pallet_re` (`presentacion_id`),
   ADD KEY `pallet_register_pall_variedad_id_2d369e31_fk_pallet_re` (`variedad_id`);
 
@@ -784,6 +1084,21 @@ ALTER TABLE `pallet_register_planta`
 -- Indices de la tabla `pallet_register_presentacion`
 --
 ALTER TABLE `pallet_register_presentacion`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pallet_register_pres_tipo_caja_id_36fe84bb_fk_pallet_re` (`tipo_caja_id`);
+
+--
+-- Indices de la tabla `pallet_register_presentacion_productos`
+--
+ALTER TABLE `pallet_register_presentacion_productos`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pallet_register_presenta_presentacion_id_producto_935bc56a_uniq` (`presentacion_id`,`producto_id`),
+  ADD KEY `pallet_register_pres_producto_id_fe6346b0_fk_pallet_re` (`producto_id`);
+
+--
+-- Indices de la tabla `pallet_register_producto`
+--
+ALTER TABLE `pallet_register_producto`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -792,6 +1107,12 @@ ALTER TABLE `pallet_register_presentacion`
 ALTER TABLE `pallet_register_sede`
   ADD PRIMARY KEY (`id`),
   ADD KEY `pallet_register_sede_zona_id_aae389b6_fk_pallet_register_zona_id` (`zona_id`);
+
+--
+-- Indices de la tabla `pallet_register_tipocaja`
+--
+ALTER TABLE `pallet_register_tipocaja`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `pallet_register_usuario`
@@ -805,7 +1126,8 @@ ALTER TABLE `pallet_register_usuario`
 -- Indices de la tabla `pallet_register_variedad`
 --
 ALTER TABLE `pallet_register_variedad`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pallet_register_vari_producto_id_07cb71ee_fk_pallet_re` (`producto_id`);
 
 --
 -- Indices de la tabla `pallet_register_zona`
@@ -821,73 +1143,127 @@ ALTER TABLE `pallet_register_zona`
 -- AUTO_INCREMENT de la tabla `auth_group`
 --
 ALTER TABLE `auth_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `auth_group_permissions`
 --
 ALTER TABLE `auth_group_permissions`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
 
 --
 -- AUTO_INCREMENT de la tabla `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT de la tabla `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_calibre`
 --
 ALTER TABLE `pallet_register_calibre`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `pallet_register_campaign`
+--
+ALTER TABLE `pallet_register_campaign`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `pallet_register_campaign_clientes`
+--
+ALTER TABLE `pallet_register_campaign_clientes`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `pallet_register_campaign_presentaciones`
+--
+ALTER TABLE `pallet_register_campaign_presentaciones`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `pallet_register_campaign_usuarios`
+--
+ALTER TABLE `pallet_register_campaign_usuarios`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `pallet_register_campaign_variedades`
+--
+ALTER TABLE `pallet_register_campaign_variedades`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_categoria`
 --
 ALTER TABLE `pallet_register_categoria`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `pallet_register_cliente`
+--
+ALTER TABLE `pallet_register_cliente`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `pallet_register_cliente_destino`
+--
+ALTER TABLE `pallet_register_cliente_destino`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `pallet_register_currentcampaign`
+--
+ALTER TABLE `pallet_register_currentcampaign`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `pallet_register_destino`
+--
+ALTER TABLE `pallet_register_destino`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_detallepallet`
 --
 ALTER TABLE `pallet_register_detallepallet`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_fundo`
 --
 ALTER TABLE `pallet_register_fundo`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_lote`
 --
 ALTER TABLE `pallet_register_lote`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_pallet`
 --
 ALTER TABLE `pallet_register_pallet`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_planta`
@@ -902,10 +1278,28 @@ ALTER TABLE `pallet_register_presentacion`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT de la tabla `pallet_register_presentacion_productos`
+--
+ALTER TABLE `pallet_register_presentacion_productos`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `pallet_register_producto`
+--
+ALTER TABLE `pallet_register_producto`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de la tabla `pallet_register_sede`
 --
 ALTER TABLE `pallet_register_sede`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `pallet_register_tipocaja`
+--
+ALTER TABLE `pallet_register_tipocaja`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_usuario`
@@ -917,7 +1311,7 @@ ALTER TABLE `pallet_register_usuario`
 -- AUTO_INCREMENT de la tabla `pallet_register_variedad`
 --
 ALTER TABLE `pallet_register_variedad`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `pallet_register_zona`
@@ -950,9 +1344,58 @@ ALTER TABLE `django_admin_log`
   ADD CONSTRAINT `django_admin_log_user_id_c564eba6_fk_pallet_register_usuario_id` FOREIGN KEY (`user_id`) REFERENCES `pallet_register_usuario` (`id`);
 
 --
+-- Filtros para la tabla `pallet_register_campaign`
+--
+ALTER TABLE `pallet_register_campaign`
+  ADD CONSTRAINT `pallet_register_camp_planta_id_d2d60227_fk_pallet_re` FOREIGN KEY (`planta_id`) REFERENCES `pallet_register_planta` (`id`),
+  ADD CONSTRAINT `pallet_register_camp_producto_id_75ac91de_fk_pallet_re` FOREIGN KEY (`producto_id`) REFERENCES `pallet_register_producto` (`id`);
+
+--
+-- Filtros para la tabla `pallet_register_campaign_clientes`
+--
+ALTER TABLE `pallet_register_campaign_clientes`
+  ADD CONSTRAINT `pallet_register_camp_campaign_id_8005f293_fk_pallet_re` FOREIGN KEY (`campaign_id`) REFERENCES `pallet_register_campaign` (`id`),
+  ADD CONSTRAINT `pallet_register_camp_cliente_id_7878b310_fk_pallet_re` FOREIGN KEY (`cliente_id`) REFERENCES `pallet_register_cliente` (`id`);
+
+--
+-- Filtros para la tabla `pallet_register_campaign_presentaciones`
+--
+ALTER TABLE `pallet_register_campaign_presentaciones`
+  ADD CONSTRAINT `pallet_register_camp_campaign_id_cbbaab80_fk_pallet_re` FOREIGN KEY (`campaign_id`) REFERENCES `pallet_register_campaign` (`id`),
+  ADD CONSTRAINT `pallet_register_camp_presentacion_id_07ce19dc_fk_pallet_re` FOREIGN KEY (`presentacion_id`) REFERENCES `pallet_register_presentacion` (`id`);
+
+--
+-- Filtros para la tabla `pallet_register_campaign_usuarios`
+--
+ALTER TABLE `pallet_register_campaign_usuarios`
+  ADD CONSTRAINT `pallet_register_camp_campaign_id_024747ca_fk_pallet_re` FOREIGN KEY (`campaign_id`) REFERENCES `pallet_register_campaign` (`id`),
+  ADD CONSTRAINT `pallet_register_camp_usuario_id_2089f713_fk_pallet_re` FOREIGN KEY (`usuario_id`) REFERENCES `pallet_register_usuario` (`id`);
+
+--
+-- Filtros para la tabla `pallet_register_campaign_variedades`
+--
+ALTER TABLE `pallet_register_campaign_variedades`
+  ADD CONSTRAINT `pallet_register_camp_campaign_id_46f3f71d_fk_pallet_re` FOREIGN KEY (`campaign_id`) REFERENCES `pallet_register_campaign` (`id`),
+  ADD CONSTRAINT `pallet_register_camp_variedad_id_75320cc9_fk_pallet_re` FOREIGN KEY (`variedad_id`) REFERENCES `pallet_register_variedad` (`id`);
+
+--
+-- Filtros para la tabla `pallet_register_cliente_destino`
+--
+ALTER TABLE `pallet_register_cliente_destino`
+  ADD CONSTRAINT `pallet_register_clie_cliente_id_235f54aa_fk_pallet_re` FOREIGN KEY (`cliente_id`) REFERENCES `pallet_register_cliente` (`id`),
+  ADD CONSTRAINT `pallet_register_clie_destino_id_ec95aa82_fk_pallet_re` FOREIGN KEY (`destino_id`) REFERENCES `pallet_register_destino` (`id`);
+
+--
+-- Filtros para la tabla `pallet_register_currentcampaign`
+--
+ALTER TABLE `pallet_register_currentcampaign`
+  ADD CONSTRAINT `pallet_register_curr_campaign_id_6e70ef80_fk_pallet_re` FOREIGN KEY (`campaign_id`) REFERENCES `pallet_register_campaign` (`id`);
+
+--
 -- Filtros para la tabla `pallet_register_detallepallet`
 --
 ALTER TABLE `pallet_register_detallepallet`
+  ADD CONSTRAINT `pallet_register_deta_lote_id_dafe4f68_fk_pallet_re` FOREIGN KEY (`lote_id`) REFERENCES `pallet_register_lote` (`id`),
   ADD CONSTRAINT `pallet_register_deta_pallet_id_0277a10d_fk_pallet_re` FOREIGN KEY (`pallet_id`) REFERENCES `pallet_register_pallet` (`id`),
   ADD CONSTRAINT `pallet_register_deta_usuario_id_fef27ca9_fk_pallet_re` FOREIGN KEY (`usuario_id`) REFERENCES `pallet_register_usuario` (`id`);
 
@@ -973,8 +1416,9 @@ ALTER TABLE `pallet_register_lote`
 --
 ALTER TABLE `pallet_register_pallet`
   ADD CONSTRAINT `pallet_register_pall_calibre_id_1ab74b54_fk_pallet_re` FOREIGN KEY (`calibre_id`) REFERENCES `pallet_register_calibre` (`id`),
+  ADD CONSTRAINT `pallet_register_pall_campaign_id_b9a66ece_fk_pallet_re` FOREIGN KEY (`campaign_id`) REFERENCES `pallet_register_campaign` (`id`),
   ADD CONSTRAINT `pallet_register_pall_categoria_id_1c9da0e2_fk_pallet_re` FOREIGN KEY (`categoria_id`) REFERENCES `pallet_register_categoria` (`id`),
-  ADD CONSTRAINT `pallet_register_pall_planta_id_2dc25271_fk_pallet_re` FOREIGN KEY (`planta_id`) REFERENCES `pallet_register_planta` (`id`),
+  ADD CONSTRAINT `pallet_register_pall_cliente_id_fec2c545_fk_pallet_re` FOREIGN KEY (`cliente_id`) REFERENCES `pallet_register_cliente` (`id`),
   ADD CONSTRAINT `pallet_register_pall_presentacion_id_0cdf61cb_fk_pallet_re` FOREIGN KEY (`presentacion_id`) REFERENCES `pallet_register_presentacion` (`id`),
   ADD CONSTRAINT `pallet_register_pall_variedad_id_2d369e31_fk_pallet_re` FOREIGN KEY (`variedad_id`) REFERENCES `pallet_register_variedad` (`id`);
 
@@ -983,6 +1427,19 @@ ALTER TABLE `pallet_register_pallet`
 --
 ALTER TABLE `pallet_register_planta`
   ADD CONSTRAINT `pallet_register_plan_sede_id_fe81c58a_fk_pallet_re` FOREIGN KEY (`sede_id`) REFERENCES `pallet_register_sede` (`id`);
+
+--
+-- Filtros para la tabla `pallet_register_presentacion`
+--
+ALTER TABLE `pallet_register_presentacion`
+  ADD CONSTRAINT `pallet_register_pres_tipo_caja_id_36fe84bb_fk_pallet_re` FOREIGN KEY (`tipo_caja_id`) REFERENCES `pallet_register_tipocaja` (`id`);
+
+--
+-- Filtros para la tabla `pallet_register_presentacion_productos`
+--
+ALTER TABLE `pallet_register_presentacion_productos`
+  ADD CONSTRAINT `pallet_register_pres_presentacion_id_9706a346_fk_pallet_re` FOREIGN KEY (`presentacion_id`) REFERENCES `pallet_register_presentacion` (`id`),
+  ADD CONSTRAINT `pallet_register_pres_producto_id_fe6346b0_fk_pallet_re` FOREIGN KEY (`producto_id`) REFERENCES `pallet_register_producto` (`id`);
 
 --
 -- Filtros para la tabla `pallet_register_sede`
@@ -995,6 +1452,12 @@ ALTER TABLE `pallet_register_sede`
 --
 ALTER TABLE `pallet_register_usuario`
   ADD CONSTRAINT `pallet_register_usua_planta_id_3b3f1b36_fk_pallet_re` FOREIGN KEY (`planta_id`) REFERENCES `pallet_register_planta` (`id`);
+
+--
+-- Filtros para la tabla `pallet_register_variedad`
+--
+ALTER TABLE `pallet_register_variedad`
+  ADD CONSTRAINT `pallet_register_vari_producto_id_07cb71ee_fk_pallet_re` FOREIGN KEY (`producto_id`) REFERENCES `pallet_register_producto` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
