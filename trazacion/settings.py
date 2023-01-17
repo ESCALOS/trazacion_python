@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-xe!x&puvq&7g0(@bsq+pylqjt#yw$^u^r4dqezt)sqgn63!e(l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True 
 
-ALLOWED_HOSTS = ['app-trazabilidad.devs-space.com','localhost','192.168.27.214']
+ALLOWED_HOSTS = ['app-trazabilidad.devs-space.com','localhost','68.183.58.72']
 
 # Application definition
 
@@ -38,8 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pallet_register',
     'django_extensions',
-    'smart_selects'
-]
+    'smart_selects',]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -121,7 +120,8 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = '/var/www/trazacion_python/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -133,3 +133,10 @@ AUTH_USER_MODEL = 'pallet_register.Usuario'
 LOGIN_URL = '/login'
 
 USE_DJANGO_JQUERY = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+
+PROJECT_ROOT=os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT=os.path.join(PROJECT_ROOT,'static')

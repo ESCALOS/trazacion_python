@@ -59,6 +59,7 @@ class Sede(BaseModel):
 
 class Fundo(BaseModel):
     fundo = models.CharField(max_length=100)
+    codigo_lugar_produccion = models.CharField(verbose_name="Codigo de Lugar de Producción",max_length=150)
     sede = models.ForeignKey(Sede, on_delete=models.RESTRICT)
     
     def __str__(self):
@@ -143,11 +144,10 @@ class Usuario(AbstractBaseUser):
     
 class Lote(BaseModel):
     lote = models.CharField(max_length=50)
-    codigo_lugar_produccion = models.CharField(verbose_name="Codigo de Lugar de Producción",max_length=150)
     fundo = models.ForeignKey(Fundo, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return self.lote + ' | ' + self.codigo_lugar_produccion + ' | ' + self.fundo.fundo
+        return self.lote + ' | ' + self.fundo.fundo
 
 class Calibre(BaseModel):
     calibre = models.CharField(max_length=100)
@@ -177,7 +177,6 @@ class TipoCaja(BaseModel):
 
 class Presentacion(BaseModel):
     tipo_caja = models.ForeignKey(TipoCaja, on_delete=models.RESTRICT)
-    descripcion = models.CharField(verbose_name='Descripción',max_length=255,default='')
     peso = models.DecimalField(max_digits=3,decimal_places=1)
     cantidad_de_cajas = models.IntegerField(default=100) 
     productos = models.ManyToManyField(Producto)
@@ -188,6 +187,9 @@ class Presentacion(BaseModel):
     def __str__(self):
         return self.descripcion + ' ' + str(self.peso) + ' KG'
     
+class Etiqueta(BaseModel):
+    etiqueta = models.CharField(max_length=250)
+
 class Categoria(BaseModel):
     categoria = models.CharField(max_length=50)
     
@@ -202,7 +204,6 @@ class Destino(BaseModel):
 
 class Cliente(BaseModel):
     cliente = models.CharField(max_length=150)
-    abreviatura = models.CharField(max_length=10)
     destino = models.ManyToManyField(Destino)
 
     def __str__(self):
@@ -225,7 +226,7 @@ class Campaign(BaseModel):
         chained_field = 'producto',
         chained_model_field = 'producto'
     )
-    clientes = models.ManyToManyField(Cliente)
+    etiquetas = models.ManyToManyField(Etiqueta)
     usuarios = ChainedManyToManyField(
         Usuario, 
         verbose_name = 'Personal',
@@ -257,13 +258,11 @@ class Pallet(BaseModel):
     campaign = models.ForeignKey(Campaign, verbose_name="Campaña", on_delete=models.RESTRICT)
     codigo = models.CharField(max_length=255)
     codigo_comercial = models.CharField(max_length=50)
-    dp = models.CharField(max_length=150,null=True)
     calibre = models.ForeignKey(Calibre, on_delete=models.RESTRICT)
     variedad = models.ForeignKey(Variedad, on_delete=models.RESTRICT)
     presentacion = models.ForeignKey(Presentacion, on_delete=models.RESTRICT)
     categoria = models.ForeignKey(Categoria, on_delete=models.RESTRICT)
-    plu = models.BooleanField(default=False)
-    cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT)
+    etiqueta = models.ForeignKey(Etiqueta, on_delete=models.RESTRICT)
     completo = models.BooleanField(default=False)
     embarcado = models.BooleanField(default=False)
     cantidad_de_cajas = models.IntegerField(default=90)
@@ -277,9 +276,9 @@ class Pallet(BaseModel):
 class DetallePallet(BaseModel):
     pallet = models.ForeignKey(Pallet, on_delete=models.RESTRICT)
     lote = models.ForeignKey(Lote, on_delete=models.RESTRICT)
-    numero_de_guia = models.CharField(max_length=255)
+    dia_de_proceso = models.IntegerField(default=1)
     numero_de_cajas = models.BigIntegerField(default=0)
     usuario = models.ForeignKey(Usuario, on_delete=models.RESTRICT)
     
     def __str__(self):
-        return 'Pallet: ' + self.pallet.codigo + ' | Lote: ' + self.lote.lote + ' | Guia: ' + self.numero_de_guia
+        return 'Pallet: ' + self.pallet.codigo + ' | Lote: ' + self.lote.lote + ' | Día de Proceso: ' + self.dia_de_proceso

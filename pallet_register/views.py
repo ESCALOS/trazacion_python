@@ -134,24 +134,22 @@ def datosPallet(request):
                     else:
                         try:
                             pallet = Pallet.objects.get(codigo=request.GET['codigo'],campaign=campaign,embarcado=False)
-                            detalle = DetallePallet.objects.annotate(fundoLote=Concat('lote__fundo__fundo',Value(' '),'lote__lote')).filter(pallet=pallet).values('numero_de_guia','numero_de_cajas','lote','fundoLote')
+                            detalle = DetallePallet.objects.annotate(fundoLote=Concat('lote__fundo__fundo',Value(' '),'lote__lote')).filter(pallet=pallet).values('dia_de_proceso','numero_de_cajas','lote','fundoLote')
                             data = {
                                 'success': True,
                                 'codigo' : pallet.codigo,
                                 'codigo_comercial': pallet.codigo_comercial,
                                 'presentacion' : pallet.presentacion_id,
-                                'presentacion_name' : pallet.presentacion.descripcion,
-                                'presentacion_peso' : pallet.presentacion.peso, 
-                                'dp' : pallet.dp,
+                                'presentacion_name' : pallet.presentacion.presentacion,
+                                'presentacion_peso' : pallet.presentacion.peso,
                                 'variedad' : pallet.variedad.variedad,
                                 'variedad_id' : pallet.variedad_id,
                                 'calibre' : pallet.calibre_id,
                                 'calibre_name' : pallet.calibre.calibre,
-                                'cliente' : pallet.cliente_id,
-                                'cliente_name' : pallet.cliente.cliente,
+                                'etiqueta' : pallet.etiqueta_id,
+                                'etiqueta_name' : pallet.etiqueta.etiqueta,
                                 'categoria' : pallet.categoria_id,
                                 'categoria_name' : pallet.categoria.categoria,
-                                'plu' : pallet.plu,
                                 'detalle': list(detalle),
                                 'message': 'Pallet encontrado',
                                 'icon' : 'success' 
@@ -352,10 +350,11 @@ def registrarPallet(request):
                         pallet.save()
                         DetallePallet.objects.filter(pallet=pallet).delete()
                         for detalle in detalles:
+                            lote = Lote.objects.get(id=detalle[2])
                             DetallePallet.objects.create(
                                 numero_de_guia=detalle[0],
                                 numero_de_cajas=detalle[1],
-                                lote=detalle[2],
+                                lote=lote,
                                 pallet_id=pallet.pk,
                                 usuario_id=request.user.id
                             )

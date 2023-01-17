@@ -21,7 +21,7 @@
           <div class="row">
             <div class="mb-4 col">
               <label for="codigo_comercial" class="form-label">Comercial</label>
-              <input type="text" class="form-control" id="codigo_comercial" placeholder="BU-123123">
+              <input type="text" class="form-control" id="codigo_comercial" placeholder="Número BU">
 	    </div>
             <div class="mb-4 col">
               <label for="presentacion" class="form-label">Presentación</label>
@@ -42,16 +42,6 @@
               </select>
             </div>
             <div class="mb-4 col">
-              <label for="cliente" class="form-label">Cliente</label>
-              <select name="cliente" class="form-control" id="cliente">
-                {% for cliente in clientes %}
-                  <option value="{{ cliente.id }}">{{ cliente.cliente }}</option>
-                {% endfor %}
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="mb-4 col">
               <label for="categoria" class="form-label">Categoría</label>
               <select name="categoria" class="form-control" id="categoria">
                 {% for categoria in categorias %}
@@ -59,15 +49,14 @@
                 {% endfor %}
               </select>
             </div>
+          </div>
+          <div class="row">
             <div class="mb-4 col">
-              <label for="dp" class="form-label">DP</label>
-              <input type="number" min=1 max=99 class="form-control" id="dp" placeholder="dp">
-            </div>
-            <div class="mb-4 col">
-              <label for="plu" class="form-label">Plu</label>
-              <select name="plu" class="form-control" id="plu">
-                <option value="true">Sí</option>
-                <option value="false">No</option>
+              <label for="etiqueta" class="form-label">Etiqueta</label>
+              <select name="etiqueta" class="form-control" id="etiqueta">
+                {% for etiqueta in etiquetas %}
+                  <option value="{{ etiqueta.id }}">{{ etiqueta.etiqueta }}</option>
+                {% endfor %}
               </select>
             </div>
           </div>

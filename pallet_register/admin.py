@@ -31,7 +31,7 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 class CampaignAdmin(admin.ModelAdmin):
-    filter_horizontal = ('clientes',)
+    filter_horizontal = ('etiquetas',)
 
 admin.site.register(models.Usuario, UserAdmin)
 admin.site.register(models.Zona)
