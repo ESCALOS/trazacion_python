@@ -21,13 +21,16 @@
           <div class="row">
             <div class="mb-4 col">
               <label for="codigo_comercial" class="form-label">Comercial</label>
-              <input type="text" class="form-control" id="codigo_comercial" placeholder="Número BU">
+              <div class="input-group">
+		<span class="input-group-text">BU - </span>
+  		<input type="number" class="form-control" id="codigo_comercial">
+	      </div> 
 	    </div>
             <div class="mb-4 col">
               <label for="presentacion" class="form-label">Presentación</label>
               <select name="presentacion" class="form-control" id="presentacion">
                 {% for presentacion in presentaciones %}
-		<option value="{{ presentacion.id }}">{{ presentacion.descripcion }} {{ presentacion.peso }}</option>
+		<option value="{{ presentacion.id }}">{{ presentacion.tipo_caja.tipo_caja }} {{ presentacion.peso }}</option>
                 {% endfor %}
               </select>
             </div>

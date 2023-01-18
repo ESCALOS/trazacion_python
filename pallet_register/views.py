@@ -4,7 +4,7 @@ from django.contrib.auth import login,authenticate,logout
 from django.db import IntegrityError
 from django.db.models import Sum,Count,Q,Value
 from django.db.models.functions import Concat
-from .models import Pallet,DetallePallet,Variedad,Presentacion,Lote,Calibre,Categoria,Campaign,CurrentCampaign,Cliente
+from .models import Pallet,DetallePallet,Etiqueta,Variedad,Presentacion,Lote,Calibre,Categoria,Campaign,CurrentCampaign,Cliente
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -60,16 +60,23 @@ def index(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     elif request.user.rol == "EMB":
         return redirect('embarque')
+    elif request.user.rol == "LEC":
+        return redirect('lector')
     elif request.user.rol == "REG":
         try:
-            campaign = Campaign.objects.get(planta=request.user.planta_id,state=True)
+            campaign = Campaign.objects.get(planta=request.user.planta,state=True)
+            if not request.user.campaign_set.filter(pk=campaign.pk).exists():
+                data = {
+                    'success' : False,
+                    'message' : 'Usuario no registrado'
+                }
+                return JsonResponse(data,safe=False)
             pallets = Pallet.objects.all()
             presentaciones = Presentacion.objects.filter(campaign=campaign)
             variedades = Variedad.objects.filter(campaign=campaign)
             calibres = Calibre.objects.values('id','calibre')
             categorias = Categoria.objects.values('id','categoria')
-            clientes = Cliente.objects.filter(campaign=campaign)
-            lotes = Lote.objects.annotate(text=Concat('fundo__fundo',Value(' '),'lote')).values('id','text')
+            etiquetas = Etiqueta.objects.filter(campaign=campaign)
             
             return render(request, 'index.html',{
                 'pallets':pallets,
@@ -77,13 +84,12 @@ def index(request):
                 'variedades' : variedades,
                 'calibres' : calibres,
                 'categorias' : categorias,
-                'clientes' : clientes,
-                'lotes' : lotes
+                'etiquetas' : etiquetas,
             })
         except Campaign.DoesNotExist:
             data = {
                 'success' : False,
-                'message' : "No hay ninguna campaña activa" 
+                'message' : "No hay campaña abierta" 
             }
             return JsonResponse(data, safe=False)
         except Exception as e:
@@ -140,7 +146,7 @@ def datosPallet(request):
                                 'codigo' : pallet.codigo,
                                 'codigo_comercial': pallet.codigo_comercial,
                                 'presentacion' : pallet.presentacion_id,
-                                'presentacion_name' : pallet.presentacion.presentacion,
+                                'presentacion_name' : pallet.presentacion.tipo_caja.tipo_caja,
                                 'presentacion_peso' : pallet.presentacion.peso,
                                 'variedad' : pallet.variedad.variedad,
                                 'variedad_id' : pallet.variedad_id,
@@ -249,10 +255,10 @@ def registrarPallet(request):
             else:
                 categoria_post = request.POST['categoria']
 
-            if request.POST['cliente'] == "":
-                cliente_post = "0"
+            if request.POST['etiqueta'] == "":
+                etiqueta_post = "0"
             else:
-                cliente_post = request.POST['cliente']
+                etiqueta_post = request.POST['etiqueta']
 
             if request.POST['codigo'] == "":
                 data = {
@@ -264,12 +270,6 @@ def registrarPallet(request):
                 data = {
                     'success' : False,
                     'message' : 'Falta el código comercial',
-                    'icon' : 'warning'
-                }
-            elif request.POST['dp'] == "":
-                data = {
-                    'success' : False,
-                    'message' : 'Falta el DP',
                     'icon' : 'warning'
                 }
             elif not Presentacion.objects.filter(id=int(presentacion_post)).exists():
@@ -284,10 +284,10 @@ def registrarPallet(request):
                     'message' : 'Falta el calibre',
                     'icon' : 'warning'
                 }
-            elif not Cliente.objects.filter(id=int(cliente_post)).exists():
+            elif not Etiqueta.objects.filter(id=int(etiqueta_post)).exists():
                 data = {
                     'success' : False,
-                    'message' : 'Falta el cliente',
+                    'message' : 'Falta la etiqueta',
                     'icon' : 'warning'
                 }
             elif not Categoria.objects.filter(id=int(categoria_post)).exists():
@@ -308,20 +308,18 @@ def registrarPallet(request):
                         pallet = Pallet.objects.get(codigo=request.POST['codigo'],campaign=campaign,embarcado=False)
 
                         pallet.codigo_comercial = request.POST['codigo_comercial']
-                        pallet.dp = request.POST['dp']
                         pallet.calibre_id = request.POST['calibre']
-                        pallet.cliente_id =request.POST['cliente']
+                        pallet.etiqueta_id =request.POST['etiqueta']
                         pallet.variedad = Variedad.objects.get(codigo=request.POST['codigo'].split("-")[0])
                         pallet.presentacion_id = request.POST['presentacion']
                         pallet.categoria_id = request.POST['categoria']
-                        pallet.plu = eval(request.POST['plu'].capitalize())
                         pallet.cantidad_de_cajas = presentacion.cantidad_de_cajas
                         pallet.save()
                         DetallePallet.objects.filter(pallet=pallet).delete()
                         for detalle in detalles:
                             lote = Lote.objects.get(id=detalle[2])
                             DetallePallet.objects.create(
-                                numero_de_guia = detalle[0],
+                                dia_de_proceso = detalle[0],
                                 numero_de_cajas = detalle[1],
                                 lote = lote,
                                 pallet_id = pallet.pk,
@@ -337,13 +335,11 @@ def registrarPallet(request):
                             campaign = Campaign.objects.get(planta=request.user.planta_id,state=True),
                             codigo = request.POST['codigo'],
                             codigo_comercial = request.POST['codigo_comercial'],
-                            dp = request.POST['dp'],
                             calibre_id = request.POST['calibre'],
-                            cliente_id = request.POST['cliente'],
+                            etiqueta_id = request.POST['etiqueta'],
                             variedad = Variedad.objects.get(codigo=request.POST['codigo'].split("-")[0]),
                             presentacion_id = request.POST['presentacion'],
                             categoria_id = request.POST['categoria'],
-                            plu = eval(request.POST['plu'].capitalize()),
                             completo = False,
                             cantidad_de_cajas = presentacion.cantidad_de_cajas
                         )
@@ -352,7 +348,7 @@ def registrarPallet(request):
                         for detalle in detalles:
                             lote = Lote.objects.get(id=detalle[2])
                             DetallePallet.objects.create(
-                                numero_de_guia=detalle[0],
+                                dia_de_proceso=detalle[0],
                                 numero_de_cajas=detalle[1],
                                 lote=lote,
                                 pallet_id=pallet.pk,
@@ -478,7 +474,7 @@ def remontabilidad(request):
     else:
         try:
             pallet_para_sacar = Pallet.objects.get(codigo = request.GET['codigo_pallet_para_sacar'],completo=False,embarcado=False)
-            pallet_para_poner = Pallet.objects.get(codigo=request.GET['codigo_pallet_para_poner'],completo=False,embarcado=False,presentacion=pallet_para_sacar.presentacion,variedad=pallet_para_sacar.variedad,calibre=pallet_para_sacar.calibre,categoria=pallet_para_sacar.categoria,cliente=pallet_para_sacar.cliente)
+            pallet_para_poner = Pallet.objects.get(codigo=request.GET['codigo_pallet_para_poner'],completo=False,embarcado=False,presentacion=pallet_para_sacar.presentacion,variedad=pallet_para_sacar.variedad,calibre=pallet_para_sacar.calibre,categoria=pallet_para_sacar.categoria,etiqueta=pallet_para_sacar.etiqueta)
             
             cajas_puestas = DetallePallet.objects.filter(pallet=pallet_para_poner).aggregate(cajas = Sum('numero_de_cajas'))
             cajas_disponibles_para_sacar = DetallePallet.objects.filter(pallet=pallet_para_sacar).aggregate(cajas = Sum('numero_de_cajas'))
@@ -544,7 +540,7 @@ def remontar(request):
                     if cajas_a_remontar - detalle.numero_de_cajas < 0:
                         detalle.numero_de_cajas -= cajas_a_remontar
                         DetallePallet.objects.create(
-                            numero_de_guia=detalle.numero_de_guia,
+                            dia_de_proceso=detalle.dia_de_proceso,
                             numero_de_cajas=cajas_a_remontar,
                             lote=detalle.lote,
                             pallet_id=pallet_para_poner,

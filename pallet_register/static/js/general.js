@@ -1,14 +1,14 @@
 function nuevoDetalle(){
     let divRow = document.createElement("div");
     
-    let divColGuia = document.createElement("div");
+    let divColDiaProceso = document.createElement("div");
     let divColCajas = document.createElement("div");
     let divColLote = document.createElement("div");
     let divRowColGC = document.createElement("div");
-    let labelGuia = document.createElement("label");
+    let labelDiaProceso = document.createElement("label");
     let labelCajas = document.createElement("label");
     let labelLote = document.createElement("label");
-    let entradaGuia = document.createElement("input");
+    let entradaDiaProceso = document.createElement("input");
     let entradaCajas = document.createElement("input");
     let entradaLote = document.createElement("select");
     let divDetalle = document.getElementById('detalle');
@@ -18,10 +18,10 @@ function nuevoDetalle(){
     divRow.setAttribute('id','divRow'+i);
     divRowColGC.setAttribute('id','divRowColGC'+i);
 
-    divColGuia.setAttribute('id','divColGuia'+i);
+    divColDiaProceso.setAttribute('id','divColDiaProceso'+i);
     divColCajas.setAttribute('id','divColCajas'+i);
     divColLote.setAttribute('id','divColLote'+i);
-    labelGuia.setAttribute('id','labelGuia'+i);
+    labelDiaProceso.setAttribute('id','labelDiaProceso'+i);
     labelCajas.setAttribute('id','labelCaja'+i);
     labelLote.setAttribute('id','labelLote'+i);
   
@@ -29,23 +29,23 @@ function nuevoDetalle(){
     divRowColGC.setAttribute('class','row');
     hr.setAttribute('class','rowDetalle');
 
-    divColGuia.setAttribute('class','col');
+    divColDiaProceso.setAttribute('class','col');
     divColCajas.setAttribute('class','col');
     divColLote.setAttribute('class','col');
 
-    labelGuia.setAttribute('class','form-label');
+    labelDiaProceso.setAttribute('class','form-label');
     labelCajas.setAttribute('class','form-label');
     labelLote.setAttribute('class','form-label');
 
     //PONIENDO EL NOMBRE DE LOS LABELS
-    labelGuia.textContent = "GUIA";
+    labelDiaProceso.textContent = "DP";
     labelCajas.textContent = "CAJAS";
     labelLote.textContent = "LOTE";
 
-    entradaGuia.setAttribute('class','form-control');
-    entradaGuia.type = "text";
-    entradaGuia.setAttribute('placeholder','4545646');
-    entradaGuia.setAttribute('id','guia'+i);
+    entradaDiaProceso.setAttribute('class','form-control');
+    entradaDiaProceso.type = "number";
+    entradaDiaProceso.setAttribute('placeholder','4545646');
+    entradaDiaProceso.setAttribute('id','dp'+i);
 
     entradaCajas.setAttribute('class','form-control');
     entradaCajas.type = "number";
@@ -63,9 +63,9 @@ function nuevoDetalle(){
 
     divRow.appendChild(divRowColGC);
 
-    divRowColGC.appendChild(divColGuia);
-    divColGuia.appendChild(labelGuia);
-    divColGuia.appendChild(entradaGuia);
+    divRowColGC.appendChild(divColDiaProceso);
+    divColDiaProceso.appendChild(labelDiaProceso);
+    divColDiaProceso.appendChild(entradaDiaProceso);
 
     divRowColGC.appendChild(divColCajas);
     divColCajas.appendChild(labelCajas);
@@ -95,7 +95,7 @@ function nuevoDetalle(){
 	width : 'resolve'
     });
 
-    document.getElementById('guia'+i).focus();
+    document.getElementById('dp'+i).focus();
 }
 function pantallaCarga(){
     Swal.fire({

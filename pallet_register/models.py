@@ -185,10 +185,13 @@ class Presentacion(BaseModel):
         verbose_name_plural = "Presentaciones"
 
     def __str__(self):
-        return self.descripcion + ' ' + str(self.peso) + ' KG'
+        return self.tipo_caja.tipo_caja + ' ' + str(self.peso) + ' KG'
     
 class Etiqueta(BaseModel):
     etiqueta = models.CharField(max_length=250)
+
+    def __str__(self):
+        return self.etiqueta
 
 class Categoria(BaseModel):
     categoria = models.CharField(max_length=50)
