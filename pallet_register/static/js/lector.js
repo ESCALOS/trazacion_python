@@ -1,5 +1,5 @@
 $(document).ready(function (){
-	cargarTabla();;
+	cargarTabla();
 });
 let i = 0;
 let camaraActiva = false;
@@ -39,8 +39,9 @@ function activarCamara(){
 
     scanner.addListener('scan',codigo => {
     	 scanner.stop().then(()=>{
+            camaraActiva = false;
             $('#modalPallet').modal('hide');
-	    codigo = codigo.replace(".","");
+	        codigo = codigo.replace(".","");
             obtenerDatos(codigo);
         });
     });
@@ -106,7 +107,7 @@ function obtenerDatos(codigo){
                 document.getElementById('plu').innerHTML = json.plu ? 'Sí' : 'No';
                 for(i = 0; i<json.detalle.length;i++){
                     nuevoDetalle();
-                    document.getElementById('guia'+i).innerHTML = json.detalle[i].numero_de_guia;
+                    document.getElementById('dp'+i).innerHTML = json.detalle[i].dia_de_proceso;
                     document.getElementById('cajas'+i).innerHTML = json.detalle[i].numero_de_cajas;
                     document.getElementById('lote'+i).innerHTML = json.detalle[i].fundoLote;
 		        }
@@ -146,14 +147,14 @@ function obtenerDatos(codigo){
 function nuevoDetalle(){
     let divRow = document.createElement("div");
     
-    let divColGuia = document.createElement("div");
+    let divColDiaProceso = document.createElement("div");
     let divColCajas = document.createElement("div");
     let divColLote = document.createElement("div");
     let divRowColGC = document.createElement("div");
-    let labelGuia = document.createElement("label");
+    let labelDiaProceso = document.createElement("label");
     let labelCajas = document.createElement("label");
     let labelLote = document.createElement("label");
-    let entradaGuia = document.createElement("label");
+    let entradaDiaProceso = document.createElement("label");
     let entradaCajas = document.createElement("label");
     let entradaLote = document.createElement("label");
     let divDetalle = document.getElementById('detalle');
@@ -163,10 +164,10 @@ function nuevoDetalle(){
     divRow.setAttribute('id','divRow'+i);
     divRowColGC.setAttribute('id','divRowColGC'+i);
 
-    divColGuia.setAttribute('id','divColGuia'+i);
+    divColDiaProceso.setAttribute('id','divColDiaProceso'+i);
     divColCajas.setAttribute('id','divColCajas'+i);
     divColLote.setAttribute('id','divColLote'+i);
-    labelGuia.setAttribute('id','labelGuia'+i);
+    labelDiaProceso.setAttribute('id','labelDiaProceso'+i);
     labelCajas.setAttribute('id','labelCaja'+i);
     labelLote.setAttribute('id','labelLote'+i);
   
@@ -174,21 +175,21 @@ function nuevoDetalle(){
     divRowColGC.setAttribute('class','row');
     hr.setAttribute('class','rowDetalle');
 
-    divColGuia.setAttribute('class','col');
+    divColDiaProceso.setAttribute('class','col');
     divColCajas.setAttribute('class','col');
     divColLote.setAttribute('class','col');
 
-    labelGuia.setAttribute('class','form-label');
+    labelDiaProceso.setAttribute('class','form-label');
     labelCajas.setAttribute('class','form-label');
     labelLote.setAttribute('class','form-label');
 
     //PONIENDO EL NOMBRE DE LOS LABELS
-    labelGuia.textContent = "GUIA";
+    labelDiaProceso.textContent = "DP";
     labelCajas.textContent = "CAJAS";
     labelLote.textContent = "LOTE";
 
-    entradaGuia.setAttribute('class','form-control');
-    entradaGuia.setAttribute('id','guia'+i);
+    entradaDiaProceso.setAttribute('class','form-control');
+    entradaDiaProceso.setAttribute('id','dp'+i);
 
     entradaCajas.setAttribute('class','form-control');
     entradaCajas.setAttribute('id','cajas'+i);
@@ -202,9 +203,9 @@ function nuevoDetalle(){
 
     divRow.appendChild(divRowColGC);
 
-    divRowColGC.appendChild(divColGuia);
-    divColGuia.appendChild(labelGuia);
-    divColGuia.appendChild(entradaGuia);
+    divRowColGC.appendChild(divColDiaProceso);
+    divColDiaProceso.appendChild(labelDiaProceso);
+    divColDiaProceso.appendChild(entradaDiaProceso);
 
     divRowColGC.appendChild(divColCajas);
     divColCajas.appendChild(labelCajas);
@@ -269,6 +270,11 @@ $('#modalLector').on('hidden.bs.modal', function (){
 });
 
 $('#modalPallet').on('hidden.bs.modal', function (){
+    if(camaraActiva){
+        scanner.stop().then(()=>{
+            alert('camara desactivada');
+        });
+    }
     document.getElementById('preview').outerHTML = document.getElementById('preview').outerHTML;
 });
 

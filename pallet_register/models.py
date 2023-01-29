@@ -284,4 +284,4 @@ class DetallePallet(BaseModel):
     usuario = models.ForeignKey(Usuario, on_delete=models.RESTRICT)
     
     def __str__(self):
-        return 'Pallet: ' + self.pallet.codigo + ' | Lote: ' + self.lote.lote + ' | Día de Proceso: ' + self.dia_de_proceso
+        return 'Pallet: ' + self.pallet.codigo + ' | Lote: ' + self.lote.lote + ' | Día de Proceso: ' + str(self.dia_de_proceso)
