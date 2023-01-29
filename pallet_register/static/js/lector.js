@@ -3,9 +3,18 @@ $(document).ready(function (){
 });
 let i = 0;
 let camaraActiva = false;
-let numero_de_la_camara_activa = 0;
+let numero_de_la_camara_activa = true;
 let recargarTabla = true;
 let scanner = "";
+
+function cambiarCamara(){
+    scanner.stop().then(()=>{
+        camaraActiva = false;
+        document.getElementById('preview').outerHTML = document.getElementById('preview').outerHTML;
+        numero_de_la_camara_activa = !numero_de_la_camara_activa;
+        activarCamara();
+    });
+}
 
 function activarCamara(){
 	scanner = new Instascan.Scanner({
@@ -18,7 +27,7 @@ function activarCamara(){
 
 	Instascan.Camera.getCameras().then(cameras => {
 		if(cameras.length > 0){
-			scanner.camera = cameras[numero_de_la_camara_activa];
+			scanner.camera = cameras[numero_de_la_camara_activa ? 1 : 0];
 			scanner.start();
 			scanner.addListener('active',()=>{
             	$('#modalPallet').modal('show');
@@ -75,12 +84,10 @@ function cargarTabla(){
 		}
 	})
 }
-
 function editarPallet(codigo){
 	resetearModal();
 	obtenerDatos(codigo);
 }
-
 function obtenerDatos(codigo){
 	$.ajax({
 		url : '../datos/',
@@ -271,9 +278,7 @@ $('#modalLector').on('hidden.bs.modal', function (){
 
 $('#modalPallet').on('hidden.bs.modal', function (){
     if(camaraActiva){
-        scanner.stop().then(()=>{
-            alert('camara desactivada');
-        });
+        scanner.stop();
     }
     document.getElementById('preview').outerHTML = document.getElementById('preview').outerHTML;
 });
