@@ -2,3 +2,6 @@ venv
 pallet_register/__pycache__
 pallet_register/migrations/__pycache__
 trazacion/__pycache__
+cert.*
+key.*
+*.sql
