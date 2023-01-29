@@ -99,7 +99,7 @@ function obtenerDatos(codigo){
                 document.getElementById('codigo').innerHTML = json.codigo;
 		        document.getElementById('variedad').innerHTML = json.variedad;
 		        document.getElementById('codigo_comercial').innerHTML = json.codigo_comercial;
-		        document.getElementById('cliente').innerHTML = json.cliente_name;
+		        document.getElementById('etiqueta').innerHTML = json.etiqueta_name;
                 document.getElementById('dp').innerHTML = json.dp;
                 document.getElementById('presentacion').innerHTML = json.presentacion_name;
                 document.getElementById('calibre').innerHTML = json.calibre_name;
