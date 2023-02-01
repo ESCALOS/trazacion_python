@@ -107,11 +107,9 @@ function obtenerDatos(codigo){
 		        document.getElementById('variedad').innerHTML = json.variedad;
 		        document.getElementById('codigo_comercial').innerHTML = json.codigo_comercial;
 		        document.getElementById('etiqueta').innerHTML = json.etiqueta_name;
-                document.getElementById('dp').innerHTML = json.dp;
                 document.getElementById('presentacion').innerHTML = json.presentacion_name;
                 document.getElementById('calibre').innerHTML = json.calibre_name;
                 document.getElementById('categoria').innerHTML = json.categoria_name;
-                document.getElementById('plu').innerHTML = json.plu ? 'Sí' : 'No';
                 for(i = 0; i<json.detalle.length;i++){
                     nuevoDetalle();
                     document.getElementById('dp'+i).innerHTML = json.detalle[i].dia_de_proceso;
@@ -290,9 +288,8 @@ function resetearModal(){
     for(element of rowDetalles){
         element.remove();
     }
-    document.getElementById('codigo').value = "";
-    document.getElementById('codigo_comercial').value = "";
-    document.getElementById('dp').value = "";
+    document.getElementById('codigo').innerHTML = "";
+    document.getElementById('codigo_comercial').innerHTML = "";
 }
 
 function pantallaCarga(){

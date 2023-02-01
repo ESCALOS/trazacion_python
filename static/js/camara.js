@@ -30,7 +30,7 @@ function registrarPallet(){
     presentacion = document.getElementById('presentacion').value;
     variedad = document.getElementById('variedad').value;
     calibre = document.getElementById('calibre').value;
-    cliente = document.getElementById('cliente').value;
+    etiqueta = document.getElementById('etiqueta').value;
     categoria = document.getElementById('categoria').value;
     plu = document.getElementById('plu').value;
     detalle = [];
@@ -82,13 +82,13 @@ function registrarPallet(){
             data : { 
                 csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
                 codigo : codigo,
-		codigo_comercial: codigo_comercial,
+		        codigo_comercial: codigo_comercial,
                 dp : dp,
                 presentacion : presentacion,
                 variedad : variedad,
                 categoria : categoria,
                 calibre : calibre,
-		cliente : cliente,
+		        etiqueta : etiqueta,
                 plu : plu,
                 detalles:JSON.stringify(detalle)
             },
@@ -162,7 +162,7 @@ function obtenerDatos(content){
                 document.getElementById('codigo').value = json.codigo;
 		        document.getElementById('variedad').innerHTML = json.variedad;
 		        document.getElementById('codigo_comercial').value = json.codigo_comercial;
-		        document.getElementById('cliente').value = json.cliente;
+		        document.getElementById('etiqueta').value = 2;
                 document.getElementById('dp').value = json.dp;
                 document.getElementById('presentacion').value = json.presentacion;
                 document.getElementById('variedad').value = json.variedad;
