@@ -1,3 +1,4 @@
+from import_export.admin import ImportExportModelAdmin
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
@@ -33,12 +34,18 @@ class UserAdmin(BaseUserAdmin):
 class CampaignAdmin(admin.ModelAdmin):
     filter_horizontal = ('etiquetas',)
 
+class LoteAdmin(ImportExportModelAdmin):
+    pass
+
+class FundoAdmin(ImportExportModelAdmin):
+    pass
+
 admin.site.register(models.Usuario, UserAdmin)
 admin.site.register(models.Zona)
 admin.site.register(models.Sede)
-admin.site.register(models.Fundo)
+admin.site.register(models.Fundo,FundoAdmin)
 admin.site.register(models.Planta)
-admin.site.register(models.Lote)
+admin.site.register(models.Lote,LoteAdmin)
 admin.site.register(models.Cliente)
 admin.site.register(models.Etiqueta)
 admin.site.register(models.Destino)

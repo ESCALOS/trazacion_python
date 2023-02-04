@@ -4,16 +4,16 @@
             <th>Código</th>
 	    <th>Comercial</th>
             <th>Presentación</th>
-            <th>Cliente</th>
+	    <th>Etiqueta</th>
         </tr>
     </thead>
     <tbody>
       {% for pallet in pallets %}
       <tr class="{% if pallet.embarcado %} bg-success {% else %} bg-warning {% endif %} text-white">
         <td>{{ pallet.codigo }}</td>
-	<td>{{ pallet.codigo_comercial }}
+	<td>BU-{{ pallet.codigo_comercial }}
 	<td>{{ pallet.presentacion.descripcion }}  {{ pallet.presentacion.peso }} KG</td>
-	<td>{{ pallet.cliente.cliente }}</td>
+	<td>{{ pallet.etiqueta.etiqueta }}</td>
       </tr>
       {% endfor %} 
     </tbody>

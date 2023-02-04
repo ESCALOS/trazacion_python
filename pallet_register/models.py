@@ -147,7 +147,7 @@ class Lote(BaseModel):
     fundo = models.ForeignKey(Fundo, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return self.lote + ' | ' + self.fundo.fundo
+        return str(self.lote) + ' | ' + self.fundo.fundo
 
 class Calibre(BaseModel):
     calibre = models.CharField(max_length=100)
