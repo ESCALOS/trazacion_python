@@ -39,6 +39,9 @@ class LoteAdmin(ImportExportModelAdmin):
 
 class FundoAdmin(ImportExportModelAdmin):
     pass
+    
+class CodigoComercialAdmin(ImportExportModelAdmin):
+    pass
 
 admin.site.register(models.Usuario, UserAdmin)
 admin.site.register(models.Zona)
@@ -59,3 +62,5 @@ admin.site.register(models.Presentacion)
 admin.site.register(models.Categoria)
 admin.site.register(models.Pallet)
 admin.site.register(models.DetallePallet)
+admin.site.register(models.CodigoComercial,CodigoComercialAdmin)
+admin.site.register(models.GuiaDeRemision)

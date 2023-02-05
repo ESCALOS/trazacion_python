@@ -244,6 +244,24 @@ class Campaign(BaseModel):
     def __str__(self):
         return self.planta.planta + ' | ' + self.producto.producto  + ' | ' + str(self.inicio)
 
+class CodigoComercial(BaseModel):
+    cliente = models.ForeignKey(Cliente, on_delete=models.RESTRICT)
+    cantidad_de_pallets = models.IntegerField(default=0)
+    campaign = models.ForeignKey(Campaign, on_delete=models.RESTRICT)
+
+    def __str__(self):
+        return 'BU-' + str(self.id) + ' | Cliente: ' + str(self.cliente.cliente) + ' | Campaña: ' + self.campaign.planta.planta + ' | ' + self.campaign.producto.producto  + ' | ' + str(self.campaign.inicio)
+
+class GuiaDeRemision(BaseModel):
+    numero = models.CharField(max_length=15)
+    codigo_comercial = models.ForeignKey(CodigoComercial, on_delete=models.RESTRICT)
+    destino = models.ForeignKey(Destino, on_delete=models.RESTRICT)
+    imagen = models.ImageField(upload_to='images/guia_de_remision/')
+    embarcado = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.numero +'| BU-'+ str(self.codigo_comercial.id) +' | Campaña: ' + self.codigo_comercial.campaign.planta.planta + ' | ' + self.codigo_comercial.campaign.producto.producto  + ' | ' + str(self.codigo_comercial.campaign.inicio)
+
 class CurrentCampaign(BaseModel):
     campaign = models.ForeignKey(Campaign, verbose_name="Campaña", on_delete=models.RESTRICT, limit_choices_to={'state':True},)
     inicio =  models.DateTimeField(auto_now_add=True,editable=False)
